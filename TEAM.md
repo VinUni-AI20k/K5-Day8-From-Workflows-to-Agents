@@ -10,14 +10,14 @@
 
 ## Thành viên
 
-Danh tính được xác nhận trong GitHub issue #1. Cả bốn thành viên cùng thực hiện các phần việc và kiểm tra; Nguyen Quoc Viet là nhóm trưởng. Email chưa có trong issue.
+Danh tính được xác nhận trong GitHub issue #1. Nguyen Quoc Viet là nhóm trưởng. Vai trò chia theo bộ việc A–D (nhãn `A`–`D` của các GitHub issue). Email do từng thành viên tự cung cấp (issue #23, #24, nhánh `feat/Do-Duan`, báo cáo cá nhân).
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-| 1 | Nguyen Quoc Viet | 2A202603556 | Chưa cung cấp | [quocvietnguyen7055](https://github.com/quocvietnguyen7055) | Nhóm trưởng; cùng thực hiện toàn bộ phần việc |
-| 2 | Le Quang Linh | 2A202603583 | Chưa cung cấp | [linhlqhe181396](https://github.com/linhlqhe181396) | Cùng thực hiện toàn bộ phần việc |
-| 3 | Dau Phuc Duc | 2A202603580 | Chưa cung cấp | [dpduc313](https://github.com/dpduc313) | Cùng thực hiện toàn bộ phần việc |
-| 4 | Do Duc Duan | 2A202603590 | Chưa cung cấp | [Do-Duan](https://github.com/Do-Duan) | Cùng thực hiện toàn bộ phần việc |
+| 1 | Nguyen Quoc Viet | 2A202603556 | rinthongminh@gmail.com | [quocvietnguyen7055](https://github.com/quocvietnguyen7055) | Nhóm trưởng; phần C: shape orchestrator và handoff |
+| 2 | Le Quang Linh | 2A202603583 | linhlqhe181396@fpt.edu.vn | [linhlqhe181396](https://github.com/linhlqhe181396) | Phần B: shape single (ReAct) |
+| 3 | Dau Phuc Duc | 2A202603580 | teflon125.work@gmail.com | [dpduc313](https://github.com/dpduc313) | Phần A: shape workflow, tích hợp, bonus B4 |
+| 4 | Do Duc Duan | 2A202603590 | duandd1101@gmail.com | [Do-Duan](https://github.com/Do-Duan) | Phần D: ledger, crash và đánh giá |
 
 ## Bảng đóng góp
 
