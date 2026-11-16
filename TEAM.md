@@ -4,17 +4,18 @@
 
 - Tên nhóm: NhomV3
 - Lớp: L3A
-- Repo nhóm: `congcoderht/K5-L3A-Day08-NhomV3-FromWorkflowsToAgents`
-- URL repo, nhánh nộp, commit chốt: https://github.com/congcoderht/K5-L3A-Day08-NhomV3-FromWorkflowsToAgents ; nhánh nộp chung và commit chốt do nhóm xác nhận sau merge.
-- Nhánh làm việc của Nguyễn Quốc Hưng: `hung`.
+- Repo nhóm: `K5-L3A-DAY08-NhomV3-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo: https://github.com/congcoderht/K5-L3A-Day08-NhomV3-FromWorkflowsToAgents
+- Nhánh nộp: main
+- Commit chốt: 
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 | Trương Việt Công | 2A202603585 | vietcongtruong07@gmail.com | congcoderht | Single agent; nhánh feature/single |
-|   2 | Nguyễn Quốc Hưng | 2A202603553 | hung90879087@gmail.com | hung309911 | Shape C; handoff/trace; rà secret/PII; R3; nhánh hung |
-|   3 | Đỗ Minh Hoàng | 2A202603554 | hoangcoihd6@gmail.com | worryveem | Phần việc còn lại theo phân công nhóm |
+|   1 |Trương Việt Công|2A202603585|vietcongtruong07@gmail.com|congcoderht|         |
+|   2 |Nguyễn Quốc Hưng|2A202603553|hung90879087@gmail.com|hung309911|         |
+|   3 |Đỗ Minh Hoàng|2A202603554|hoangcoihd6@gmail.com|worryveem|         |
 
 Gợi ý chia vai:
 
