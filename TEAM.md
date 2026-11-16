@@ -21,15 +21,20 @@ Danh tính được xác nhận trong GitHub issue #1. Nguyen Quoc Viet là nhó
 
 ## Bảng đóng góp
 
-Cả bốn thành viên cùng chịu trách nhiệm cho phần triển khai và kiểm tra dưới đây. Các commit chứa thay đổi chung của nhóm; không tách công việc thành các phần riêng.
+Mỗi dòng chỉ ghi commit có nội dung do chính người đó đứng tên trên nhánh `main`, không tính các commit merge PR. Riêng test của Le Quang Linh nằm trong commit merge `a62b4b8` của chính Linh. Đối chiếu: `git log --author=<tên> --stat main`.
 
-| Người | Vai | Commit | Test đã thêm hoặc sửa / đã chạy |
+| Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyen Quoc Viet (2A202603556) | Nhóm trưởng; cùng triển khai ba shape, báo cáo và kiểm tra | `3614266`, `4bec2f3` (đóng góp chung) | `python -m pytest -q` (54 đạt); `python -m pytest -q -m student -o addopts=` (248 đạt) |
-| Le Quang Linh (2A202603583) | Cùng triển khai ba shape, báo cáo và kiểm tra | `3614266`, `4bec2f3` (đóng góp chung) | `python -m pytest -q` (54 đạt); `python -m pytest -q -m student -o addopts=` (248 đạt) |
-| Dau Phuc Duc (2A202603580) | Cùng triển khai ba shape, báo cáo và kiểm tra | `3614266`, `4bec2f3` (đóng góp chung) | `python -m pytest -q` (54 đạt); `python -m pytest -q -m student -o addopts=` (248 đạt) |
-| Do Duc Duan (2A202603590) | Cùng triển khai ba shape, báo cáo và kiểm tra | `3614266`, `4bec2f3` (đóng góp chung) | `python -m pytest -q` (54 đạt); `python -m pytest -q -m student -o addopts=` (248 đạt) |
+| Nguyen Quoc Viet (2A202603556) | Nhóm trưởng; phần C. Cài ba shape, sinh `benchmark.json` và `crash.json`, viết ADR, research card, báo cáo nhóm | `3614266` (ba shape, benchmark, crash), `c495637`, `4bec2f3`, `d669b6e` (báo cáo) | Chưa có (issue #13) |
+| Le Quang Linh (2A202603583) | Phần B: test shape single | `a62b4b8` (test single), `ac2901f` (báo cáo cá nhân) | `src/tests/test_team_single.py` (2 test: C-002 seed 55 không tin ticket; giới hạn bước và `run_id` trong trace) |
+| Dau Phuc Duc (2A202603580) | Phần A: test workflow, rà soát tái lập, ablation research card, tích hợp | `2307509` (test workflow), `7c40c0a` (ablation và research card), `541f382` (báo cáo cá nhân), `9bbf1a4` (email, vai trò), `00db032` (khôi phục file mẫu) | `src/tests/test_team_workflow.py` (33 test: T02 cả 5 seed theo order; trace và kết quả không lộ dữ liệu khách) |
+| Do Duc Duan (2A202603590) | Phần D: demo durability và crash trong báo cáo nhóm | `f39d8b4` (báo cáo nhóm, demo crash), `dd26bf9` (email, báo cáo cá nhân) | Chưa có (issue #18) |
 
 ## Báo cáo cá nhân
 
-Báo cáo của từng thành viên nằm tại `report/team/2A202603556_NguyenQuocViet.md`, `report/team/2A202603583_LeQuangLinh.md`, `report/team/2A202603580_DauPhucDuc.md` và `report/team/2A202603590_DoDucDuan.md`.
+Báo cáo cá nhân của từng thành viên nằm tại:
+
+- `report/team/2A202603556_NguyenQuocViet.md`
+- `report/team/2A202603583_LeQuangLinh.md`
+- `report/team/2A202603580_DauPhucDuc.md`
+- `report/team/2A202603590_DoDucDuan.md`
