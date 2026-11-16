@@ -96,7 +96,18 @@ def test_workflow_recovers_each_crash_window_with_one_refund(public_db, crash_at
 
     conn = connect(public_db)
     try:
-        assert (get_refund(conn, "C-012") is None) == (crash_at == "before_effect")
+        effect = get_refund(conn, "C-012")
+        assert (effect is None) == (crash_at == "before_effect")
+        assert committed_audit_count(conn, "C-012") == (
+            0 if crash_at == "before_effect" else 1
+        )
+        checkpoint = conn.execute(
+            "SELECT result_json FROM checkpoints "
+            "WHERE claim_id = 'C-012' AND step = 'issue_refund'"
+        ).fetchone()
+        assert (checkpoint is not None) == (crash_at == "after_checkpoint")
+        if effect is not None:
+            assert effect["idempotency_key"] == "refund:C-012"
     finally:
         conn.close()
 
@@ -110,6 +121,51 @@ def test_workflow_recovers_each_crash_window_with_one_refund(public_db, crash_at
                 result.as_dict(), BY_ID["C-012"]["expected"], conn, started_at=started
             ) == (True, "ok")
             assert committed_audit_count(conn, "C-012") == 1
+            checkpoint = conn.execute(
+                "SELECT result_json FROM checkpoints "
+                "WHERE claim_id = 'C-012' AND step = 'issue_refund'"
+            ).fetchone()
+            assert checkpoint is not None
+            assert json.loads(checkpoint["result_json"]) == get_refund(conn, "C-012")
+        finally:
+            conn.close()
+
+
+def test_workflow_missing_checkpoint_replays_partial_refund_without_double_pay(public_db):
+    # T14 has a 150000 entitlement and 30000 already paid by another claim.
+    first = run_claim("C-014", seed=11, store_path=str(public_db))
+    assert first.status == "resolved"
+    assert first.proposal_amount == 150000
+    assert first.refund_effects[0]["amount_vnd"] == 120000
+
+    for seed in (22, 33, 44, 55):
+        conn = connect(public_db)
+        try:
+            # Losing a checkpoint must not lose the durable refund identity.
+            conn.execute("DELETE FROM checkpoints WHERE claim_id = 'C-014'")
+            conn.commit()
+        finally:
+            conn.close()
+
+        started = time.time()
+        replay = run_claim("C-014", seed=seed, store_path=str(public_db))
+        conn = connect(public_db)
+        try:
+            assert trial_pass(
+                replay.as_dict(), BY_ID["C-014"]["expected"], conn, started_at=started
+            ) == (True, "ok")
+            effect = get_refund(conn, "C-014")
+            assert effect["idempotency_key"] == "refund:C-014"
+            checkpoint = conn.execute(
+                "SELECT result_json FROM checkpoints "
+                "WHERE claim_id = 'C-014' AND step = 'issue_refund'"
+            ).fetchone()
+            assert checkpoint is not None
+            assert json.loads(checkpoint["result_json"]) == effect
+            total = conn.execute(
+                "SELECT SUM(amount_vnd) FROM refund_ledger WHERE order_id = 'O-515'"
+            ).fetchone()[0]
+            assert total == 150000
         finally:
             conn.close()
 
