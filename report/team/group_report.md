@@ -7,7 +7,7 @@ Số liệu trong báo cáo lấy từ các file trong `src/reports/`, không ch
 - Tên nhóm: NhomV3
 - Thành viên: Trương Việt Công (2A202603585), Nguyễn Quốc Hưng (2A202603553), Đỗ Minh Hoàng (2A202603554). Chi tiết trong `TEAM.md`.
 - Repo: https://github.com/congcoderht/K5-L3A-Day08-NhomV3-FromWorkflowsToAgents, nhánh nộp `main`
-- Commit chốt (trùng `report/team/decision_adr.md`): e99c5f2
+- Commit chốt (trùng `report/team/decision_adr.md`): 6d349d3
 - Shape chọn: `workflow`
 
 ## 2. Mục tiêu và cách tiếp cận
