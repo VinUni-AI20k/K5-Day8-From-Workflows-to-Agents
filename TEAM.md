@@ -5,7 +5,7 @@
 - Tên nhóm: NKV
 - Lớp: L3A
 - Repo nhóm: `K5-L3A-DAY08-NKV-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: main, commit 511f6d9
+- URL repo, nhánh nộp, commit chốt: main, commit 49ac282
 
 ## Thành viên
 
@@ -24,7 +24,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Khánh Vinh | Core Architecture & Shapes | 511f6d9 | tests/test_individual_vinhnk.py |
+| Nguyễn Khánh Vinh | Core Architecture & Shapes | 49ac282 | tests/test_individual_vinhnk.py |
 
 ## Cá nhân
 
