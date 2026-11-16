@@ -23,9 +23,9 @@ from __future__ import annotations
 import sqlite3
 
 from lab8.db import connect
-from lab8.durability import InjectedCrash, issue_refund
 from lab8.schemas import Budget, RunResult, make_run_id
 from lab8.shapes.common import finish
+from lab8.shapes.ledger import finish_refund
 from lab8.tools import (
     compute_compensation,
     get_claim_view,
@@ -109,22 +109,10 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
 
     # Step 6: host issues refund
     complete(budget, seed=seed, purpose="draft", prompt=f"proposal={amount}")
-    try:
-        refund_res = issue_refund(conn, claim_id, amount, crash_at=crash_at)
-    except InjectedCrash:
-        trace.add("crash", {"at": crash_at})
+    if crash_at is not None:
         trace.write()
-        raise
-
-    if refund_res.get("ok"):
-        final_status = "resolved"
-        err = None
-    else:
-        final_status = "failed" if refund_res.get("conflict") else "denied"
-        err = refund_res.get("reason")
-
-    return finish(
+    return finish_refund(
         conn, shape="single", claim_id=claim_id, seed=seed,
-        status=final_status, proposal_amount=amount, budget=budget, trace=trace,
-        error_reason=err,
+        proposal_amount=amount, budget=budget, trace=trace,
+        crash_at=crash_at,
     )

@@ -30,9 +30,9 @@ ones. `lab8.trace.Trace` does this; your own tracer is fine if it matches.
 from __future__ import annotations
 
 from lab8.db import connect
-from lab8.durability import issue_refund
 from lab8.schemas import Budget, RunResult, make_run_id
 from lab8.shapes.common import finish
+from lab8.shapes.ledger import finish_refund
 from lab8.tools import compute_compensation, get_claim_view, lookup_order, tool_cost
 from lab8.trace import Trace
 
@@ -83,10 +83,10 @@ def run_claim(
         budget.add_tool(tool_cost())
         trace.add("refund_request", {"proposal_amount": proposal})
         trace.write()  # Preserve a safe trace even if the host injects a crash.
-        outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
-        trace.add("refund_outcome", {"ok": outcome["ok"], "reason": outcome["reason"]})
-        if not outcome["ok"]:
-            return result("failed" if outcome["conflict"] else "denied", proposal, outcome["reason"])
-        return result("resolved", proposal)
+        return finish_refund(
+            conn, shape="workflow", claim_id=claim_id, seed=seed,
+            proposal_amount=proposal, budget=budget, trace=trace,
+            crash_at=crash_at,
+        )
     finally:
         conn.close()
