@@ -2,17 +2,21 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: 4H45
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- Repo nhóm: `K5-L3A-DAY08-4H45-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
 - URL repo, nhánh nộp, commit chốt:
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
+|   1  |    Vũ Quang Thái    |   2A202603545    |   qtvu2k5@gmail.com    |    vuThai05    |         |
+
+|   2  |    Nguyễn Thị Thùy Dung    |   2A202603552   |   nttdungk5@gmail.com
+    |        |         |
+|   3  |    Lưu Thanh Mỹ    |   2A202603532    |    data97688@gmail.com
+   |    aialphaproduct    |         |
 
 Gợi ý chia vai:
 
@@ -41,9 +45,16 @@ Sao chép mục dưới đây cho từng thành viên.
 
 ## MSSV_HoTen
 
+2A202603545_VuQuangThai
+2A202603552_NguyenThiThuyDung
+2A202603532_LuuThanhMy
+
 ### Phần việc phụ trách
 
--
+PR #2 — Shape workflow (CP2): :Lưu Thanh Mỹ
+PR #3 — Shape single (CP2)  Vũ Quang Thái
+
+PR #4 — Shape orchestrator (CP2): Nguyễn Thị Thùy Dung
 
 ### Đóng góp cụ thể
 
