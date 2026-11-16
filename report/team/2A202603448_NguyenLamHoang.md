@@ -27,27 +27,33 @@ Các nhánh kết thúc dùng `common.finish()` để lấy effect và audit t�
 
 Bổ sung `src/tests/test_workflow_integration.py` gồm 28 ca: injection trong ticket, trần theo đơn, approval không tồn tại và approval sai claim, conflict sau commit, thay thế trace cũ cho claim không tồn tại và 20 tổ hợp crash/seed qua cả ba vị trí `before_effect`, `after_effect_before_checkpoint`, `after_checkpoint`. Mỗi ca crash đều kiểm tra resume rồi retry vẫn chỉ có một effect và một audit committed. Các test tích hợp thuộc cổng pytest mặc định để kiểm tra lại khi ghép các shape của nhóm.
 
+Tích hợp workflow, single và orchestrator qua các API host chính thức; ba shape không phụ thuộc module bổ sung ngoài tập file mà grader nhận. Single dùng `run_react` giới hạn 8 bước với tool chỉ đọc, tính quote bằng code và chỉ gọi host ghi refund sau khi vòng lặp hoàn tất. Chi phí yêu cầu refund được tính vào Budget theo cùng quy ước ở cả ba shape.
+
+Bổ sung `src/tests/test_shapes_integration.py` gồm 17 ca: chạy từng shape khi không có module ledger bổ sung, đổi shape trên cùng database mà vẫn một refund, crash/resume ở ba vị trí trên cả ba shape, giới hạn ReAct và chặn ghi tiền khi vòng lặp chạm trần. Thông tin thành viên được hợp nhất trong `TEAM.md`, giữ thông tin liên hệ và vai trò của các thành viên.
+
 ## 4. Bằng chứng
 
-Môi trường kiểm chứng: Windows AMD64, Python 3.14.3, pytest 8.4.2. Phạm vi phiên bản yêu cầu của đề là Python 3.11–3.13; các kết quả dưới đây được đo trên môi trường nêu trên.
+Môi trường kiểm chứng: Windows AMD64, Python 3.14.3, pytest 8.4.2.
 
 Các lệnh chạy trong `src/`, dùng Python của virtualenv:
 
 ```powershell
 .\.venv\Scripts\python.exe -m lab8.smoke
-.\.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
-.\.venv\Scripts\python.exe -m pytest -q -m student -o addopts= -k workflow -p no:cacheprovider
-.\.venv\Scripts\python.exe -m lab8.benchmark --shapes workflow --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/workflow_benchmark.json
+.\.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider --basetemp ".venv/pytest-tmp-$([guid]::NewGuid().ToString('N'))"
+.\.venv\Scripts\python.exe -m pytest -q -m student -o addopts= -p no:cacheprovider --basetemp ".venv/pytest-tmp-$([guid]::NewGuid().ToString('N'))"
+.\.venv\Scripts\python.exe -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json
+.\.venv\Scripts\python.exe -m lab8.crash_test --count 20 --out reports/crash.json
 ```
 
 | Kiểm chứng | Kết quả |
 | --- | --- |
 | Smoke | `lab8.smoke pass` |
-| Cổng host và test tích hợp | 82 passed, 248 deselected |
-| Ma trận student của workflow | 62 passed, 268 deselected |
-| Test tích hợp bổ sung | 28 passed, gồm 20 ca crash/resume |
+| Cổng host và test tích hợp | 104 passed, 248 deselected |
+| Ma trận student của cả bốn shape | 248 passed, 104 deselected |
+| Test cá nhân bổ sung | 45 passed: 28 ca workflow và 17 ca tích hợp ba shape |
+| Crash suite tham chiếu | 20/20 |
 
-Benchmark được công cụ sinh tại [src/reports/workflow_benchmark.json](../../src/reports/workflow_benchmark.json), trên 14 claim public và seed `11,22,33,44,55`, database mới cho mỗi trial:
+Benchmark được công cụ sinh tại [src/reports/benchmark.json](../../src/reports/benchmark.json), trên 14 claim public và seed `11,22,33,44,55`, database mới cho mỗi trial. Số liệu của workflow:
 
 | Metric | Giá trị |
 | --- | --- |
@@ -58,6 +64,15 @@ Benchmark được công cụ sinh tại [src/reports/workflow_benchmark.json](.
 | Mean / p95 steps | 5,071429 / 6 |
 | Mean model calls | 0 |
 | Mean tool calls | 3,428571 |
+
+| Shape | Trial pass | Pass rate | Pass^5 | Cost/success mô phỏng (VND) |
+| --- | --- | --- | --- | --- |
+| workflow | 70/70 | 1,0 | 1,0 | 34,285714 |
+| single | 70/70 | 1,0 | 1,0 | 35,422857 |
+| orchestrator | 70/70 | 1,0 | 1,0 | 43,571429 |
+| swarm | 69/70 | 0,985714 | 0,928571 | 49,566957 |
+
+Trial fail của swarm là C-002 tại seed 55, tương ứng điểm yếu tham chiếu được mô tả trong đề. Ma trận student kiểm tra riêng hành vi fail kỳ vọng này nên vẫn có 248 test pass. Crash suite `reports/crash.json` dùng swarm tham chiếu; crash/resume của ba shape nhóm viết được kiểm tra thêm trong ma trận student và test tích hợp.
 
 Run id dẫn chứng: `R-workflow-C-001-s11` (refund hợp lệ), `R-workflow-C-002-s55` (không tin số ngày trong ticket), `R-workflow-C-013-s11` (đã hoàn đủ), `R-workflow-C-014-s11` (chỉ ghi phần chênh). JSON benchmark được sinh bằng lệnh, không chỉnh tay.
 

@@ -2,17 +2,19 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm: MienNui
+- Tên nhóm: Mien Nui
 - Lớp: L3A
 - Repo nhóm: `K5-L3A-DAY08-MienNui-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- URL repo, nhánh nộp, commit chốt: https://github.com/hoangnguyenai/K5-L3A-DAY08-MienNui-FromWorkflowsToAgents
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Nguyễn Lâm Hoàng | 2A202603448 | 26ai.hoangnl@vinuni.edu.vn | [hoangnguyenai](https://github.com/hoangnguyenai) | Workflow + integration |
-|   2 |        |      |       |        |         |
+|   2 | Nguyễn Tiến Khoa| 2A202603460 | nkhoa151004@gmail.com| llkhoa| single|
+|   3 | Nguyễn Tuấn Quang| 2A202603392 | | | orchestrator + handoff|
+|   4 | Phan Hải Đăng | 2A202603409 | 26ai.dangph5@vinuni.edu.vn | [dangph12](https://github.com/dangph12) | ledger + evaluation |
 
 Gợi ý chia vai:
 
@@ -25,7 +27,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Lâm Hoàng | Workflow + integration | `2fbe693` | `src/tests/test_workflow_integration.py` (28 ca kiểm thử) |
+| Nguyễn Lâm Hoàng | Workflow + integration | `2fbe693` | `src/tests/test_workflow_integration.py` (28 ca), `src/tests/test_shapes_integration.py` (17 ca) |
 
 ## Cá nhân
 
@@ -47,9 +49,9 @@ Sao chép mục dưới đây cho từng thành viên.
 
 ### Đóng góp cụ thể
 
-- Triển khai `src/lab8/shapes/workflow.py`, bổ sung 28 ca kiểm thử tích hợp, chạy benchmark workflow trên 14 claim × 5 seed.
+- Triển khai workflow, tích hợp ba shape với host, bổ sung 45 ca kiểm thử và chạy benchmark bốn shape trên 14 claim × 5 seed.
 
 ### Bằng chứng
 
 - [Báo cáo cá nhân](report/team/2A202603448_NguyenLamHoang.md).
-- [Benchmark workflow](src/reports/workflow_benchmark.json): 70/70 trial pass.
+- [Benchmark bốn shape](src/reports/benchmark.json), [crash suite](src/reports/crash.json).
