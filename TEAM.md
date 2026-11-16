@@ -13,7 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |    Đồng Ngọc Phúc    |  2A202603399    |    dnphuc04@gmail.com   |    dnphuc04    | Workflow + tích hợp + chốt bài nộp |
 |   2 |   Nguyễn Trần Tiến     |   2A202603504   |       |        | Single agent + ReAct + budget |
-|   3 |    Nguyễn Tiến Hưng    |   2A202603411   |       |        | Orchestrator + handoff + trace an toàn |
+|   3 |    Nguyễn Việt Hưng    |   2A202603411   | robinnguyen2004@gmail.com      |        | Orchestrator + handoff + trace an toàn |
 |   4 |    Nguyễn Huy Hoàng    |      |       |        | Kiểm thử policy/durability + benchmark + đánh giá |
 
 ## Phân công thực hiện
@@ -24,7 +24,7 @@
 | --- | --- | --- | --- |
 | Đồng Ngọc Phúc | Viết `src/lab8/shapes/workflow.py`; tích hợp ba shape; giữ cổng host xanh; tổng hợp báo cáo nhóm và checklist nộp | `src/tests/test_team_workflow.py`: kiểm tra ticket mâu thuẫn dữ kiện đơn không làm đổi quote, và thiếu order không ghi refund | Workflow qua 62 test student; dùng quote đầy đủ, `finish()` và truyền `crash_at`; tổng hợp `group_report.md`, thông tin nhóm và commit chốt sau khi có kết quả |
 | Nguyễn Trần Tiến | Viết `src/lab8/shapes/single.py` bằng `run_react`, tối đa 8 bước; chỉ cho model chọn tool đọc; tính đủ budget | `src/tests/test_team_single.py`: kiểm tra giới hạn vòng lặp và model không thể chọn tool ghi refund | Single qua 62 test student; tiền do code tính, host ghi; viết phần Single và ranh giới code/model trong mục 3 báo cáo nhóm |
-| Nguyễn Tiến Hưng | Viết `src/lab8/shapes/orchestrator.py`; dựng handoff bằng `make_handoff`; investigator chỉ đọc; trace theo allowlist | `src/tests/test_team_orchestrator.py`: kiểm tra handoff loại secret và tool ghi, trace không lộ dữ liệu nhạy cảm | Orchestrator qua 62 test student; viết phần Orchestrator, handoff và trace trong mục 3 báo cáo nhóm |
+| Nguyễn Việt Hưng | Viết `src/lab8/shapes/orchestrator.py`; dựng handoff bằng `make_handoff`; investigator chỉ đọc; trace theo allowlist | `src/tests/test_team_orchestrator.py`: kiểm tra handoff loại secret và tool ghi, trace không lộ dữ liệu nhạy cảm | Orchestrator qua 62 test student; viết phần Orchestrator, handoff và trace trong mục 3 báo cáo nhóm |
 | Nguyễn Huy Hoàng | Kiểm thử tích hợp approval, trần theo đơn, idempotency, crash; chạy benchmark bốn shape và tự kiểm hidden khi có dữ liệu; phân tích số liệu | `src/tests/test_team_safety.py`: kiểm tra approval sai claim và crash/resume không tạo refund trùng trên ba shape | Sinh `src/reports/crash.json` đạt 20/20 và `benchmark.json` đủ bốn shape, năm seed; soạn `decision_adr.md`, `research_card.md`, mục 4 và 7 báo cáo nhóm từ số liệu thật |
 
 ### Thứ tự phối hợp
