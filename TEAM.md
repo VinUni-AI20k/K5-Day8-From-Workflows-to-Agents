@@ -12,7 +12,7 @@
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |        |      |       |        |         |
-|   2 | Nguyễn Văn Vinh | 2A202603672 | 26ai.vinhnv@vinuni.edu.vn |        | Single agent (ReAct): shape B `single` |
+|   2 | Nguyễn Văn Vinh | 2A202603672 | 26ai.vinhnv@vinuni.edu.vn | [VINH1811](https://github.com/VINH1811) | Single agent (ReAct): shape B `single` |
 
 Gợi ý chia vai:
 
