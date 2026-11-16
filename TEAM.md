@@ -27,7 +27,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Lâm Hoàng | Workflow + integration | `2fbe693` | `src/tests/test_workflow_integration.py` (28 ca), `src/tests/test_shapes_integration.py` (17 ca) |
+| Nguyễn Lâm Hoàng | Workflow + integration; bonus B3 | `2fbe693` | `src/tests/test_workflow_integration.py` (28 ca), `src/tests/test_shapes_integration.py` (17 ca), `src/tests/test_bonus_swarm_verified.py` (101 ca) |
 
 ## Cá nhân
 

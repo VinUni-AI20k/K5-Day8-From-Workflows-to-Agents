@@ -31,6 +31,8 @@ Tích hợp workflow, single và orchestrator qua các API host chính thức; b
 
 Bổ sung `src/tests/test_shapes_integration.py` gồm 17 ca: chạy từng shape khi không có module ledger bổ sung, đổi shape trên cùng database mà vẫn một refund, crash/resume ở ba vị trí trên cả ba shape, giới hạn ReAct và chặn ghi tiền khi vòng lặp chạm trần. Thông tin thành viên được hợp nhất trong `TEAM.md`, giữ thông tin liên hệ và vai trò của các thành viên.
 
+Triển khai bonus B3 tại `src/bonus/swarm_verified.py`: giữ luồng swarm, thêm verifier đọc lại dữ liệu đơn có kiểm quyền và tính lại quote tối đa một lần trước khi ghi tiền. Bổ sung 12 claim đối kháng với nhãn khai báo theo luật nghiệp vụ, 101 test trong `src/tests/test_bonus_swarm_verified.py` và script tái lập benchmark/safety `src/bonus/evaluate.py`. Kết quả và giới hạn được trình bày trong [báo cáo bonus B3](bonus_report.md).
+
 ## 4. Bằng chứng
 
 Môi trường kiểm chứng: Windows AMD64, Python 3.14.3, pytest 8.4.2.
@@ -48,9 +50,9 @@ Các lệnh chạy trong `src/`, dùng Python của virtualenv:
 | Kiểm chứng | Kết quả |
 | --- | --- |
 | Smoke | `lab8.smoke pass` |
-| Cổng host và test tích hợp | 104 passed, 248 deselected |
-| Ma trận student của cả bốn shape | 248 passed, 104 deselected |
-| Test cá nhân bổ sung | 45 passed: 28 ca workflow và 17 ca tích hợp ba shape |
+| Cổng host, tích hợp và bonus | 205 passed, 248 deselected |
+| Ma trận student của cả bốn shape | 248 passed, 205 deselected |
+| Test cá nhân bổ sung | 146 passed: 28 ca workflow, 17 ca tích hợp ba shape, 101 ca B3 |
 | Crash suite tham chiếu | 20/20 |
 
 Benchmark được công cụ sinh tại [src/reports/benchmark.json](../../src/reports/benchmark.json), trên 14 claim public và seed `11,22,33,44,55`, database mới cho mỗi trial. Số liệu của workflow:
