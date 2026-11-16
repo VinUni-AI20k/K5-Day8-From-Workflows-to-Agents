@@ -1,8 +1,8 @@
-# Báo cáo cá nhân — 20240001_NguyenDangKhoa
+# Báo cáo cá nhân — Nguyễn Tiến Khoa
 
 ## 1. Thông tin thành viên
 
-- Họ tên: Nguyễn Tiêdn Khoa
+- Họ tên: Nguyễn Tiến Khoa
 - MSSV: 2A202603460
 - Email: nkhoa151004@gmail.com
 - GitHub: llkhoa
