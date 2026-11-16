@@ -4,7 +4,7 @@
 
 - **Họ tên:** Lê Đoàn Dương
 - **MSSV:** 2A202603372
-- **Email:** [Bổ sung email sinh viên]
+- **Email:** leduong04st@gmail.com
 - **GitHub:** [leduong04](https://github.com/leduong04)
 - **Repository:** [K5-L3A-DAY08-Gehihi-FromWorkflowsToAgents](https://github.com/lythanhlap/K5-L3A-DAY08-Gehihi-FromWorkflowsToAgents)
 - **Branch:** `LeDoanDuong`
