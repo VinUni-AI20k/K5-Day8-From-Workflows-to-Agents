@@ -29,8 +29,14 @@ ones. `lab8.trace.Trace` does this; your own tracer is fine if it matches.
 
 from __future__ import annotations
 
-from lab8.schemas import RunResult
-from lab8.shapes.common import not_implemented
+from contextlib import closing
+
+from lab8.db import connect
+from lab8.durability import issue_refund
+from lab8.schemas import Budget, RunResult, make_run_id
+from lab8.shapes.common import finish
+from lab8.tools import compute_compensation, get_claim_view, lookup_order, tool_cost
+from lab8.trace import Trace
 
 
 def run_claim(
@@ -40,7 +46,62 @@ def run_claim(
     store_path: str,
     crash_at: str | None = None,
 ) -> RunResult:
-    # TODO CP2 (student): thay stub này bằng shape workflow theo các bước ở docstring đầu file.
-    # TODO CP3 (student): truyền crash_at vào durability.issue_refund, không bắt InjectedCrash.
-    del store_path, crash_at
-    return not_implemented("workflow", claim_id, seed)
+    shape = "workflow"
+    budget = Budget()
+    trace = Trace(make_run_id(shape, claim_id, seed))
+
+    with closing(connect(store_path)) as conn:
+
+        def complete(
+            status: str,
+            proposal_amount: int = 0,
+            error_reason: str | None = None,
+        ) -> RunResult:
+            trace.add(
+                "decision",
+                {
+                    "status": status,
+                    "proposal_amount": proposal_amount,
+                    "reason": error_reason,
+                },
+            )
+            return finish(
+                conn,
+                shape=shape,
+                claim_id=claim_id,
+                seed=seed,
+                status=status,
+                proposal_amount=proposal_amount,
+                budget=budget,
+                trace=trace,
+                error_reason=error_reason,
+            )
+
+        budget.add_tool(tool_cost())
+        claim = get_claim_view(conn, claim_id)
+        if not claim["found"]:
+            return complete("failed", error_reason="unknown_claim")
+
+        order_id = claim["order_id"]
+        if not order_id:
+            return complete("needs_info", error_reason="missing_order_id")
+
+        budget.add_tool(tool_cost())
+        order_view = lookup_order(conn, order_id, claim["principal_id"])
+        if not order_view["visible"]:
+            return complete("escalated", error_reason=order_view["reason"])
+
+        budget.add_tool(tool_cost())
+        quote = compute_compensation(conn, order_view["order"])
+        proposal = quote["amount_vnd"]
+        if proposal == 0:
+            return complete("denied", error_reason=quote["reason"])
+
+        outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
+        if outcome["ok"]:
+            return complete("resolved", proposal_amount=proposal)
+
+        if outcome["conflict"]:
+            return complete("failed", proposal, outcome["reason"])
+
+        return complete("denied", proposal, outcome["reason"])
