@@ -23,15 +23,24 @@ Vai trò D — Test/Host, phụ trách kiểm thử workflow, single và orchest
 - Tham số hóa ba shape và hai điểm crash `before_effect`, `after_checkpoint`, tạo thành 6 ca kiểm thử. Đây là hai cửa sổ crash bổ sung cho T12 có sẵn (`after_effect_before_checkpoint`).
 - Kiểm tra `InjectedCrash` thực sự xảy ra, cùng trạng thái ledger, audit và checkpoint ngay sau crash.
 - Resume rồi retry trên cùng database; kiểm tra kết quả qua `trial_pass`, đúng một refund, một audit `refund_committed` và có checkpoint sau phục hồi.
-- Sử dụng fixture `public_db` và marker `student`; không sửa host, policy, metric hoặc dữ liệu chuẩn.
+- Sử dụng fixture `public_db`; đã bỏ marker `student` theo thông báo bổ sung để sáu ca test đóng góp chạy trong cổng host mặc định. Không sửa host, policy, metric hoặc dữ liệu chuẩn.
 - CP3: trực tiếp chạy T11 và T12 trên workflow, single, orchestrator và swarm; cả hai nhóm kiểm thử đều đạt 4/4 ca.
 - CP4: chạy crash suite đạt 20/20, tạo `src/reports/crash.json`; chạy các nhóm test approval, public matrix, bảo mật và durability bổ sung đều pass.
 - Commit chứa file test bổ sung: `d70fc4a` — `Final CP2`.
+- Commit điều chỉnh test đóng góp: `791521c` — `test: run durability contribution in default host suite`, author Võ Huy Hoàng, email `vhhoang27062@gmail.com`.
 - CP5: tạo `src/reports/benchmark.json` với 4 shape × 14 claim × 5 seed (280 trial), xác định trial fail duy nhất của swarm và chạy `lab8.check_submission` để phân loại các mục tài liệu cần hoàn thiện.
 
 ## 4. Bằng chứng
 
 File test: [test_durability_shapes.py](../../src/tests/test_durability_shapes.py).
+
+Sau khi bỏ marker `student`, chạy riêng bằng lệnh mặc định đạt **6 passed in 0.37s**:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q tests/test_durability_shapes.py -p no:cacheprovider
+```
+
+Các lệnh có `-m student` bên dưới là bằng chứng lịch sử trước thay đổi marker; để chạy lại file test này ở phiên bản hiện tại, dùng lệnh mặc định ở trên.
 
 Lệnh chạy từ thư mục `src/`:
 
@@ -138,12 +147,20 @@ Bằng chứng: [benchmark.json](../../src/reports/benchmark.json). Mỗi shape 
 .\.venv\Scripts\python.exe -m lab8.check_submission
 ```
 
-Lần kiểm tra bài nộp ghi nhận **8 FAIL, 1 WARN**: ba shape, benchmark 4 × 14 × 5, crash 20/20 và cấu trúc bảng đóng góp đều OK. Bảy FAIL thuộc các trường ADR còn trống (phụ trách B); một FAIL thuộc research card (phụ trách C). WARN báo thay đổi chưa commit, hash tại lần kiểm tra là `96ab720`; không dùng hash này làm commit chốt khi chưa thống nhất phiên bản nộp.
 
-Cần chạy lại `check_submission` sau khi B/C hoàn thiện tài liệu và nhóm commit bằng chứng. Chưa ghi nhận `0 FAIL`, kết quả hidden self-check hoặc ablation.
+
+### Tự kiểm student_drop không có nhãn
+
+Đã có đủ `hidden_claims.jsonl` và `hidden_world_state.json` trong `src/student_drop/`. Chạy từ `src/`:
+
+```powershell
+.\.venv\Scripts\python.exe -m lab8.benchmark --shapes workflow,single,orchestrator --cases student_drop/hidden_claims.jsonl --world student_drop/hidden_world_state.json --seeds 11,22,33,44,55 --out reports/hidden_selfcheck.json
+```
+
+Bằng chứng: [hidden_selfcheck.json](../../src/reports/hidden_selfcheck.json). Hoàn thành **600 trial** (3 shape × 40 claim × 5 seed), mỗi shape 200 trial. Cả 600 trial có `reason = unlabeled`, không có `status = error` hoặc cảnh báo trace/leak từ bộ tự kiểm. Dữ liệu không có nhãn nên không tính pass rate chính thức, không kết luận đạt ngưỡng hidden hoặc bonus. Không commit thư mục `student_drop/`.
 
 ## 6. Tự đánh giá
 
 Đã có test bổ sung cho hai cửa sổ crash trên ba shape, kiểm tra dữ liệu cả trước và sau phục hồi. Cần nắm rõ vì sao checkpoint không thay thế ledger và retry không được tạo thêm refund hoặc audit hoàn tiền.
 
-Đã hoàn thành phần chạy test, crash suite, benchmark public và kiểm tra bài nộp lần đầu của vai D. Kết quả và giới hạn được ghi trong các mục bằng chứng trên. Việc còn lại: phối hợp B/C hoàn thiện ADR và research card, commit các bằng chứng, cập nhật commit chốt và chạy lại `lab8.check_submission` đến khi `0 FAIL`. Chưa kết luận hoàn thành bài nộp nhóm.
+Đã hoàn thành phần chạy test, crash suite, benchmark public, tự kiểm 600 trial không có nhãn. Kết quả và giới hạn được ghi trong các mục bằng chứng trên. Việc còn lại: commit tài liệu và bằng chứng, chạy lại checker sau commit và phối hợp nhóm kiểm tra push/nộp LMS. Chưa ghi nhận hoàn tất các bước nộp bài này.

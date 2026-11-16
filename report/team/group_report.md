@@ -96,12 +96,12 @@ python -m lab8.check_submission
 | --- | --- |
 | Toàn bộ host, student và test bổ sung | 327 passed in 12.70s |
 | Crash JSON đã được D commit trong `96ab720` | 20/20 |
-| `lab8.check_submission` sau khi tích hợp ADR `c21031b` | 1 FAIL ở research card trống; 1 WARN vì còn file chưa commit |
-| Hidden self-check | Chưa chạy: workspace chưa có `student_drop/` |
+| Hidden self-check tại máy D | 600 trial, mỗi shape 200; tất cả reason = unlabeled, không có lỗi runtime hoặc cảnh báo trace/leak từ bộ tự kiểm |
 
-Tại máy D (Python 3.12.10), lần chạy toàn bộ test trước benchmark đạt **327 passed in 9.89s**. Checker trước khi tích hợp ADR ghi nhận **8 FAIL, 1 WARN** (bảy trường ADR và research card còn trống). Kết quả 1 FAIL tại máy A trong bảng trên được ghi nhận sau khi tích hợp ADR.
+Tại máy D (Python 3.12.10), lần chạy toàn bộ test trước benchmark đạt **327 passed in 9.89s**
 
-Checker tại máy A đọc được benchmark local, crash 20/20, ADR chọn workflow, bảng đóng góp và ba shape đạt 12/12 claim public ở seed 11. Đây chưa phải `0 FAIL`, chưa xác nhận bài nhóm sẵn sàng nộp. C cần hoàn thiện research card; D đã stage benchmark và cần chạy checker lại sau tích hợp. Kết quả public không chứng minh đạt ngưỡng hidden 0.75.
+
+D đã chạy ba shape trên 40 claim chưa có nhãn với năm seed, hoàn thành 600 trial. [hidden_selfcheck.json](../../src/reports/hidden_selfcheck.json) ghi nhận mọi trial có `reason = unlabeled`, không có `status = error` hoặc cảnh báo trace/leak từ bộ tự kiểm. Không có nhãn nên không suy ra pass rate chính thức hoặc kết luận đạt ngưỡng hidden 0.75. Lệnh tái hiện trong báo cáo cá nhân D; không commit `student_drop/`.
 
 ## 5. Khó khăn và cách xử lý
 

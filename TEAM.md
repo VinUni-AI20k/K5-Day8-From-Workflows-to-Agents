@@ -37,7 +37,7 @@ Email ghi `(Git)` lấy từ author commit; trường chưa có bằng chứng �
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 | Nguyễn Hoàng Anh | B — Single, safety, budget/token và ADR | `c47102a`, `4b462c5`, `c21031b` | `src/tests/test_single_safety.py`: unknown claim, budget/token, injection và ba cửa sổ crash (7 ca) |
-| Võ Huy Hoàng | D — Test/Host, durability, approval và bằng chứng CP4 | `d70fc4a`, `96ab720` | `src/tests/test_durability_shapes.py::test_resume_other_crash_windows_keeps_one_refund` (6 ca) |
+| Võ Huy Hoàng | D — Test/Host, durability, approval và bằng chứng CP4 | `d70fc4a`, `96ab720`, `791521c` | `src/tests/test_durability_shapes.py::test_resume_other_crash_windows_keeps_one_refund` (6 ca, không có marker student) |
 | Nguyễn Tuấn Hiếu | A — Workflow, idempotency, checkpoint và tổng hợp | `28717d8`, `33d04f3` | `src/tests/test_workflow_safety.py`: approval sai claim, injection, ba cửa sổ crash, mất checkpoint và amount conflict (9 ca) |
 | Phạm Hữu Đức | C — Orchestrator và tool đọc qua handoff | `8966ddd` | `src/tests/test_orchestrator.py`: `test_orchestrator_c001_resolves`, `test_orchestrator_missing_order_needs_info`, `test_orchestrator_unknown_claim_fails` (3 ca) |
 
@@ -49,9 +49,8 @@ Các commit có thật trong lịch sử `main`. Phân công ở trên không đ
 - `src/reports/crash.json` đã được D đưa vào `96ab720`, đạt **20/20**.
 - A đã tổng hợp benchmark trong [báo cáo nhóm](report/team/group_report.md). D đã chạy và xác nhận benchmark bốn shape × 14 claim × 5 seed, phân tích trial fail duy nhất của swarm và stage `src/reports/benchmark.json` để đưa vào Git trong lần tích hợp này.
 - B đã hoàn thiện `report/team/decision_adr.md` trong `c21031b`: chọn workflow, commit mã nguồn `96ab720`, run id `R-workflow-C-001-s11`.
-- C cần hoàn thiện `report/team/research_card.md`, gồm một ablation thực chạy và giới hạn kết luận.
-- Sau khi tích hợp ADR `c21031b`, lần chạy `lab8.check_submission` tại máy A đọc được benchmark local, crash và ADR; còn **1 FAIL** do research card trống và **1 WARN** vì file chưa commit. D cần chạy lại sau tích hợp để đạt **0 FAIL**.
-- Workspace máy A chưa có `student_drop/`; chưa ghi nhận hidden self-check hoặc điểm hidden.
+- C đã cập nhật `report/team/research_card.md`; phần kiểm tra định dạng tài liệu đã qua checker trong lần kiểm tra mới nhất.
+- D đã tự kiểm `student_drop/`: [hidden_selfcheck.json](src/reports/hidden_selfcheck.json) có 600 trial (3 shape × 40 claim × 5 seed), tất cả `reason = unlabeled`, không có lỗi runtime hoặc cảnh báo trace/leak từ bộ tự kiểm. Không có nhãn nên chưa có pass rate hidden chính thức; không commit `student_drop/`.
 - Mỗi thành viên xác nhận thông tin cá nhân, bổ sung báo cáo riêng và tự nộp cùng link repo trên LMS. Trạng thái này chưa xác nhận bài nhóm đã sẵn sàng nộp.
 
 ## Cá nhân
@@ -85,6 +84,7 @@ Các commit có thật trong lịch sử `main`. Phân công ở trên không đ
 - Bằng chứng CP3: T11 đạt 4/4 và T12 đạt 4/4 trên bốn shape.
 - Bằng chứng CP4: [crash.json](src/reports/crash.json) đạt 20/20; test approval 11 passed, public matrix 248 passed, handoff/secret/trace/workflow safety 18 passed và durability bổ sung 6 passed.
 - Commit chứa test: `d70fc4a`. File crash và bằng chứng CP4 được đưa vào `96ab720`.
+- Commit `791521c` (Võ Huy Hoàng) bỏ marker `student` để test đóng góp chạy trong cổng host mặc định; chạy riêng đạt 6 passed in 0.37s.
 - Báo cáo cá nhân: [2A202603397_VoHuyHoang.md](report/team/2A202603397_VoHuyHoang.md).
 - CP5: tạo [benchmark.json](src/reports/benchmark.json) với 4 shape × 14 claim × 5 seed (280 trial); ba shape nhóm viết đạt 70/70 mỗi shape, swarm đạt 69/70. Phân tích trial fail `R-swarm-C-002-s55`, tổng hợp bảng số liệu và đề xuất workflow theo kết quả public.
 - Chạy toàn bộ test trước benchmark: 327 passed in 9.89s.
