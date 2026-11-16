@@ -1,35 +1,20 @@
-# Research card
-
-File này nằm cố định ở `report/team/research_card.md`; `python -m lab8.check_submission` đọc cột "Nhóm điền" bằng máy.
-
-Phần này nối tiếp phần mini research ở buổi lý thuyết (slide 62–63). Chọn **một** câu R1–R4, điền 6 dòng, rồi biến nó thành **một ablation** chạy được trong lab: giữ nguyên model (MockLLM), tool, seed, corpus và giá, chỉ thay đổi một biến.
-
-| Câu | Nguồn (thư viện tham khảo, slide 68–69) | Câu hỏi gợi ý cho lab |
-| --- | --- | --- |
-| R1 · Scaling | Google Research 2026, *Towards a Science of Scaling Agent Systems* | Task claims chủ yếu tuần tự hay song song được? Dự đoán thêm investigator sẽ làm pass rate và cost/success thay đổi thế nào. |
-| R2 · Failure taxonomy | MAST, NeurIPS 2025, *Why Do Multi-Agent LLM Systems Fail?* | Các trial fail của swarm (seed 55) thuộc nhóm nào: lỗi giao việc, lệch mục tiêu, hay lỗi kiểm chứng? |
-| R3 · Architecture choices | AgentArch, AACL 2026 | Nếu đổi topology mà giữ nguyên mọi thứ khác, biến nào phải cố định để kết luận còn đúng? |
-| R4 · Evaluation confounders | EMNLP 2026, *Rethinking Evaluation of MAS Efficiency* | Làm sao chứng minh chênh lệch giữa A/B/C/D là do topology, không phải do prompt, tool hay seed? |
+# Phiếu nghiên cứu
 
 ## Phiếu của nhóm
 
-Điền vào cột cuối. Không xóa hai cột đầu.
-
 | Field | Hướng dẫn | Nhóm điền |
 | --- | --- | --- |
-| CÂU | R1 / R2 / R3 / R4 | |
-| SOURCE | Paper/blog, năm, URL, loại bằng chứng (benchmark, production report, blog kinh nghiệm) | |
-| CLAIM | Một kết luận gốc của nguồn. Không viết rộng hơn phạm vi paper | |
-| BOUNDARY | Model / dataset / setup giới hạn kết luận đó | |
-| HYPOTHESIS | Nếu đổi shape A→B (hoặc bật/tắt một thành phần), metric X sẽ đổi theo hướng nào, khoảng bao nhiêu | |
-| METHOD | Biến giữ cố định: model, tools, seed, corpus, giá, evaluator. Biến duy nhất được thay đổi: … | |
-| FAILURE / METRIC | Một lỗi dự kiến và cách đo nó: pass rate, pass^5, variance, cost/success, leak, bypass | |
+| CÂU | R1 / R2 / R3 / R4 | R3 · Lựa chọn kiến trúc |
+| SOURCE | Paper/blog, năm, URL, loại bằng chứng | Bogavelli, Subramani và Sharma (2026), [AgentArch: A Benchmark for Evaluating Agent Architectures in Enterprise Workflows](https://aclanthology.org/2026.aacl-long.44/), bài báo AACL-IJCNLP 2026/benchmark. Nghiên cứu đánh giá 18 cấu hình theo chiến lược điều phối, kiểu tác tử, bộ nhớ và công cụ suy nghĩ. |
+| CLAIM | Một kết luận gốc của nguồn | AgentArch xem kiến trúc gồm nhiều chiều thiết kế và đánh giá cấu hình một cách có hệ thống; kết quả chỉ áp dụng trong benchmark và các mô hình đã thử nghiệm. |
+| BOUNDARY | Model / dataset / setup giới hạn kết luận | Tác vụ quy trình doanh nghiệp, benchmark, mô hình được thử nghiệm và 18 cấu hình của bài báo. Kết quả không chứng minh orchestrator hay nhiều tác tử luôn tốt hơn. |
+| HYPOTHESIS | Shape A→B và dự đoán metric | Giữ nguyên topology swarm, chỉ tắt một thành phần: việc tin số ngày trễ ghi trong ticket thay cho `delay_days` của order (khối `REFERENCE_WEAKNESS`). Dự đoán: pass rate tăng từ 0.986 lên 1.000 và pass^5 từ 0.929 lên 1.000, vì lỗi duy nhất của swarm trên bộ public (C-002, seed 55) đến từ thành phần này; số lời gọi model không đổi. Nếu đúng, khoảng cách giữa swarm và workflow là do một quyết định tin dữ liệu, không phải do topology. |
+| METHOD | Biến giữ cố định và biến thay đổi | Giữ cố định: MockLLM, bộ công cụ, seed 11/22/33/44/55, 14 claim public, bảng giá, world, evaluator, và topology swarm (peer, parse, handoff, investigator, draft). Biến duy nhất thay đổi: có hay không khối ghi đè `delay_days` bằng số trong ticket. Biến thể `src/bonus/swarm_no_override.py` chép từ `swarm_reference.py`, chỉ bỏ khối đó; chạy cạnh swarm qua `--extra-shape`. |
+| FAILURE / METRIC | Lỗi dự đoán và cách đo | Lỗi dự đoán: swarm trả `resolved` cho C-002 ở seed 55 (ticket ghi trễ 5 ngày, order ghi 2 ngày) thay vì `denied`. Đo pass rate, pass^5, pass rate theo seed, phương sai seed, số lời gọi model/tool và chi phí/lần đạt. |
 
 ## Kết quả ablation
 
-- Lệnh đã chạy (copy nguyên văn):
-- Run id / file report:
-- Kết quả so với hypothesis (đúng / sai / không kết luận được), kèm số liệu:
-- Giới hạn: MockLLM không phải model sản xuất, latency là `unavailable`.
-
-Muốn đi xa hơn một ablation để lấy điểm cộng thì xem [docs/bonus_topics.md](../../docs/bonus_topics.md).
+- Lệnh đã chạy (trong `src/`): `python -m lab8.benchmark --shapes swarm,swarm_no_override --extra-shape swarm_no_override=bonus.swarm_no_override:run_claim --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/bonus_ablation_no_override.json`
+- Run id / file report: `src/reports/bonus_ablation_no_override.json`. Trial khác nhau duy nhất: `R-swarm-C-002-s55` (fail, `status resolved != denied`) so với `R-swarm_no_override-C-002-s55` (pass).
+- Kết quả so với giả thuyết: **Đúng.** Swarm: pass rate 0.986, pass^5 0.929, seed 55 = 0.929, phương sai 0.000816, 49.57 VND/lần đạt. Swarm không ghi đè: pass rate 1.000, pass^5 1.000, mọi seed = 1.000, phương sai 0, 48.72 VND/lần đạt. Số lời gọi model như nhau (3.00/claim); số tool call 4.66 so với 4.64, chênh do swarm tính lại quote một lần ở trial bị ghi đè. Vậy toàn bộ chênh lệch pass rate giữa swarm và workflow trên bộ public đến từ thành phần này, không phải từ topology. Phần chênh chi phí còn lại (48.72 so với 27.86 VND của workflow) là giá của topology: peer, parse, draft và investigator không mua thêm lượt đạt nào.
+- Giới hạn: Chỉ 14 claim public và một trial bất đồng, nên không đủ để kiểm định thống kê. Kết luận dựa trên cơ chế đã biết (`docs/metrics.md`), không dựa trên p-value. Chưa chạy trên bộ hidden. MockLLM không đại diện cho mô hình sản xuất: với model thật, việc đọc ticket có thể cho cả lỗi lẫn lợi ích mà bộ public không đo được. Độ trễ `unavailable`.
