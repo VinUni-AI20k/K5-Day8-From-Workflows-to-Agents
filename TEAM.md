@@ -16,7 +16,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Nguyễn Hoàng Anh | 2A202603385 | Chưa khai báo | [hoanganhchimxanh](https://github.com/hoanganhchimxanh) | B — Single Agent; quyết định kiến trúc và ADR |
 |   2 | Võ Huy Hoàng | 2A202603397 | 26ai.hoangvh4@vinuni.edu.vn | [ferr2764](https://github.com/ferr2764) | D — Test/Host, Durability & Benchmark Runner |
-|   3 | Nguyễn Tuấn Hiếu | 2A202603374 | tuanhieu1162004@gmail.com (Git) | Chưa khai báo | A — Workflow & Lead tổng hợp; báo cáo nhóm và TEAM |
+|   3 | Nguyễn Tuấn Hiếu | 2A202603374 | tuanhieu1162004@gmail.com (Git) | [tuanhieu1162004](https://github.com/tuanhieu1162004) | A — Workflow & Lead tổng hợp; báo cáo nhóm và TEAM |
 |   4 | Phạm Hữu Đức | 2A202603380 | phamduc31103@gmail.com (Git) | Chưa khai báo | C — Orchestrator & Research; handoff, research card và ablation |
 
 Email ghi `(Git)` lấy từ author commit; trường chưa có bằng chứng được đánh dấu `Chưa khai báo` để chính thành viên xác nhận, không suy đoán tài khoản.
