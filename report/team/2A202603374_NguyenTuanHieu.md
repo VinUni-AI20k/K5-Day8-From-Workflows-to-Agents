@@ -5,7 +5,7 @@
 - Họ tên: Nguyễn Tuấn Hiếu.
 - MSSV: 2A202603374.
 - Email: tuanhieu1162004@gmail.com, theo thông tin author commit.
-- GitHub cá nhân: chưa xác nhận; cần bổ sung đúng tài khoản của thành viên.
+- GitHub cá nhân: [tuanhieu1162004](https://github.com/tuanhieu1162004), do thành viên cung cấp.
 - Nhóm: 4 Thằng Sinh Viên, lớp L3A.
 - Repo nhóm: https://github.com/hoanganhchimxanh/K5-L3A-DAY08-4ThangSinhVien-FromWorkflowsToAgents
 - Vai trò: A — Workflow & Lead tổng hợp.
