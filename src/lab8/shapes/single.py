@@ -39,15 +39,14 @@ def run_claim(
     store_path: str,
     crash_at: str | None = None,
 ) -> RunResult:
-    del crash_at
     conn = connect(store_path)
     try:
-        return _run(conn, claim_id, seed=seed)
+        return _run(conn, claim_id, seed=seed, crash_at=crash_at)
     finally:
         conn.close()
 
 
-def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int) -> RunResult:
+def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | None) -> RunResult:
     budget = Budget()
     run_id = make_run_id("single", claim_id, seed)
     trace = Trace(run_id)
@@ -136,7 +135,11 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int) -> RunResult:
             error_reason=error_reason,
         )
 
-    outcome = issue_refund(conn, claim_id, proposal)
+    # Host is the only writer. Pass the FULL quote and crash_at; never catch
+    # InjectedCrash. Flush the safe trace first so a crash run leaves an artifact.
+    trace.add("host_call", {"tool": "issue_refund", "proposal_amount": proposal})
+    trace.write()
+    outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
     trace.add(
         "host_refund",
         {
