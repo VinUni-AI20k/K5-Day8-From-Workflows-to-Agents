@@ -13,6 +13,8 @@ CP2: Kiểm thử các shape đã viết. CP3: Kiểm chứng idempotency và cr
 
 CP4: Chạy crash suite, kiểm tra approval, giới hạn hoàn tiền theo đơn, handoff, trace và secret.
 
+CP5: Chạy benchmark bốn shape với năm seed, phân tích trial fail, tổng hợp số liệu và kiểm tra bài nộp.
+
 Vai trò D — Test/Host, phụ trách kiểm thử workflow, single và orchestrator; bổ sung test. Kiểm thử crash/resume bổ sung phục vụ CP3–CP4.
 
 ## 3. Đóng góp cụ thể
@@ -25,6 +27,7 @@ Vai trò D — Test/Host, phụ trách kiểm thử workflow, single và orchest
 - CP3: trực tiếp chạy T11 và T12 trên workflow, single, orchestrator và swarm; cả hai nhóm kiểm thử đều đạt 4/4 ca.
 - CP4: chạy crash suite đạt 20/20, tạo `src/reports/crash.json`; chạy các nhóm test approval, public matrix, bảo mật và durability bổ sung đều pass.
 - Commit chứa file test bổ sung: `d70fc4a` — `Final CP2`.
+- CP5: tạo `src/reports/benchmark.json` với 4 shape × 14 claim × 5 seed (280 trial), xác định trial fail duy nhất của swarm và chạy `lab8.check_submission` để phân loại các mục tài liệu cần hoàn thiện.
 
 ## 4. Bằng chứng
 
@@ -109,8 +112,38 @@ Select-String -Path lab8/shapes/workflow.py,lab8/shapes/single.py,lab8/shapes/or
 
 Các điểm trace ghi quyết định, mã claim/order, quote, điểm crash và handoff đã sanitize. Trace investigator dùng order view từ tool đọc có allowlist. Trong kết quả tìm kiếm, `parent_secret` chỉ xuất hiện ở lời nhắc trong docstring orchestrator; không thấy lệnh in trực tiếp claim/order row thô tại các điểm đã rà. Các test bảo mật nêu trên pass; kết luận giới hạn trong code và tình huống được kiểm tra, chưa thay thế đánh giá hidden.
 
+### CP5 — Benchmark và kiểm tra bài nộp
+
+Trước benchmark, chạy toàn bộ test bằng lệnh sau và ghi nhận **327 passed in 9.89s**:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q -o addopts= -p no:cacheprovider
+.\.venv\Scripts\python.exe -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json
+```
+
+Bằng chứng: [benchmark.json](../../src/reports/benchmark.json). Mỗi shape có 70 trial; các trial dùng cùng 14 claim, seed `11,22,33,44,55`, MockLLM, bảng giá và `as_of = 2026-11-15`, với SQLite mới cho từng trial.
+
+| Shape | Pass rate | Pass^5 | Seed min–max | Variance | Cost/success (VND mô phỏng) | Mean / p95 steps |
+| --- | ---: | ---: | --- | ---: | ---: | --- |
+| workflow | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 27.86 | 1.64 / 2 |
+| single | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 29.65 | 2.00 / 2 |
+| orchestrator | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 46.43 | 2.79 / 3 |
+| swarm | 0.986 | 0.929 | 0.929–1.000 | 0.000816 | 49.57 | 2.80 / 3 |
+
+Đọc các trial có `passed = false` trong JSON xác nhận chỉ một trial fail: swarm, `C-002`, seed `55`, lý do `status resolved != denied`, run ID `R-swarm-C-002-s55`. Đây là điểm yếu đối chứng dự kiến khi swarm tin số ngày trong ticket. Ba shape nhóm viết đều đạt 70/70 trial.
+
+Đề xuất gửi cho người phụ trách ADR: workflow có cùng độ đúng và variance bằng 0 như single/orchestrator trên public, đồng thời cost/success thấp nhất. Run ID dẫn chứng: `R-workflow-C-001-s11`. Đây là đề xuất dựa trên public; không thay thế quyết định ADR của nhóm hoặc đánh giá hidden. Chi phí là mô phỏng; latency `unavailable`.
+
+```powershell
+.\.venv\Scripts\python.exe -m lab8.check_submission
+```
+
+Lần kiểm tra bài nộp ghi nhận **8 FAIL, 1 WARN**: ba shape, benchmark 4 × 14 × 5, crash 20/20 và cấu trúc bảng đóng góp đều OK. Bảy FAIL thuộc các trường ADR còn trống (phụ trách B); một FAIL thuộc research card (phụ trách C). WARN báo thay đổi chưa commit, hash tại lần kiểm tra là `96ab720`; không dùng hash này làm commit chốt khi chưa thống nhất phiên bản nộp.
+
+Cần chạy lại `check_submission` sau khi B/C hoàn thiện tài liệu và nhóm commit bằng chứng. Chưa ghi nhận `0 FAIL`, kết quả hidden self-check hoặc ablation.
+
 ## 6. Tự đánh giá
 
 Đã có test bổ sung cho hai cửa sổ crash trên ba shape, kiểm tra dữ liệu cả trước và sau phục hồi. Cần nắm rõ vì sao checkpoint không thay thế ledger và retry không được tạo thêm refund hoặc audit hoàn tiền.
 
-Đã có bằng chứng CP2–CP4: sáu test bổ sung, T11/T12, kiểm tra tích hợp, crash suite 20/20 và các nhóm test approval/bảo mật đều pass. Việc tiếp theo: cập nhật bảng đóng góp trong `TEAM.md`, commit bằng chứng CP4, benchmark bốn shape với năm seed và `lab8.check_submission`. Các bước tiếp theo chưa được ghi nhận là hoàn thành trong báo cáo hiện tại.
+Đã hoàn thành phần chạy test, crash suite, benchmark public và kiểm tra bài nộp lần đầu của vai D. Kết quả và giới hạn được ghi trong các mục bằng chứng trên. Việc còn lại: phối hợp B/C hoàn thiện ADR và research card, commit các bằng chứng, cập nhật commit chốt và chạy lại `lab8.check_submission` đến khi `0 FAIL`. Chưa kết luận hoàn thành bài nộp nhóm.
