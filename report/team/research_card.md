@@ -17,19 +17,30 @@ Phần này nối tiếp phần mini research ở buổi lý thuyết (slide 62�
 
 | Field | Hướng dẫn | Nhóm điền |
 | --- | --- | --- |
-| CÂU | R1 / R2 / R3 / R4 | |
-| SOURCE | Paper/blog, năm, URL, loại bằng chứng (benchmark, production report, blog kinh nghiệm) | |
-| CLAIM | Một kết luận gốc của nguồn. Không viết rộng hơn phạm vi paper | |
-| BOUNDARY | Model / dataset / setup giới hạn kết luận đó | |
-| HYPOTHESIS | Nếu đổi shape A→B (hoặc bật/tắt một thành phần), metric X sẽ đổi theo hướng nào, khoảng bao nhiêu | |
-| METHOD | Biến giữ cố định: model, tools, seed, corpus, giá, evaluator. Biến duy nhất được thay đổi: … | |
-| FAILURE / METRIC | Một lỗi dự kiến và cách đo nó: pass rate, pass^5, variance, cost/success, leak, bypass | |
+| CÂU | R1 / R2 / R3 / R4 | R3 — Architecture choices (nhóm thống nhất chọn R3; Nguyễn Quốc Hưng chuẩn bị và chạy ablation). |
+| SOURCE | Paper/blog, năm, URL, loại bằng chứng (benchmark, production report, blog kinh nghiệm) | Bogavelli, Subramani, Sharma (2026), [AgentArch](https://aclanthology.org/2026.aacl-long.44/), AACL-IJCNLP; bằng chứng thực nghiệm trên benchmark enterprise. |
+| CLAIM | Một kết luận gốc của nguồn. Không viết rộng hơn phạm vi paper | Trong 18 cấu hình AgentArch, hiệu quả kiến trúc phụ thuộc model; nghiên cứu không xác lập một cấu hình tối ưu cho mọi trường hợp. |
+| BOUNDARY | Model / dataset / setup giới hạn kết luận đó | Phạm vi kết luận là các model, cấu hình và tác vụ enterprise được nghiên cứu. Lab này chỉ dùng MockLLM, 14 claim giả và chi phí mô phỏng; không tái lập điểm của paper hoặc đại diện production. |
+| HYPOTHESIS | Nếu đổi shape A→B (hoặc bật/tắt một thành phần), metric X sẽ đổi theo hướng nào, khoảng bao nhiêu | Tách 1 investigator đọc cả order/policy thành 2 investigator, mỗi bên đọc 1 tool, sẽ giữ pass rate và pass^5 (chênh 0 điểm phần trăm), nhưng tăng 1 tool đọc claim cho mỗi trial cần điều tra, tức 10 VND/trial đó theo bảng giá hiện có. |
+| METHOD | Biến giữ cố định: model, tools, seed, corpus, giá, evaluator. Biến duy nhất được thay đổi: … | Cố định MockLLM, nội dung prompt, tool có sẵn, corpus, seed 11/22/33/44/55, as_of, bảng giá, logic quote/host và evaluator. Chỉ thay cách phân chia hai tool đọc cho 1 hoặc 2 investigator; dùng cùng runtime. Mỗi trial có SQLite mới. Mã thí nghiệm ở tests/research_orchestrator_r3.py; không sửa file đo lường. |
+| FAILURE / METRIC | Một lỗi dự kiến và cách đo nó: pass rate, pass^5, variance, cost/success, leak, bypass | Rủi ro: thêm investigator làm tăng chi phí mà không tăng độ đúng. Đo pass rate, pass^5, seed variance, cost/success và mean tool/model calls bằng benchmark chính thức; rà secret/PII riêng bằng audit và test injection. |
 
 ## Kết quả ablation
 
-- Lệnh đã chạy (copy nguyên văn):
-- Run id / file report:
-- Kết quả so với hypothesis (đúng / sai / không kết luận được), kèm số liệu:
-- Giới hạn: MockLLM không phải model sản xuất, latency là `unavailable`.
+- Lệnh đã chạy (trong `src/`; môi trường thực thi dùng `.venv/Scripts/python.exe` làm `python`):
+
+```text
+python -m lab8.benchmark --shapes orchestrator,orchestrator_split --extra-shape orchestrator_split=tests.research_orchestrator_r3:run_split_claim --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/orchestrator_r3_ablation.json
+```
+
+- Run id / file report: `src/reports/orchestrator_r3_ablation.json`; ví dụ cặp `R-orchestrator-C-001-s11` và `R-orchestrator_split-C-001-s11`.
+- Kết quả: phù hợp giả thuyết trong phạm vi public. Cả hai bản pass `70/70`, pass rate/pass^5 đều `1.0`, variance `0.0`. Cost/success tăng từ `49.00142857142857` lên `58.287142857142854` VND mô phỏng, chênh `9.285714285714285` VND/trial trung bình. Có 65/70 trial cần điều tra, mỗi trial thêm đúng 1 lượt đọc claim giá 10 VND; 5 trial thiếu order_id trả sớm nên không thêm lượt đọc. Mean tool calls tăng từ `4.642857142857143` lên `5.571428571428571`; mean model calls giữ `1.9285714285714286`.
+- Giới hạn: đây là thí nghiệm phân chia công việc của investigator trong Shape C, thực thi tuần tự, không đo tăng tốc song song. Hai bản dùng cùng prompt và code tính tiền, không phải hai agent tự suy luận độc lập. Mean/p95 trace steps đều `6.0/7.0` vì trace ghi event ở mức tổng hợp, không tương ứng từng tool call. Không suy luận về tốc độ hoặc hidden từ kết quả này. MockLLM không phải model sản xuất; latency là `unavailable`.
+
+## Liên hệ với quyết định kiến trúc
+
+Ablation R3 cho thấy, khi giữ cố định model, prompt, tool, seed, corpus và giá, việc thêm một investigator không tăng độ đúng mà chỉ tăng cost (49.00 → 58.29 VND/success). Kết quả này nhất quán với benchmark 4 shape (`src/reports/benchmark.json`): ba shape nhóm viết cùng đạt pass rate 1.000, và chi phí tăng theo mức tự chủ (workflow 34.29, single 47.94, orchestrator 49.00). Vì vậy nhóm chọn `workflow` trong `report/team/decision_adr.md`. Theo BOUNDARY của AgentArch, kết luận này chỉ đúng cho MockLLM và 14 claim public, không suy rộng cho model thật.
+
+Người chuẩn bị R3: Nguyễn Quốc Hưng — `2A202603553`.
 
 Muốn đi xa hơn một ablation để lấy điểm cộng thì xem [docs/bonus_topics.md](../../docs/bonus_topics.md).
