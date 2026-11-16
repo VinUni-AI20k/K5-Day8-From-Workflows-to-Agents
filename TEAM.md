@@ -13,7 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |    Đồng Ngọc Phúc    |  2A202603399    |    dnphuc04@gmail.com   |    dnphuc04    | Workflow + tích hợp + chốt bài nộp |
 |   2 |   Nguyễn Trần Tiến     |   2A202603504   |       |        | Single agent + ReAct + budget |
-|   3 |    Nguyễn Việt Hưng    |   2A202603411   | robinnguyen2004@gmail.com      |        | Orchestrator + handoff + trace an toàn |
+|   3 |    Nguyễn Việt Hưng    |   2A202603411   | robinnguyen2004@gmail.com      | robinnguyen2004       | Orchestrator + handoff + trace an toàn |
 |   4 |    Nguyễn Huy Hoàng    |      |       |        | Kiểm thử policy/durability + benchmark + đánh giá |
 
 ## Phân công thực hiện
