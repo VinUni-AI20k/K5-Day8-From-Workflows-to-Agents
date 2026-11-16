@@ -4,6 +4,7 @@
 
 - Họ tên: Phạm Nguyên Vũ
 - MSSV: 2A202603436
+- Email: phamvu65cs@gmail.com
 - GitHub: `phamvu65`
 
 ## 2. Phần việc phụ trách
@@ -22,16 +23,24 @@ Shape B (`single`) trong `src/lab8/shapes/single.py`, gồm vòng ReAct, xử l�
 - Bộ test host: **55 passed**, gồm test mới trong `src/tests/test_single_agent.py`.
 - Benchmark riêng `single` trên 14 claim public × 5 seed (`11,22,33,44,55`): **70/70** trial pass, `pass^5 = 1.0`, `seed_variance = 0`, chi phí mô phỏng **29,46 VND/lượt thành công**. Run ID ví dụ: `R-single-C-014-s11`.
 
-Lệnh tái tạo benchmark từ `src`:
+Để tái hiện kết quả trên PowerShell, chạy các lệnh sau trong `src` với môi trường `.venv` đã kích hoạt. Mỗi lần chạy pytest dùng một thư mục tạm mới trong `.pytest_cache` để tránh lỗi quyền truy cập thư mục tạm mặc định.
 
 ```powershell
-python -m lab8.benchmark --shapes single --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out .pytest_cache/single-benchmark.json
+$studentTemp = Join-Path '.pytest_cache' ('student-single-' + [guid]::NewGuid().ToString('N'))
+python -m pytest -q -m student -o 'addopts=' -k 'single and not (workflow or orchestrator or swarm)' --basetemp $studentTemp
+
+$hostTemp = Join-Path '.pytest_cache' ('host-single-' + [guid]::NewGuid().ToString('N'))
+python -m pytest -q --basetemp $hostTemp
+
+python -m lab8.benchmark --shapes single --cases data/public_claims.jsonl --seeds '11,22,33,44,55' --out .pytest_cache/single-benchmark.json
 ```
 
 ## 5. Công cụ AI đã dùng
 
-Codex hỗ trợ đọc contract, viết code và test, chạy ma trận student, bộ test host và benchmark public. Kết quả ở trên lấy từ các lệnh đã chạy trong repo.
+Codex hỗ trợ triển khai và kiểm thử Shape B (single).
 
 ## 6. Tự đánh giá
 
-Kết quả kiểm thử hiện tại giới hạn ở dữ liệu public và MockLLM. Thành viên bổ sung nhận xét cá nhân và cách tự kiểm tra kết quả trước khi nộp.
+Điểm quan trọng của `single` là tách bước điều tra khỏi quyền ghi giao dịch. Vòng ReAct có thể đọc dữ liệu để lấy quote, còn host kiểm tra approval và ghi ledger. T14 cho thấy cần chuyển quote đầy đủ **150.000 VND** để host trừ **30.000 VND** đã hoàn và ghi đúng **120.000 VND**. T12 kiểm tra trường hợp crash ngay sau khi ghi giao dịch, khi lần chạy lại phải giữ nguyên khoản đã ghi.
+
+Kết quả 70/70 cho thấy `single` ổn định trên 14 claim public và 5 seed đã chạy. `decide` chọn hành động bằng logic mô phỏng dựa trên kết quả tool, còn MockLLM ghi nhận số lượt gọi và chi phí mô phỏng. Kết quả vì vậy giới hạn ở bộ public và cách mô phỏng này. Khả năng tổng quát trên bộ hidden và hiệu năng với model thật vẫn cần được đánh giá riêng.
