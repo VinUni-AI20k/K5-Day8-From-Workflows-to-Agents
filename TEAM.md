@@ -29,6 +29,7 @@ Gợi ý chia vai:
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 | | | | |
+| Nguyễn Quốc Hưng — 2A202603553 | Orchestrator, handoff/trace, audit secret/PII và R3 | [2ce84ee](https://github.com/congcoderht/K5-L3A-Day08-NhomV3-FromWorkflowsToAgents/commit/2ce84ee86e7f71d83d5bb86ba83b1c22e544b952) | src/tests/test_team_orchestrator.py — 19 test pass; ví dụ test_injected_ticket_cannot_override_order_or_leak_pii |
 
 ## Cá nhân
 
@@ -40,46 +41,25 @@ report/team/MSSV_HoTen.md
 
 Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
+Báo cáo Nguyễn Quốc Hưng: [2A202603553_NguyenQuocHung.md](report/team/2A202603553_NguyenQuocHung.md).
+
 Sao chép mục dưới đây cho từng thành viên.
 
-## 2A202603585_TruongVietCong
+## Nguyễn Quốc Hưng — 2A202603553
 
 ### Phần việc phụ trách
 
-- 
+- Shape C, handoff allowlist, trace và công cụ rà secret/PII; nhánh `hung`.
+- Phần Shape C trong báo cáo nhóm, nghiên cứu R3 và báo cáo cá nhân.
 
 ### Đóng góp cụ thể
 
-- 
+- Triển khai `src/lab8/shapes/orchestrator.py`; thêm 19 test riêng trong `src/tests/test_team_orchestrator.py`.
+- Viết `audit_team_security.py`, thí nghiệm `research_orchestrator_r3.py` và script kiểm sau merge.
 
 ### Bằng chứng
 
--
-
-## 2A202603553_NguyenQuocHung
-
-### Phần việc phụ trách
-
-- 
-
-### Đóng góp cụ thể
-
-- 
-
-### Bằng chứng
-
-- 
-
-## 2A202603585_TruongVietCong
-
-### Phần việc phụ trách
-
--
-
-### Đóng góp cụ thể
-
--
-
-### Bằng chứng
-
--
+- Student matrix Shape C: `62 passed`; test riêng: `19 passed`; bộ test mặc định: `73 passed`.
+- `src/reports/orchestrator_benchmark.json`: 70/70 trial public pass.
+- `src/reports/orchestrator_security.json` và `src/reports/orchestrator_r3_ablation.json`.
+- Báo cáo cá nhân: `report/team/2A202603553_NguyenQuocHung.md`. Commit kỹ thuật: `2ce84ee86e7f71d83d5bb86ba83b1c22e544b952` trên nhánh `hung`.
