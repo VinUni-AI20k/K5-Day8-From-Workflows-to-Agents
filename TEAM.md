@@ -13,6 +13,8 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |        |      |       |        |         |
 |   2 |        |      |       |        |         |
+|   3 | DoanNhatAnh | 2A202603408 | nhatanhdoan1@gmail.com | [nhatanh2901](https://github.com/nhatanh2901) | Orchestrator, handoff và bảo mật trace |
+|   4 |        |      |       |        |         |
 
 Gợi ý chia vai:
 
@@ -25,9 +27,11 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| DoanNhatAnh (2A202603408) | Orchestrator + handoff + bảo mật | [158d999](https://github.com/Dovanngoc05/K5-L3A-DAY08-Random-FromWorkflowsToAgents/commit/158d999) | `src/tests/test_orchestrator_security.py`: kiểm tra ticket injection, handoff chỉ đọc, trace không lộ dữ liệu và hai nhánh trả về sớm |
 
 ## Cá nhân
+
+Báo cáo của DoanNhatAnh: [2A202603408_DoanNhatAnh.md](report/team/2A202603408_DoanNhatAnh.md).
 
 Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
 

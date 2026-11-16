@@ -25,6 +25,8 @@ Nếu pass nhỉnh hơn mà cost và variance cao hơn, nhóm giữ hay đổi? 
 
 Trace của nhóm ghi những event nào? Field nào cố ý **không** ghi, và vì sao? Nếu trace nằm ngoài chỗ scanner quét được, đội security chứng minh thế nào là hệ thống không lộ secret?
 
+Đối với orchestrator, trace được ghi bằng `Trace` và `finish()`, có `run_id` khớp kết quả. Tùy nhánh, các event gồm `handoff`, `investigator`, `quote`, `decision`. Handoff qua allowlist, không chứa ticket hay parent context; investigator chỉ ghi visibility, reason và số policy. Không ghi secret, headers, principal context, số điện thoại, địa chỉ, tên hàng hoặc ghi chú nội bộ. Shape không tạo log phụ và không in dữ liệu ra stdout. Test `test_ticket_injection_cannot_cross_handoff_or_change_quote` kiểm tra handoff thực tế, các file có tiền tố run id, kết quả và stdout/stderr với ticket được cài canary/PII giả. Đây là bằng chứng cho các ca đã thử, chưa phải kết quả hidden hay bằng chứng an toàn tuyệt đối.
+
 ## Giới hạn
 
 MockLLM không phải model sản xuất. Latency để `unavailable`. Không sửa JSON cho đủ 0.75.
