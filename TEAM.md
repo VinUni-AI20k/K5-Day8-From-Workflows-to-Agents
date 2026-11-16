@@ -62,7 +62,7 @@ Các commit có thật trong lịch sử `main`. Phân công ở trên không đ
 - CP3: kiểm chứng ba cửa sổ crash; mất checkpoint vẫn nhận ra refund trong ledger, không hoàn trùng hoặc tạo audit committed lần hai.
 - Test: `src/tests/test_workflow_safety.py`; chi tiết [cp3_workflow.md](report/team/cp3_workflow.md).
 - CP5: tổng hợp `group_report.md`, phân công và bảng đóng góp trong `TEAM.md` bằng commit/test/số liệu thực tế.
-- Báo cáo cá nhân cần tạo riêng: `report/team/2A202603374_NguyenTuanHieu.md`.
+- Báo cáo cá nhân: [2A202603374_NguyenTuanHieu.md](report/team/2A202603374_NguyenTuanHieu.md).
 
 ### Nguyễn Hoàng Anh — 2A202603385
 
