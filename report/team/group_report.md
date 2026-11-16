@@ -4,7 +4,7 @@
 
 - Nhóm: Mien Nui, lớp L3A.
 - Thành viên: Nguyễn Lâm Hoàng, Nguyễn Tiến Khoa, Nguyễn Tuấn Quang và Phan Hải Đăng. [TEAM.md](../../TEAM.md)
-- Commit chứa mã tích hợp và hai JSON dùng trong báo cáo: `ede52b8`. Hash nộp chính thức sẽ được chốt cùng [ADR](decision_adr.md).
+- Commit chốt trong ADR: `7d7506e`. Mã tích hợp và hai JSON được đưa vào từ `ede52b8`. [ADR](decision_adr.md)
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -35,7 +35,7 @@ Benchmark chạy 14 claim public với seed `11,22,33,44,55`, tổng cộng 280 
 
 `swarm` sai ở `R-swarm-C-002-s55`. Ở seed 55, shape tham chiếu dùng số ngày trễ trong ticket và trả `resolved`, trong khi dữ liệu đơn cho kết quả `denied`. Ba shape nhóm đạt cả năm seed ở claim này. Crash suite đạt **20/20** cho host và swarm. Các ca T11/T12 trong ma trận student kiểm retry và crash/resume của từng shape. Lần kiểm tra bản tích hợp có **104 test mặc định** và **248 test student** đạt. Repo chưa có báo cáo tự kiểm `student_drop/`. [Crash JSON](../../src/reports/crash.json) · [Ma trận public](../../src/tests/test_public_matrix.py)
 
-**Đề xuất từ kết quả public:** chọn `workflow`. Shape đạt 70/70, dùng luồng cố định và có chi phí mô phỏng thấp nhất, 34,29 VND mỗi lượt đạt. `single` và `orchestrator` đạt cùng tỷ lệ pass với mức chi phí lần lượt là 35,42 và 43,57 VND. Quyết định chính thức cần ghi trong ADR. Phiếu nghiên cứu và ablation hiện chưa có số liệu để đưa vào báo cáo. [ADR](decision_adr.md) · [Research card](research_card.md)
+**Quyết định của nhóm:** chọn `workflow`. Shape đạt 70/70 trên bộ public và có chi phí mô phỏng thấp nhất, 34,29 VND mỗi lượt đạt. Kiểm tra hidden local bằng benchmark có nhãn cho `workflow`, `single` và `orchestrator` cùng đạt 200/200, còn `swarm` đạt 194/200. Phiếu nghiên cứu R3 đối chiếu `single` và `swarm` trên public, với giới hạn là hai cách triển khai còn khác nhau về luồng tool và lỗi có chủ đích. [ADR](decision_adr.md) · [Research card](research_card.md)
 
 ## 5. Khó khăn và cách xử lý
 
@@ -52,9 +52,9 @@ Khi mô phỏng cách grader chép ba file shape của nhóm vào starter, lện
 
 ## 7. Hạn chế và hướng cải thiện
 
-Kết quả đo giới hạn ở 14 claim public và năm seed. Các ngưỡng hidden cho shape chọn, gồm pass rate tối thiểu 0,75 và các cổng approval, secret, crash, cần được xác nhận bằng bộ chấm chính thức. Lab dùng MockLLM và bảng giá mô phỏng, latency là `unavailable`. Chênh lệch số bước phản ánh số event mỗi shape ghi trong trace. Với `single`, việc chọn tool hiện do `decide` thực hiện theo logic cố định, nên số liệu chỉ mô tả cách cài đặt này.
+Benchmark public giới hạn ở 14 claim và năm seed. Các ngưỡng hidden cho shape chọn, gồm pass rate tối thiểu 0,75 và các cổng approval, secret, crash, cần được xác nhận bằng bộ chấm chính thức. Lab dùng MockLLM và bảng giá mô phỏng, latency là `unavailable`. Chênh lệch số bước phản ánh số event mỗi shape ghi trong trace. Với `single`, việc chọn tool hiện do `decide` thực hiện theo logic cố định, nên số liệu chỉ mô tả cách cài đặt này.
 
-Có thể xem lại đề xuất `workflow` nếu bộ hidden cho thấy shape khác xử lý thêm được các claim mà workflow bỏ sót, vẫn đạt các cổng an toàn và mức tăng tỷ lệ thành công đủ lớn so với chi phí tăng thêm.
+Có thể xem lại lựa chọn `workflow` nếu tập đánh giá mở rộng cho thấy shape khác xử lý thêm được các claim mà workflow bỏ sót, vẫn đạt các cổng an toàn và mức tăng tỷ lệ thành công đủ lớn so với chi phí tăng thêm.
 
 ## 8. Tài liệu tham khảo
 
