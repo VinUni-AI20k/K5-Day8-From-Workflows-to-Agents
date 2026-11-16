@@ -11,7 +11,6 @@ from lab8.shapes import SHAPES
 from tests.conftest import BY_ID
 
 
-@pytest.mark.student
 @pytest.mark.parametrize("shape", ["workflow", "single", "orchestrator"])
 @pytest.mark.parametrize("crash_at", ["before_effect", "after_checkpoint"])
 def test_resume_other_crash_windows_keeps_one_refund(public_db, shape, crash_at):
