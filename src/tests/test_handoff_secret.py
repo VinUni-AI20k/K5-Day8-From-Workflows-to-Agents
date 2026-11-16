@@ -62,3 +62,25 @@ def test_claim_view_and_react_observation_omit_secret(public_db):
     conn.close()
     assert outcome["stopped"] == "final"
     assert "CANARY_SECRET_" not in str(outcome)
+
+def test_orchestrator_handoff_blocks_write_tools_and_unauthorized_facts():
+    """Student test: Ensure handoff strictly enforces read-only tools and fact allowlist."""
+    with pytest.raises(HandoffError):
+        make_handoff(
+            request_id="REQ-TEST",
+            claim_id="C-001",
+            task="malicious_investigate",
+            facts={"parent_secret": "LEAKED_SECRET", "delay_days": 3},
+            allowed_tools=["lookup_order", "issue_refund"],
+        )
+
+    # Valid handoff should drop any non-allowed facts automatically
+    clean_handoff = make_handoff(
+        request_id="REQ-TEST-2",
+        claim_id="C-001",
+        task="investigate",
+        facts={"unauthorized_field": "drop_me", "delay_days": 3},
+        allowed_tools=["lookup_order"],
+    )
+    assert "unauthorized_field" not in clean_handoff["facts"]
+    assert clean_handoff["facts"]["delay_days"] == 3
