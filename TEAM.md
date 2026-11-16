@@ -27,12 +27,20 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Hoàng Anh | | | |
+| Nguyễn Hoàng Anh | B — Single agent ReAct, ADR | 4b462c5 | src/tests/test_single_safety.py — kiểm thử ReAct budget, crash recovery và prompt injection |
 | Võ Huy Hoàng | D — Test/Host, durability, đánh giá | d70fc4a | src/tests/test_durability_shapes.py — test_resume_other_crash_windows_keeps_one_refund (6 ca) |
 | Nguyễn Tuấn Hiếu | | | |
 | Phạm Hữu Đức | | | |
 
 ## Cá nhân
+
+### Nguyễn Hoàng Anh — 2A202603385
+
+- Phụ trách CP2: lập trình Shape B (Single Agent ReAct); CP3 & CP4: xử lý crash/idempotency, rà soát budget/tokens và trace an toàn; CP5: viết quyết định kiến trúc decision_adr.md.
+- Đóng góp: hoàn thiện `src/lab8/shapes/single.py`, bổ sung bộ test `src/tests/test_single_safety.py` (7 tests), viết `report/team/decision_adr.md`.
+- Bằng chứng: Single student matrix 62/62 pass, Single safety 7/7 pass, crash suite 20/20, benchmark run ID `R-single-C-001-s11`.
+- Commit chứa test: `4b462c5`.
+- Báo cáo cá nhân: [2A202603385_NguyenHoangAnh.md](report/team/2A202603385_NguyenHoangAnh.md).
 
 ### Võ Huy Hoàng — 2A202603397
 
