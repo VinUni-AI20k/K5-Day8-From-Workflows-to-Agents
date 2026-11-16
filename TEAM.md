@@ -11,8 +11,10 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
+|   1 | Nguyễn Viết Mạnh Khải | 2A202603664 | | | Workflow + Single ReAct + Benchmark & ADR |
+|   2 | Vũ Đức Anh | 2A202603573 | | | Orchestrator + Security/Handoff + Crash & Research Card |
+
+Xem chi tiết phân công và quy tắc tránh xung đột Git tại [report/team/WORKPLAN.md](report/team/WORKPLAN.md).
 
 Gợi ý chia vai:
 
