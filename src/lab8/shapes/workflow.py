@@ -1,36 +1,24 @@
-"""Shape A — deterministic workflow. Student work.
+"""Shape A — deterministic workflow.
 
-Signature (do not change):
-
-    run_claim(claim_id, *, seed, store_path, crash_at=None) -> RunResult
-
-Suggested steps. Money stays in code (`lab8.tools.compute_compensation`).
-
-1. Open the store. Read the claim through `get_claim_view` (not SELECT *).
-2. Missing order_id -> status `needs_info`. Do not write the ledger.
-3. `lookup_order`. If not visible -> `escalated`. Do not copy phone, address, item, internal note.
-4. Quote from the order row. Ignore delay numbers written in the ticket.
-5. Quote amount 0 -> `denied`. Do not call issue_refund.
-6. Quote amount > 0 -> `durability.issue_refund(conn, claim_id, <full quote>)`.
-   Pass the FULL quote. The host checks the claim's own approval and subtracts
-   what earlier claims already got for the same order (T13, T14). Do not
-   subtract it yourself or the host subtracts twice.
-   Auth failure or order already refunded -> `denied` (the host writes `policy_denied`).
-   `proposal_amount` stays the full quote. Amount conflict -> `failed`.
-7. Success -> `resolved`. One ledger row, one `refund_committed` audit.
-8. Use MockLLM only to draft the reply text, if you want a model call at all.
-
-The model must not choose the refund amount and must not commit the refund.
-
-Trace contract v1 (docs/contracts.md): return a trace_path to a JSON file written in this run,
-{"run_id": <same run_id>, "events": [...]}, on every return path including early
-ones. `lab8.trace.Trace` does this; your own tracer is fine if it matches.
+The workflow owns the order of operations and the compensation quote. The host
+remains the only component that can authorize and commit a refund.
 """
 
 from __future__ import annotations
 
-from lab8.schemas import RunResult
-from lab8.shapes.common import not_implemented
+import sqlite3
+
+from lab8.db import connect
+from lab8.durability import issue_refund
+from lab8.schemas import Budget, RunResult, make_run_id
+from lab8.shapes.common import finish
+from lab8.tools import (
+    compute_compensation,
+    get_claim_view,
+    lookup_order,
+    tool_cost,
+)
+from lab8.trace import Trace
 
 
 def run_claim(
@@ -40,7 +28,137 @@ def run_claim(
     store_path: str,
     crash_at: str | None = None,
 ) -> RunResult:
-    # TODO CP2 (student): thay stub này bằng shape workflow theo các bước ở docstring đầu file.
-    # TODO CP3 (student): truyền crash_at vào durability.issue_refund, không bắt InjectedCrash.
-    del store_path, crash_at
-    return not_implemented("workflow", claim_id, seed)
+    """Run the fixed claims flow without letting ticket text set the quote."""
+    conn = connect(store_path)
+    try:
+        return _run(conn, claim_id, seed=seed, crash_at=crash_at)
+    finally:
+        conn.close()
+
+
+def _run(
+    conn: sqlite3.Connection,
+    claim_id: str,
+    *,
+    seed: int,
+    crash_at: str | None,
+) -> RunResult:
+    budget = Budget()
+    trace = Trace(make_run_id("workflow", claim_id, seed))
+
+    # The tools expose only the fields needed by this flow. In particular, do
+    # not trace the ticket, principal, raw headers, or the full database rows.
+    budget.add_tool(tool_cost())
+    claim = get_claim_view(conn, claim_id)
+    if not claim.get("found"):
+        trace.add("claim", {"found": False})
+        return finish(
+            conn,
+            shape="workflow",
+            claim_id=claim_id,
+            seed=seed,
+            status="failed",
+            proposal_amount=0,
+            budget=budget,
+            trace=trace,
+            error_reason="unknown_claim",
+        )
+
+    order_id = claim.get("order_id")
+    trace.add("claim", {"found": True, "order_id": order_id})
+    if not order_id:
+        trace.add("decision", {"status": "needs_info"})
+        return finish(
+            conn,
+            shape="workflow",
+            claim_id=claim_id,
+            seed=seed,
+            status="needs_info",
+            proposal_amount=0,
+            budget=budget,
+            trace=trace,
+            error_reason="missing_order_id",
+        )
+
+    budget.add_tool(tool_cost())
+    order_result = lookup_order(conn, order_id, claim["principal_id"])
+    trace.add(
+        "lookup_order",
+        {
+            "visible": bool(order_result.get("visible")),
+            "reason": order_result.get("reason"),
+            "order_id": order_id,
+        },
+    )
+    if not order_result.get("visible"):
+        return finish(
+            conn,
+            shape="workflow",
+            claim_id=claim_id,
+            seed=seed,
+            status="escalated",
+            proposal_amount=0,
+            budget=budget,
+            trace=trace,
+            error_reason=order_result.get("reason"),
+        )
+
+    # Quote only from the structured order and current policy. User supplied
+    # delay claims in the ticket are untrusted and are intentionally ignored.
+    order = order_result["order"]
+    budget.add_tool(tool_cost())
+    quote = compute_compensation(conn, order)
+    proposal = int(quote["amount_vnd"])
+    trace.add(
+        "quote",
+        {
+            "amount_vnd": proposal,
+            "reason": quote.get("reason"),
+            "clause_ids": quote.get("clause_ids", []),
+            "parts": quote.get("parts", {}),
+        },
+    )
+    if proposal <= 0:
+        return finish(
+            conn,
+            shape="workflow",
+            claim_id=claim_id,
+            seed=seed,
+            status="denied",
+            proposal_amount=0,
+            budget=budget,
+            trace=trace,
+            error_reason=quote.get("reason"),
+        )
+
+    # This is a host operation: it validates the claim's own approval,
+    # idempotency, and the per-order cap transactionally.
+    outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
+    trace.add(
+        "issue_refund",
+        {"ok": bool(outcome["ok"]), "reason": outcome["reason"]},
+    )
+    if not outcome["ok"]:
+        status = "failed" if outcome["conflict"] else "denied"
+        return finish(
+            conn,
+            shape="workflow",
+            claim_id=claim_id,
+            seed=seed,
+            status=status,
+            proposal_amount=proposal,
+            budget=budget,
+            trace=trace,
+            error_reason=outcome["reason"],
+        )
+
+    return finish(
+        conn,
+        shape="workflow",
+        claim_id=claim_id,
+        seed=seed,
+        status="resolved",
+        proposal_amount=proposal,
+        budget=budget,
+        trace=trace,
+    )
