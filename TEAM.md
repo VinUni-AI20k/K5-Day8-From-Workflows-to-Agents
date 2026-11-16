@@ -11,7 +11,7 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 | Nguyễn Văn Đăng | 2A202603371 | nguyenvandang22012k5@gmail.com | nguyenvandang2201 | Orchestrator, handoff và test |
 |   2 |        |      |       |        |         |
 
 Gợi ý chia vai:
@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Nguyễn Văn Đăng | Orchestrator, handoff và test | `14e0d76`, `d8a4211` | `src/tests/test_orchestrator_boundary.py` (2 test) |
 
 ## Cá nhân
 
