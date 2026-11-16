@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#132139">
+  <meta name="description" content="Demo trực quan Lab 8 LogiX VN: bốn kiến trúc xử lý claim và bonus B3 verifier.">
+  <title>LogiX VN — From Workflows to Agents</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23132139'/%3E%3Cpath d='M17 16h11v28h20v9H17z' fill='%23679aff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 3v17h17M8 15v-4m5 4V6m5 9V9"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H5v18h14V8zM14 3v6h5M8 13h8m-8 4h6"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 10-13h-8z"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m3 8 9-5 9 5-9 5zM3 12l9 5 9-5M3 16l9 5 9-5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12-1l2 3M4 15l2 3a7 7 0 0 0 12-1"/></symbol>
+  </defs></svg>
+  <a class="skip-link" href="#content">Đến nội dung chính</a>
+  <aside class="sidebar">
+    <a class="brand" href="#main" aria-label="LogiX VN, bài chính"><span class="brand-symbol"><i></i><i></i><i></i></span><span>LogiX<span class="brand-vn">/ VN</span></span></a>
+    <div class="sidebar-label">FROM WORKFLOWS TO AGENTS</div>
+    <nav aria-label="Điều hướng demo">
+      <button class="nav-item active" data-page="main"><svg class="icon"><use href="#i-grid"/></svg><span>Bài chính<small>4 kiến trúc · 1 bài toán</small></span><kbd>1</kbd></button>
+      <button class="nav-item" data-page="bonus"><svg class="icon"><use href="#i-shield"/></svg><span>Bonus B3<small>Verifier chống lan truyền lỗi</small></span><span class="nav-bonus">B3</span></button>
+      <button class="nav-item" data-page="evidence"><svg class="icon"><use href="#i-chart"/></svg><span>Bằng chứng<small>Benchmark & safety</small></span><kbd>3</kbd></button>
+    </nav>
+    <div class="sidebar-principle"><svg class="icon"><use href="#i-shield"/></svg><p>AI có thể đề xuất.<br><strong>Code quyết định tiền.</strong></p><span>Approval · Policy · Ledger</span></div>
+    <div class="sidebar-footer"><span class="avatar">MN</span><div><strong>Nhóm Miền Núi</strong><small>K5 · L3A · Lab 08</small></div><span class="member-count">04</span></div>
+  </aside>
+  <div class="shell">
+    <header class="topbar"><div class="breadcrumb">Không gian trình diễn <span>/</span> <strong id="breadcrumb">Bài chính</strong></div><div class="top-actions"><span class="live-pill"><i></i><span id="server-status">Đang kết nối</span></span><button class="quiet-button" id="help-button" title="Gợi ý trình bày">Hướng dẫn</button><button class="icon-button" id="present-button" aria-label="Bật chế độ trình chiếu" title="Chế độ trình chiếu"><svg class="icon"><use href="#i-expand"/></svg></button></div></header>
+    <main id="content" tabindex="-1"><div class="initial-loading"><span class="spinner"></span>Đang tải không gian demo…</div></main>
+    <footer class="page-footer"><span>LogiX VN <span class="footer-dot">·</span> Dữ liệu giả lập, kết quả chạy thật</span><span>MockLLM · Chi phí mô phỏng VND · Offline</span></footer>
+  </div>
+  <div id="notification" class="notification" role="status" aria-live="polite"></div>
+  <dialog id="help-dialog"><div class="dialog-heading"><div><span class="eyebrow">DEMO PLAYBOOK</span><h2>Trình bày rõ trong 5 phút.</h2></div><button class="icon-button" id="close-help" aria-label="Đóng hướng dẫn"><svg class="icon"><use href="#i-cross"/></svg></button></div><ol class="playbook"><li><span>01</span><div><strong>Cùng một task, bốn kiến trúc</strong><p>Ở Bài chính, chọn “Hoàn phí hợp lệ”. Phân biệt quote (đề xuất theo luật) và tiền host thực sự ghi.</p></div></li><li><span>02</span><div><strong>Cho thấy ranh giới an toàn</strong><p>Chọn “Hoàn phần chênh” rồi “Crash & resume”. Ledger vẫn chỉ có một refund và một audit.</p></div></li><li><span>03</span><div><strong>Bonus B3 là thí nghiệm riêng</strong><p>Mở Bonus B3, chạy C-002 với seed 55. Ticket nói 5 ngày, đơn ghi 2 ngày; verifier sửa quote 20.000đ về 0đ trước khi ghi tiền.</p></div></li><li><span>04</span><div><strong>Kết luận bằng số liệu</strong><p>Mở Bằng chứng. Verifier cải thiện độ đúng nhưng tăng chi phí. Với task này, workflow vẫn là baseline đơn giản và rẻ hơn.</p></div></li></ol><div class="dialog-foot">Phím tắt: <kbd>1</kbd> Bài chính <kbd>2</kbd> Bonus <kbd>3</kbd> Bằng chứng <kbd>R</kbd> Chạy <kbd>Esc</kbd> Thoát trình chiếu</div></dialog>
+</body>
+</html>
