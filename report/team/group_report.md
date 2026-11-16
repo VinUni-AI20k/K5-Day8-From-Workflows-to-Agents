@@ -69,7 +69,7 @@ Crash safety lấy từ [src/reports/crash.json](../../src/reports/crash.json): 
 
 ### Benchmark public CP5
 
-Số liệu dưới đây đọc từ `src/reports/benchmark.json` do lệnh chuẩn sinh tại máy A trên commit đo ở mục 1, không sửa JSON bằng tay. Tại lúc viết báo cáo, file có ở máy A nhưng chưa nằm trong lịch sử Git. Người D cần kiểm tra/tái chạy và commit bằng chứng benchmark; phần cập nhật của A chỉ gồm `group_report.md` và `TEAM.md`.
+Số liệu dưới đây đọc từ [benchmark.json](../../src/reports/benchmark.json), được sinh bằng lệnh chuẩn, không sửa JSON bằng tay. A đã tổng hợp kết quả; D đã chạy benchmark tại máy cá nhân, xác nhận đủ 280 trial và phân tích lỗi swarm. File benchmark đã được stage để đưa vào Git trong lần tích hợp này.
 
 Điều kiện cố định: 14 claim C-001…C-014, seed `11,22,33,44,55`, tổng 280 trial; mỗi trial có SQLite mới, cùng evaluator, backend MockLLM, `as_of=2026-11-15`. Giá mô phỏng: tool 10 VND/lần, input/output 20/80 VND mỗi 1000 token; latency là `unavailable`.
 
@@ -84,7 +84,7 @@ Run id dẫn chứng: `R-workflow-C-001-s11`, `R-single-C-001-s11`, `R-orchestra
 
 Nhóm chọn workflow theo [decision_adr.md](decision_adr.md), đã được B cập nhật trong `c21031b`: cùng độ đúng public với B/C, chi phí mô phỏng thấp nhất và không cần model. Điều kiện đổi kiến trúc ghi trong ADR; C phụ trách [research_card.md](research_card.md) và một ablation. Bảng này chưa cô lập tác động của topology vì số lời gọi model/tool và cách triển khai cũng khác nhau; kết luận về hiệu quả và an toàn vẫn giới hạn ở các ca đã kiểm tra.
 
-Lệnh đã thực chạy trong `src/`, bằng Python 3.13.14 trên Windows (dùng Python của môi trường `.venv` đã cài):
+Lệnh A đã thực chạy trong `src/`, bằng Python 3.13.14 trên Windows (dùng Python của môi trường `.venv` đã cài):
 
 ```powershell
 python -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json
@@ -99,7 +99,9 @@ python -m lab8.check_submission
 | `lab8.check_submission` sau khi tích hợp ADR `c21031b` | 1 FAIL ở research card trống; 1 WARN vì còn file chưa commit |
 | Hidden self-check | Chưa chạy: workspace chưa có `student_drop/` |
 
-Checker đọc được benchmark local, crash 20/20, ADR chọn workflow, bảng đóng góp và ba shape đạt 12/12 claim public ở seed 11. Đây chưa phải `0 FAIL`, chưa xác nhận bài nhóm sẵn sàng nộp. C cần hoàn thiện research card; D đưa benchmark vào Git và chạy checker lại sau tích hợp. Kết quả public không chứng minh đạt ngưỡng hidden 0.75.
+Tại máy D (Python 3.12.10), lần chạy toàn bộ test trước benchmark đạt **327 passed in 9.89s**. Checker trước khi tích hợp ADR ghi nhận **8 FAIL, 1 WARN** (bảy trường ADR và research card còn trống). Kết quả 1 FAIL tại máy A trong bảng trên được ghi nhận sau khi tích hợp ADR.
+
+Checker tại máy A đọc được benchmark local, crash 20/20, ADR chọn workflow, bảng đóng góp và ba shape đạt 12/12 claim public ở seed 11. Đây chưa phải `0 FAIL`, chưa xác nhận bài nhóm sẵn sàng nộp. C cần hoàn thiện research card; D đã stage benchmark và cần chạy checker lại sau tích hợp. Kết quả public không chứng minh đạt ngưỡng hidden 0.75.
 
 ## 5. Khó khăn và cách xử lý
 

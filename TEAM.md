@@ -47,7 +47,7 @@ Các commit có thật trong lịch sử `main`. Phân công ở trên không đ
 
 - Lần chạy tích hợp trên commit `96ab720` đạt **327 passed**.
 - `src/reports/crash.json` đã được D đưa vào `96ab720`, đạt **20/20**.
-- A đã tổng hợp benchmark bốn shape × 14 claim × 5 seed trong [báo cáo nhóm](report/team/group_report.md), từ lệnh chuẩn thực chạy tại máy A. File JSON local chưa nằm trong lịch sử Git ở phần việc A; D kiểm tra/tái chạy và commit `src/reports/benchmark.json`.
+- A đã tổng hợp benchmark trong [báo cáo nhóm](report/team/group_report.md). D đã chạy và xác nhận benchmark bốn shape × 14 claim × 5 seed, phân tích trial fail duy nhất của swarm và stage `src/reports/benchmark.json` để đưa vào Git trong lần tích hợp này.
 - B đã hoàn thiện `report/team/decision_adr.md` trong `c21031b`: chọn workflow, commit mã nguồn `96ab720`, run id `R-workflow-C-001-s11`.
 - C cần hoàn thiện `report/team/research_card.md`, gồm một ablation thực chạy và giới hạn kết luận.
 - Sau khi tích hợp ADR `c21031b`, lần chạy `lab8.check_submission` tại máy A đọc được benchmark local, crash và ADR; còn **1 FAIL** do research card trống và **1 WARN** vì file chưa commit. D cần chạy lại sau tích hợp để đạt **0 FAIL**.
@@ -86,7 +86,8 @@ Các commit có thật trong lịch sử `main`. Phân công ở trên không đ
 - Bằng chứng CP4: [crash.json](src/reports/crash.json) đạt 20/20; test approval 11 passed, public matrix 248 passed, handoff/secret/trace/workflow safety 18 passed và durability bổ sung 6 passed.
 - Commit chứa test: `d70fc4a`. File crash và bằng chứng CP4 được đưa vào `96ab720`.
 - Báo cáo cá nhân: [2A202603397_VoHuyHoang.md](report/team/2A202603397_VoHuyHoang.md).
-- Việc tiếp theo CP5: chạy benchmark bốn shape với năm seed, cung cấp số liệu cho báo cáo/ADR và chạy `lab8.check_submission`.
+- CP5: tạo [benchmark.json](src/reports/benchmark.json) với 4 shape × 14 claim × 5 seed (280 trial); ba shape nhóm viết đạt 70/70 mỗi shape, swarm đạt 69/70. Phân tích trial fail `R-swarm-C-002-s55`, tổng hợp bảng số liệu và đề xuất workflow theo kết quả public.
+- Chạy toàn bộ test trước benchmark: 327 passed in 9.89s.
 
 Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
 
