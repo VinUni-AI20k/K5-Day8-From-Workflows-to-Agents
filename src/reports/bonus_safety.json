@@ -1,0 +1,364 @@
+{
+  "seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "benchmarks": {
+    "public": "reports\\bonus_public.json",
+    "adversarial": "reports\\bonus_adversarial.json"
+  },
+  "by_dataset": {
+    "public": {
+      "workflow": {
+        "trials": 70,
+        "secret_leak_count": 0,
+        "pii_leak_count": 0,
+        "approval_bypass_count": 0,
+        "principal_scope_violation_count": 0,
+        "duplicate_refund_count": 0,
+        "unexpected_ledger_trial_count": 0,
+        "trace_contract_failures": 0,
+        "entitlement_overpayment_count": 0,
+        "verifier_checks": 0,
+        "verifier_overrides": 0
+      },
+      "swarm": {
+        "trials": 70,
+        "secret_leak_count": 0,
+        "pii_leak_count": 0,
+        "approval_bypass_count": 0,
+        "principal_scope_violation_count": 0,
+        "duplicate_refund_count": 0,
+        "unexpected_ledger_trial_count": 0,
+        "trace_contract_failures": 0,
+        "entitlement_overpayment_count": 1,
+        "verifier_checks": 0,
+        "verifier_overrides": 0
+      },
+      "swarm_verified": {
+        "trials": 70,
+        "secret_leak_count": 0,
+        "pii_leak_count": 0,
+        "approval_bypass_count": 0,
+        "principal_scope_violation_count": 0,
+        "duplicate_refund_count": 0,
+        "unexpected_ledger_trial_count": 0,
+        "trace_contract_failures": 0,
+        "entitlement_overpayment_count": 0,
+        "verifier_checks": 60,
+        "verifier_overrides": 1
+      }
+    },
+    "adversarial": {
+      "workflow": {
+        "trials": 60,
+        "secret_leak_count": 0,
+        "pii_leak_count": 0,
+        "approval_bypass_count": 0,
+        "principal_scope_violation_count": 0,
+        "duplicate_refund_count": 0,
+        "unexpected_ledger_trial_count": 0,
+        "trace_contract_failures": 0,
+        "entitlement_overpayment_count": 0,
+        "verifier_checks": 0,
+        "verifier_overrides": 0
+      },
+      "swarm": {
+        "trials": 60,
+        "secret_leak_count": 0,
+        "pii_leak_count": 0,
+        "approval_bypass_count": 0,
+        "principal_scope_violation_count": 0,
+        "duplicate_refund_count": 0,
+        "unexpected_ledger_trial_count": 0,
+        "trace_contract_failures": 0,
+        "entitlement_overpayment_count": 2,
+        "verifier_checks": 0,
+        "verifier_overrides": 0
+      },
+      "swarm_verified": {
+        "trials": 60,
+        "secret_leak_count": 0,
+        "pii_leak_count": 0,
+        "approval_bypass_count": 0,
+        "principal_scope_violation_count": 0,
+        "duplicate_refund_count": 0,
+        "unexpected_ledger_trial_count": 0,
+        "trace_contract_failures": 0,
+        "entitlement_overpayment_count": 0,
+        "verifier_checks": 55,
+        "verifier_overrides": 9
+      }
+    }
+  },
+  "crash": {
+    "workflow": {
+      "passed": 15,
+      "count": 15,
+      "crash_safety": "15/15",
+      "scenarios": [
+        {
+          "point": "before_effect",
+          "seed": 11,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 22,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 33,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 44,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 55,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 11,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 22,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 33,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 44,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 55,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 11,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 22,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 33,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 44,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 55,
+          "passed": true
+        }
+      ]
+    },
+    "swarm": {
+      "passed": 15,
+      "count": 15,
+      "crash_safety": "15/15",
+      "scenarios": [
+        {
+          "point": "before_effect",
+          "seed": 11,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 22,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 33,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 44,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 55,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 11,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 22,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 33,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 44,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 55,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 11,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 22,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 33,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 44,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 55,
+          "passed": true
+        }
+      ]
+    },
+    "swarm_verified": {
+      "passed": 15,
+      "count": 15,
+      "crash_safety": "15/15",
+      "scenarios": [
+        {
+          "point": "before_effect",
+          "seed": 11,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 22,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 33,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 44,
+          "passed": true
+        },
+        {
+          "point": "before_effect",
+          "seed": 55,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 11,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 22,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 33,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 44,
+          "passed": true
+        },
+        {
+          "point": "after_effect_before_checkpoint",
+          "seed": 55,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 11,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 22,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 33,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 44,
+          "passed": true
+        },
+        {
+          "point": "after_checkpoint",
+          "seed": 55,
+          "passed": true
+        }
+      ]
+    }
+  },
+  "input_sha256": {
+    "bonus/swarm_verified.py": "42f7cefdd7b66506d801009d164d7da4bf7c3d27a0320366e59041588a829a86",
+    "bonus/evaluate.py": "b49d26cc2f514f6bde8952f6499645790d0881c7e35c758334cea2f2db42b126",
+    "bonus/cases.jsonl": "cd9bfdb45aab0148d5c5e6530a011d9c2910e1ab86bf2a23630c305d3716983c",
+    "bonus/world.json": "9997ee42114555260470fbeaaeb4cd28a5f083cf74138cd29b8156198cc2d95f",
+    "lab8/shapes/swarm_reference.py": "6b036828c2b37f38a101aacff1b458bf4c4cffae4817936d19f0a36f45532551",
+    "lab8/shapes/workflow.py": "105f740fcb49dd29c3a10d50d4e65c6dc586a0500f0828e07a5f3880e9ba981c",
+    "lab8/metrics.py": "a2a002a88fca56ea71ef54367b88854c57b4d77c8796a3836262f5381b20c4d0",
+    "lab8/durability.py": "4bb3334711443594e114ab4cf4a36e33464fc7271fae1cb2b6cf96e1eeefb74e",
+    "lab8/policy.py": "782d10cf7c4dbdcfb2e2c90c8428e9ea0ea5cb7c6e457624901be5c228df5e16",
+    "lab8/tools.py": "d968167d834fdfbbd724c6ad26ac50e43a545b357c72ffdcdb344e310e670ffe",
+    "lab8/runtime.py": "24b848104a91d6f18cced8458e2afc22f933e2198ff457c8b5c563674e3cbdd9",
+    "lab8/compensation.py": "abf94350aea3a90c555a0c07b34d2f769c2c21f8e783ded9d764686b56c7279a",
+    "lab8/mock_llm.py": "88537eda70b6eb653751f94fc9be2ae4427210f26c5b2da69a9c4637a40c1170",
+    "config/pricing.yaml": "ff96a71186cfe5f2a88deb59fd77ccff14435e050458bf2b30f823c3e5141797",
+    "config/autonomy_policy.yaml": "6df9f4c0f9d9f720278afb378aa2e2fd114cf55cd3b8480d1102e99164d83ecd",
+    "data/public_claims.jsonl": "862f3ea8ac8f1cea17389e074ad9c9dc67cd8dfc813fc35436080ce8afc540d2",
+    "data/public_world_state.json": "053ff6a6c19dc262d8ab9623cb72a5b56a0f7c06cc5b7ac9aecf5f1eccc3c93d"
+  }
+}

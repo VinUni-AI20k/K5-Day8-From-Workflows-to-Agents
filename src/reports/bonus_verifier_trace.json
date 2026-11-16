@@ -1,0 +1,81 @@
+{
+  "run_id": "R-swarm_verified-C-002-s55",
+  "steps": 6,
+  "events": [
+    {
+      "kind": "handoff",
+      "payload": {
+        "principal_scope": "owner_order_only",
+        "task": "check_applicable_policy",
+        "facts": {},
+        "request_id": "REQ-C-002",
+        "claim_id": "C-002",
+        "max_output_tokens": 400,
+        "contract_version": "handoff.v1",
+        "allowed_tools": [
+          "lookup_order",
+          "lookup_policy",
+          "compute_compensation"
+        ]
+      }
+    },
+    {
+      "kind": "investigator",
+      "payload": {
+        "lookup_order": {
+          "visible": true,
+          "reason": "ok",
+          "order": {
+            "order_id": "O-202",
+            "status": "delivered",
+            "delay_days": 2,
+            "shipping_fee_vnd": 20000,
+            "paid_vnd": 100000,
+            "damage_verified": false,
+            "carrier": "LOGIX_LOCAL"
+          }
+        },
+        "policy_count": 1
+      }
+    },
+    {
+      "kind": "model_override",
+      "payload": {
+        "delay_days": 5
+      }
+    },
+    {
+      "kind": "verifier_check",
+      "payload": {
+        "matched": false,
+        "checked_fields": [
+          "delay_days",
+          "status",
+          "damage_verified",
+          "shipping_fee_vnd",
+          "paid_vnd"
+        ]
+      }
+    },
+    {
+      "kind": "verifier_override",
+      "payload": {
+        "changed_fields": [
+          "delay_days"
+        ],
+        "previous_amount_vnd": 20000,
+        "verified_amount_vnd": 0,
+        "repair_round": 1
+      }
+    },
+    {
+      "kind": "quote",
+      "payload": {
+        "amount_vnd": 0,
+        "reason": "no_entitlement",
+        "clause_ids": [],
+        "parts": {}
+      }
+    }
+  ]
+}
