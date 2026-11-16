@@ -18,11 +18,23 @@ Nhóm hiểu bài toán thế nào, chia việc ra sao, thứ tự làm bốn sh
 
 Mô tả ba shape nhóm viết (workflow, single, orchestrator): mỗi shape đọc gì, quyết định gì, gọi host ra sao. Chỉ rõ ranh giới code / model (tham khảo [docs/architecture.md](../../docs/architecture.md)), cách handoff được sanitize và trace ghi những event nào.
 
-...
+### A — Workflow
+
+Workflow thực hiện các bước cố định bằng Python: đọc claim qua `get_claim_view`, kiểm tra quyền xem đơn bằng `lookup_order`, rồi dùng `compute_compensation` để tính quote từ dữ liệu order và policy. Nếu quote dương, workflow chuyển toàn bộ quote cho `durability.issue_refund`; host chịu trách nhiệm kiểm tra approval, áp dụng trần theo đơn, idempotency và ghi ledger. Workflow không dùng model để quyết định số tiền. Trace ghi trạng thái tra cứu, quote đã lọc và quyết định; không ghi dữ liệu nhạy cảm của claim hoặc order.
+
+### B — Single agent
+
+[Nhóm bổ sung mô tả shape single sau khi tích hợp và kiểm chứng.]
+
+### C — Orchestrator
+
+[Nhóm bổ sung mô tả orchestrator, investigator và handoff đã sanitize sau khi tích hợp và kiểm chứng.]
 
 ## 4. Kết quả
 
 Bảng so sánh 4 shape trên bộ public (từ `src/reports/benchmark.json`): pass rate, pass^5, seed min–max, variance, cost/success, mean/p95 steps. Kèm crash safety (`src/reports/crash.json`) và, nếu có, kết quả tự kiểm trên `student_drop/`.
+
+Crash suite đã chạy: `crash_safety 20/20` (`src/reports/crash.json`). Benchmark 4 shape và các số liệu so sánh đang chờ nhóm chạy; không điền số liệu trước khi có report do công cụ sinh ra.
 
 ...
 
