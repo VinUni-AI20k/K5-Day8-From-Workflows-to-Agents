@@ -2,22 +2,18 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: NhomBDH
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Repo nhóm: `K5-Day8-NhomBDH-From-Workflows-to-Agents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo, nhánh nộp, commit chốt: https://github.com/baonvt/K5-Day8-NhomBDH-From-Workflows-to-Agents, nhánh `main`
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
-
-Gợi ý chia vai:
-
-- Nhóm 6 người: integration; workflow; single agent; orchestrator; ledger/policy/crash; eval/report.
-- Nhóm 4 người: workflow + integration; single; orchestrator + handoff; ledger + evaluation.
+|   1 | Nguyễn Võ Thái Bảo | 232030333 | baonguyenvothai@gmail.com | https://github.com/baonvt | Workflow + Evidence/Benchmark |
+|   2 | Nguyễn Trường Duy | 2A202603589 | ntduy279@gmail.com | https://github.com/Dizo279 | Single ReAct |
+|   3 | Đoàn Văn Hiệp | 2A202603565 | hiep24042002@gmail.com | https://github.com/hiep0405 | Orchestrator + Handoff/Trace |
 
 ## Bảng đóng góp
 
@@ -25,7 +21,9 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Nguyễn Võ Thái Bảo | Workflow | cb1cb3f | test_workflow_shape.py |
+| Nguyễn Trường Duy | Single ReAct | 67a3a24 | test_single_shape.py |
+| Đoàn Văn Hiệp | Orchestrator | ebd88eb | test_orchestrator_handoff_trace.py |
 
 ## Cá nhân
 
@@ -39,16 +37,58 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Sao chép mục dưới đây cho từng thành viên.
 
-## MSSV_HoTen
+## 232030333_NguyenVoThaiBao
 
 ### Phần việc phụ trách
 
--
+- Triển khai Shape A (Workflow).
+- Thiết lập báo cáo thực nghiệm benchmark và crash suite.
 
 ### Đóng góp cụ thể
 
--
+- Hoàn thiện mã nguồn `src/lab8/shapes/workflow.py`.
+- Viết test `src/tests/test_workflow_shape.py`.
+- Sinh các file bằng chứng `src/reports/benchmark.json` và `src/reports/crash.json`.
 
 ### Bằng chứng
 
--
+- Commit: `cb1cb3f`
+- Test: `test_workflow_shape.py`
+
+## 2A202603589_NguyenTruongDuy
+
+### Phần việc phụ trách
+
+- Triển khai Shape B (Single ReAct Agent).
+- Quản lý vòng lặp ReAct và giới hạn công cụ chỉ đọc.
+
+### Đóng góp cụ thể
+
+- Hoàn thiện mã nguồn `src/lab8/shapes/single.py`.
+- Viết test `src/tests/test_single_shape.py`.
+- Cập nhật tài liệu kỹ thuật ADR và research card.
+
+### Bằng chứng
+
+- Commit: `67a3a24`
+- Test: `test_single_shape.py`
+
+## 2A202603565_DoanVanHiep
+
+### Phần việc phụ trách
+
+- Triển khai Shape C (Orchestrator + Read-only Investigators).
+- Đảm bảo chuẩn giao tiếp Handoff v1 và Trace Contract v1.
+- Xử lý Crash safety và tính lũy kế (idempotency).
+
+### Đóng góp cụ thể
+
+- Hoàn thiện mã nguồn `src/lab8/shapes/orchestrator.py`.
+- Viết test `src/tests/test_orchestrator_handoff_trace.py`.
+- Biên soạn nội dung so sánh kiến trúc trong `report/team/group_report.md`.
+
+### Bằng chứng
+
+- Commit: `ebd88eb`
+- Test: `test_orchestrator_handoff_trace.py`
+- Báo cáo cá nhân: `report/team/2A202603565_DoanVanHiep.md`
