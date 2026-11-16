@@ -11,9 +11,16 @@
 
 Triển khai shape A tại `src/lab8/shapes/workflow.py` và kiểm thử tích hợp workflow với các thành phần host có sẵn: đọc dữ liệu theo principal, tính compensation, approval, ledger, checkpoint, trace và output contract.
 
+Phụ trách tích hợp ba shape của nhóm, bonus B3 về verifier trước thao tác hoàn tiền và UI demo offline. Bài chính, thí nghiệm B3 và bằng chứng benchmark được trình bày thành các khu vực riêng trong UI.
+
 ## 3. Đóng góp cụ thể
 
-Commit code, test và benchmark: `2fbe693` — `Implement deterministic workflow and host integration regressions`.
+| Phần đóng góp | Commit dẫn chứng | Nội dung |
+| --- | --- | --- |
+| Workflow | `2fbe693` | `Implement deterministic workflow and host integration regressions` |
+| Integration | `ede52b8` | `intergration`: tích hợp code nhóm, test ba shape và bằng chứng benchmark/crash |
+| Bonus B3 | `27392c9` | `bonus`: verifier, fixture đối kháng, test và báo cáo B3 |
+| UI demo | `b374e95` | `add demo ui`: dashboard offline, runner cách ly và test API |
 
 Workflow thực hiện các bước Python cố định: `get_claim_view` → kiểm tra mã đơn → `lookup_order` theo principal → `compute_compensation` → `issue_refund` khi quote dương → `finish`. Claim không tồn tại trả `failed`; thiếu mã đơn trả `needs_info`; đơn không tìm thấy hoặc ngoài phạm vi principal trả `escalated`; quote bằng 0 trả `denied`. Host từ chối approval trả `denied`, conflict số tiền trả `failed`, host chấp nhận trả `resolved`.
 
@@ -33,6 +40,8 @@ Bổ sung `src/tests/test_shapes_integration.py` gồm 17 ca: chạy từng shap
 
 Triển khai bonus B3 tại `src/bonus/swarm_verified.py`: giữ luồng swarm, thêm verifier đọc lại dữ liệu đơn có kiểm quyền và tính lại quote tối đa một lần trước khi ghi tiền. Bổ sung 12 claim đối kháng với nhãn khai báo theo luật nghiệp vụ, 101 test trong `src/tests/test_bonus_swarm_verified.py` và script tái lập benchmark/safety `src/bonus/evaluate.py`. Kết quả và giới hạn được trình bày trong [báo cáo bonus B3](bonus_report.md).
 
+Xây dựng UI demo tại `src/demo_ui/`, khởi động bằng `demo.cmd` ở gốc repo. UI có ba khu vực: bài chính so sánh bốn kiến trúc, bonus B3 minh họa quote trước/sau verifier, và bằng chứng với biểu đồ cùng JSON gốc. Mỗi yêu cầu demo chạy shape thật trong subprocess với database và trace tạm riêng; retry/resume trong cùng kịch bản dùng chung ledger. UI không ghi đè báo cáo nộp bài và chỉ hiển thị dữ liệu đơn trong phạm vi được phép. Bổ sung 15 test API tại `src/tests/test_demo_ui.py`, chế độ trình chiếu, phát lại trace và dàn ý demo 5 phút trong [DEMO.md](../../DEMO.md).
+
 ## 4. Bằng chứng
 
 Môi trường kiểm chứng: Windows AMD64, Python 3.14.3, pytest 8.4.2.
@@ -50,9 +59,9 @@ Các lệnh chạy trong `src/`, dùng Python của virtualenv:
 | Kiểm chứng | Kết quả |
 | --- | --- |
 | Smoke | `lab8.smoke pass` |
-| Cổng host, tích hợp và bonus | 205 passed, 248 deselected |
-| Ma trận student của cả bốn shape | 248 passed, 205 deselected |
-| Test cá nhân bổ sung | 146 passed: 28 ca workflow, 17 ca tích hợp ba shape, 101 ca B3 |
+| Cổng host, tích hợp, bonus và UI | 220 passed, 248 deselected |
+| Ma trận student của cả bốn shape | 248 passed, 220 deselected |
+| Test cá nhân bổ sung | 161 passed: 28 ca workflow, 17 ca tích hợp ba shape, 101 ca B3, 15 ca API demo |
 | Crash suite tham chiếu | 20/20 |
 
 Benchmark được công cụ sinh tại [src/reports/benchmark.json](../../src/reports/benchmark.json), trên 14 claim public và seed `11,22,33,44,55`, database mới cho mỗi trial. Số liệu của workflow:
@@ -78,10 +87,16 @@ Trial fail của swarm là C-002 tại seed 55, tương ứng điểm yếu tham
 
 Run id dẫn chứng: `R-workflow-C-001-s11` (refund hợp lệ), `R-workflow-C-002-s55` (không tin số ngày trong ticket), `R-workflow-C-013-s11` (đã hoàn đủ), `R-workflow-C-014-s11` (chỉ ghi phần chênh). JSON benchmark được sinh bằng lệnh, không chỉnh tay.
 
+Bằng chứng B3: [bonus_public.json](../../src/reports/bonus_public.json) ghi swarm_verified đạt 70/70 trial, [bonus_adversarial.json](../../src/reports/bonus_adversarial.json) ghi 60/60 trial; [bonus_safety.json](../../src/reports/bonus_safety.json) ghi 10 lần verifier can thiệp và crash bổ sung 15/15 cho biến thể. Trace minh họa `R-swarm_verified-C-002-s55` cho thấy quote 20.000 VND được sửa về 0 trước khi ghi tiền.
+
+Bằng chứng UI: test `test_bonus_demo_shows_real_before_and_after_without_changing_reports`, `test_demo_crash_and_resume_use_same_ledger` và `test_demo_requests_start_with_independent_databases` kiểm kết quả thật, không làm thay đổi benchmark và cách ly từng yêu cầu. Kiểm tra trên trình duyệt xác nhận hiển thị đúng hai hướng sửa quote, bảng crash/resume/retry, số liệu đối kháng 54/60 so với 60/60, chế độ trình chiếu và bố cục màn hình nhỏ.
+
 ## 5. Công cụ AI đã dùng
 
-Codex hỗ trợ đọc tài liệu, triển khai workflow, bổ sung test tích hợp và chạy các lệnh kiểm chứng ở mục 4. Bằng chứng kiểm tra gồm đối chiếu với contract, luật nghiệp vụ, ma trận public, truy vấn effect/audit trong test và benchmark do công cụ của lab tạo. Thông tin này ghi nhận kiểm chứng tự động; không thay cho việc thành viên tự chạy lại và giải thích code khi được hỏi.
+Codex hỗ trợ đọc tài liệu, triển khai workflow, tích hợp code nhóm, xây dựng bonus B3 và UI demo, bổ sung test và chạy các lệnh kiểm chứng ở mục 4. Bằng chứng kiểm tra gồm đối chiếu với contract, luật nghiệp vụ, ma trận public, truy vấn effect/audit trong test, benchmark do công cụ của lab tạo và kiểm tra UI trên trình duyệt. Thông tin này ghi nhận kiểm chứng tự động; không thay cho việc thành viên tự chạy lại và giải thích code khi được hỏi.
 
 ## 6. Tự đánh giá
 
 Workflow thể hiện mức tự chủ thấp: code quyết định luồng và số tiền, host quyết định quyền ghi. Kết quả public cho thấy hành vi ổn định trên năm seed và các test crash/resume bảo toàn một refund. Kết quả này có phạm vi dữ liệu public và các test tích hợp đã nêu; không suy ra điểm hidden hay quyết định kiến trúc chung của nhóm. Chi phí là mô phỏng, latency là `unavailable`; lab không sử dụng model sản xuất.
+
+B3 cho thấy bước kiểm chứng có thể sửa lỗi dữ kiện của swarm nhưng tăng chi phí so với workflow trên các corpus đã đo. UI giúp giải thích ranh giới quote/tiền thực hoàn và minh họa bằng chứng; UI không phải một kiến trúc mới hay bằng chứng về điểm hidden. Điểm bonus phụ thuộc các điều kiện chấm riêng của đề.
