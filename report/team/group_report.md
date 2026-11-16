@@ -18,6 +18,15 @@ Nhóm hiểu bài toán thế nào, chia việc ra sao, thứ tự làm bốn sh
 
 Mô tả ba shape nhóm viết (workflow, single, orchestrator): mỗi shape đọc gì, quyết định gì, gọi host ra sao. Chỉ rõ ranh giới code / model (tham khảo [docs/architecture.md](../../docs/architecture.md)), cách handoff được sanitize và trace ghi những event nào.
 
+### Shape B — Single agent dùng ReAct
+Trương Việt Công (MSSV 2A202603585) phụ trách Shape B trên nhánh feature/single.
+
+Shape B đọc claim trước khi chạy vòng ReAct, giới hạn tối đa 8 bước. Callback decide dùng kế hoạch đọc cố định theo thứ tự lookup_order, lookup_refund_history, lookup_policy. Các lượt gọi MockLLM được tính vào Budget. Claim không tồn tại trả failed, thiếu mã đơn trả needs_info, còn đơn ngoài phạm vi truy cập hoặc không tìm thấy trả escalated.
+
+Sau vòng lặp, compute_compensation tính mức bồi thường từ dữ liệu đơn và chính sách hiện hành. Ở C-002, ticket khai trễ 5 ngày nhưng dữ liệu đơn ghi 2 ngày nên Shape B từ chối hoàn tiền ở cả 5 seed. Khi quote dương, shape chuyển nguyên số tiền đề xuất vào issue_refund. Host kiểm approval, áp trần theo đơn và dùng ledger để tránh hoàn trùng khi retry. Ví dụ, ở C-014, quote là 150.000 VND, đơn đã được hoàn 30.000 VND nên host chỉ ghi thêm 120.000 VND.
+
+Trace ghi tên tool, tóm tắt quan sát, quote và quyết định cuối. Dữ liệu đơn trong trace lấy từ các trường cho phép của lookup_order. Mọi nhánh trả kết quả đi qua finish(). Shape truyền crash_at xuống host và ghi trace trước khi ném lại InjectedCrash để bên gọi tiếp tục xử lý.
+
 ### Shape C — Orchestrator và investigator chỉ đọc
 
 Người phụ trách: Nguyễn Quốc Hưng, MSSV `2A202603553`, nhánh `hung` trong repo `congcoderht/K5-L3A-Day08-NhomV3-FromWorkflowsToAgents`.
@@ -33,6 +42,11 @@ Trace chỉ ghi kết quả tìm claim dạng boolean, handoff đã sanitize, kh
 ## 4. Kết quả
 
 Bảng so sánh 4 shape trên bộ public (từ `src/reports/benchmark.json`): pass rate, pass^5, seed min–max, variance, cost/success, mean/p95 steps. Kèm crash safety (`src/reports/crash.json`) và, nếu có, kết quả tự kiểm trên `student_drop/`.
+
+### Kết quả Shape B
+Theo [benchmark.json](../../src/reports/benchmark.json), Shape B đạt 70/70 trial public trên 14 claim và 5 seed 11,22,33,44,55. Pass rate và pass^5 đều đạt 100%, tỷ lệ pass theo seed dao động 100%–100%, phương sai bằng 0. Chi phí mô phỏng là 47,94 VND/lần thành công. Mean/p95 theo số sự kiện trace lần lượt là 8,07/9. Một run đối chiếu là R-single-C-001-s11.
+
+Ma trận student lọc riêng Shape B đạt 62 test pass, gồm kịch bản retry T11 và crash/resume T12. Bốn test riêng của nhóm trong tests/test_team_single.py đều pass. Sau merge, kiểm tra approval ở seed 11 trên cả Workflow, Single và Orchestrator đạt 15/15 lượt. Approval bị thu hồi, hết hạn, thuộc claim khác và đơn đã hoàn đủ đều bị từ chối với audit policy_denied. Ca C-014 giữ tổng tiền hoàn ở mức 150.000 VND trên cả ba shape. Kết quả hidden đang chờ bộ dữ liệu student_drop/.
 
 ### Kết quả riêng Shape C trước khi merge
 
