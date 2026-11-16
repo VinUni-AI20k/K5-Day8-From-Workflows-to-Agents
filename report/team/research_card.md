@@ -17,19 +17,19 @@ Phần này nối tiếp phần mini research ở buổi lý thuyết (slide 62�
 
 | Field | Hướng dẫn | Nhóm điền |
 | --- | --- | --- |
-| CÂU | R1 / R2 / R3 / R4 | |
-| SOURCE | Paper/blog, năm, URL, loại bằng chứng (benchmark, production report, blog kinh nghiệm) | |
-| CLAIM | Một kết luận gốc của nguồn. Không viết rộng hơn phạm vi paper | |
-| BOUNDARY | Model / dataset / setup giới hạn kết luận đó | |
-| HYPOTHESIS | Nếu đổi shape A→B (hoặc bật/tắt một thành phần), metric X sẽ đổi theo hướng nào, khoảng bao nhiêu | |
-| METHOD | Biến giữ cố định: model, tools, seed, corpus, giá, evaluator. Biến duy nhất được thay đổi: … | |
-| FAILURE / METRIC | Một lỗi dự kiến và cách đo nó: pass rate, pass^5, variance, cost/success, leak, bypass | |
+| CÂU | R1 / R2 / R3 / R4 | R1 · Scaling |
+| SOURCE | Paper/blog, năm, URL, loại bằng chứng (benchmark, production report, blog kinh nghiệm) | Google Research, 2026, [Towards a science of scaling agent systems: When and why agent systems work](https://www.research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/), controlled benchmark trên 180 cấu hình agent. |
+| CLAIM | Một kết luận gốc của nguồn. Không viết rộng hơn phạm vi paper | Hiệu quả của multi-agent phụ thuộc cấu trúc tác vụ: phối hợp giúp tác vụ song song hóa được, nhưng trong các tác vụ suy luận tuần tự được nghiên cứu, các biến thể multi-agent làm giảm hiệu năng 39–70% do chi phí phối hợp và phân mảnh quá trình xử lý. |
+| BOUNDARY | Model / dataset / setup giới hạn kết luận đó | Nguồn đánh giá năm kiến trúc trên bốn benchmark và ba họ model với tool/token budget được chuẩn hóa. Kết luận không trực tiếp bao phủ LogiX-VN synthetic, MockLLM hoặc mọi hệ thống production. |
+| HYPOTHESIS | Nếu đổi shape A→B (hoặc bật/tắt một thành phần), metric X sẽ đổi theo hướng nào, khoảng bao nhiêu | Đổi từ workflow tuần tự sang orchestrator có investigator sẽ không tăng pass rate trên claim LogiX-VN, nhưng làm cost/success tăng ít nhất 50% do thêm bước điều phối và tool call. |
+| METHOD | Biến giữ cố định: model, tools, seed, corpus, giá, evaluator. Biến duy nhất được thay đổi: … | Giữ cố định MockLLM, tool manifest, 14 claim, world state, seed `11,22,33,44,55`, pricing và evaluator. Biến thay đổi là topology: workflow cố định → orchestrator trung tâm với investigator read-only. Mỗi trial dùng SQLite mới. |
+| FAILURE / METRIC | Một lỗi dự kiến và cách đo nó: pass rate, pass^5, variance, cost/success, leak, bypass | Rủi ro dự kiến là investigator không tăng độ đúng nhưng tạo coordination overhead. Đo pass rate, pass^5, seed variance/min–max, cost/success, mean/p95 steps; đồng thời yêu cầu leak và approval bypass đều bằng 0. |
 
 ## Kết quả ablation
 
-- Lệnh đã chạy (copy nguyên văn):
-- Run id / file report:
-- Kết quả so với hypothesis (đúng / sai / không kết luận được), kèm số liệu:
-- Giới hạn: MockLLM không phải model sản xuất, latency là `unavailable`.
+- Lệnh đã chạy (copy nguyên văn): `.venv/bin/python -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json`
+- Run id / file report: `R-workflow-C-001-s11`, `R-orchestrator-C-001-s11`; `src/reports/benchmark.json`.
+- Kết quả so với hypothesis (đúng / sai / không kết luận được), kèm số liệu: Đúng trên bộ public. Hai shape cùng đạt pass rate/pass^5 `1.000/1.000` và variance `0`, nhưng cost/success tăng từ `27.86` lên `46.43 VND`, tương đương khoảng `66.7%`; mean steps tăng từ `3.79` lên `4.36`. Leak và approval bypass đều bằng 0.
+- Giới hạn: MockLLM không phải model sản xuất, latency là `unavailable`. Đây là ablation trong lab synthetic; khác biệt giữa hai implementation được xem như một thay đổi topology và chưa chứng minh quan hệ nhân quả ngoài thiết lập này.
 
 Muốn đi xa hơn một ablation để lấy điểm cộng thì xem [docs/bonus_topics.md](../../docs/bonus_topics.md).
