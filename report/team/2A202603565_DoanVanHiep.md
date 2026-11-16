@@ -29,7 +29,7 @@
 
 ## 4. Bằng chứng
 
-- **Commit**: `6b386ed`
+- **Commit**: `bbf1e76`
 - **Bộ kiểm thử tự động**:
   - Kiểm thử máy chủ (Host tests): `python -m pytest -q` đạt `63/63 passed`.
   - Kiểm thử sinh viên (Student tests): `python -m pytest -q -m student -o addopts=` đạt `248/248 passed` (trong đó 62 test case dành riêng cho shape Orchestrator đều vượt qua 100%).
@@ -48,5 +48,6 @@
 
 ## 6. Tự đánh giá
 
-- **Mức độ hoàn thành**: 100% các tiêu chí yêu cầu cho Shape C (Orchestrator).
-- **Đáp ứng các điều kiện Must-Pass**: Đảm bảo không bypass approval, không lộ canary secret, và an toàn tuyệt đối khi xảy ra crash.
+- Các test public cho Orchestrator và handoff/trace đều đạt; test T12 xác nhận crash sau khi ghi effect rồi resume không tạo refund thứ hai.
+- Trace/handoff chỉ mang dữ liệu allowlist; investigator không có quyền ghi. Đây là kết quả trên bộ public và test trong repo, chưa phải hidden grade chính thức.
+- Hạn chế: MockLLM và 14 claim public không đại diện model hay traffic production; cần dùng kết quả hidden của giảng viên trước khi kết luận ngoài bộ public.

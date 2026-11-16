@@ -5,13 +5,14 @@
 - Tên nhóm: NhomBDH
 - Lớp: L3A
 - Repo nhóm: `K5-Day8-NhomBDH-From-Workflows-to-Agents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: https://github.com/baonvt/K5-Day8-NhomBDH-From-Workflows-to-Agents, nhánh `main`
+- URL repo hiện tại: https://github.com/baonvt/K5-Day8-NhomBDH-From-Workflows-to-Agents, nhánh `main`, mã shape chốt `bbf1e76`.
+- Tên repo cần đổi theo [SUBMISSION.md](SUBMISSION.md): `K5-L3A-DAY08-NhomBDH-FromWorkflowsToAgents`.
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 | Nguyễn Võ Thái Bảo | 232030333 | baonguyenvothai@gmail.com | https://github.com/baonvt | Workflow + Evidence/Benchmark |
+|   1 | Nguyễn Võ Thái Bảo | 2A202603638 | baonguyenvothai@gmail.com | https://github.com/baonvt | Workflow + Evidence/Benchmark |
 |   2 | Nguyễn Trường Duy | 2A202603589 | ntduy279@gmail.com | https://github.com/Dizo279 | Single ReAct |
 |   3 | Đoàn Văn Hiệp | 2A202603565 | hiep24042002@gmail.com | https://github.com/hiep0405 | Orchestrator + Handoff/Trace |
 
@@ -21,9 +22,9 @@
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Võ Thái Bảo | Workflow | cb1cb3f | test_workflow_shape.py |
-| Nguyễn Trường Duy | Single ReAct | 67a3a24 | test_single_shape.py |
-| Đoàn Văn Hiệp | Orchestrator | 6b386ed | test_orchestrator_handoff_trace.py |
+| Nguyễn Võ Thái Bảo | Workflow + benchmark/crash | cb1cb3f | `src/tests/test_workflow_shape.py` |
+| Nguyễn Trường Duy | Single ReAct + ADR/research | 67a3a24 | `src/tests/test_single_shape.py` |
+| Đoàn Văn Hiệp | Orchestrator + handoff/trace | bbf1e76 | `src/tests/test_orchestrator_handoff_trace.py` |
 
 ## Cá nhân
 
@@ -37,7 +38,7 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Sao chép mục dưới đây cho từng thành viên.
 
-## 232030333_NguyenVoThaiBao
+## 2A202603638_NguyenVoThaiBao
 
 ### Phần việc phụ trách
 
@@ -89,6 +90,6 @@ Sao chép mục dưới đây cho từng thành viên.
 
 ### Bằng chứng
 
-- Commit: `6b386ed`
+- Commit: `bbf1e76`
 - Test: `test_orchestrator_handoff_trace.py`
 - Báo cáo cá nhân: `report/team/2A202603565_DoanVanHiep.md`

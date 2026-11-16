@@ -6,7 +6,7 @@ Số liệu dưới đây lấy từ các file sinh bởi công cụ trong `src/
 
 - Tên nhóm: NhomBDH (chi tiết trong `TEAM.md`).
 - Thành viên: xem `TEAM.md`.
-- Commit chốt: `6b386ed` (hoàn thiện đầy đủ cả 3 shape: workflow, single, orchestrator).
+- Commit mã chốt: `bbf1e76` (hoàn thiện đầy đủ cả 3 shape: workflow, single, orchestrator).
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -41,7 +41,7 @@ Các cổng chạy thành công: `python -m pytest -q` → 63 passed; `python -m
 
 ## 6. Tổng hợp đóng góp
 
-Phần thành viên và bảng đóng góp được giữ cho lượt cập nhật tiếp theo theo yêu cầu. Khi điền, mỗi thành viên cần khai commit có nội dung và ít nhất một test đã thêm hoặc sửa trong `TEAM.md`, đồng thời tạo báo cáo cá nhân từ file mẫu.
+Đóng góp được ghi trong `TEAM.md`, mỗi người có commit kỹ thuật kèm test. Báo cáo cá nhân: Nguyễn Võ Thái Bảo (`2A202603638_NguyenVoThaiBao.md`), Nguyễn Trường Duy (`2A202603589_NguyenTruongDuy.md`), Đoàn Văn Hiệp (`2A202603565_DoanVanHiep.md`).
 
 ## 7. Hạn chế và hướng cải thiện
 
