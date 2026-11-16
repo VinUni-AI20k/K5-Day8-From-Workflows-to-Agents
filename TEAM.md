@@ -27,5 +27,5 @@ Gợi ý chia vai:
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 | Vũ Quang Thái | Shape single | `16496be` (single) | |
-| Nguyễn Thị Thùy Dung | Orchestrator; CP3 | `85bc805` (orchestrator); `c0ae98e` (CP3) | Cần bổ sung test do Dung thêm hoặc sửa và commit tương ứng. |
+| Nguyễn Thị Thùy Dung | Orchestrator; CP3; decision ADR | `85bc805` (orchestrator); `c0ae98e` (CP3); `036b684` (ADR) | `src/tests/test_orchestrator_handoff_boundary.py` (cần commit và ghi hash sau khi Dung kiểm tra) |
 | Lưu Thanh Mỹ | Shape workflow; benchmark, hidden, quyết định kiến trúc; vá rò ticket và khóa tham số tool trong single.py | `76aab20` (workflow); `76709c4` (trace privacy + arg integrity); `2ddce84` (benchmark) | `src/tests/test_shape_trace_privacy.py`, `src/tests/test_single_arg_integrity.py` (commit `76709c4`) |
