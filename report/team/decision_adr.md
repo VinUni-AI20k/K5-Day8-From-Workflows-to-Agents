@@ -1,30 +1,25 @@
 # Decision record
 
-Điền sau dấu `:` trên cùng dòng, không xóa nhãn. Giảng viên và `python -m lab8.check_submission` (chạy trong `src/`) đọc các dòng này bằng máy. Không đổi tên hay dời file này khỏi `report/team/`.
-`Shape chọn` phải là đúng một trong: `workflow`, `single`, `orchestrator`, `swarm`. Đây là shape được chấm cổng hidden.
-
-- Shape chọn:
-- Commit hash:
-- Run id dẫn chứng:
-- Pass rate / pass^5 / seed min-max / variance:
-- Cost per success (mô phỏng, VND):
-- Crash safety:
-- Secret leak / approval bypass:
-
-Ví dụ một dòng đã điền: `- Shape chọn: workflow`, `- Crash safety: 20/20 (src/reports/crash.json)`.
+- Shape chọn: workflow
+- Commit hash: 036b684ec610e3b811b0f066e05529d9c64c0145
+- Run id dẫn chứng: R-workflow-C-001-s11 (một trial trong src/reports/benchmark.json)
+- Pass rate / pass^5 / seed min-max / variance: 100% / 100% / 100%–100% / 0 (public, 14 claim × 5 seed)
+- Cost per success (mô phỏng, VND): 34,29
+- Crash safety: 20/20 (src/reports/crash.json, kiểm tra host và swarm); T12 của workflow đã pass trong ma trận student.
+- Secret leak / approval bypass: Các test public liên quan đã pass
 
 ## Vì sao shape này
 
-Viết 1 đoạn. So cùng corpus và cùng seed, không so với một lần chạy lẻ.
+Nhóm chọn workflow cho luồng xử lý tuần tự, dễ theo dõi. Trên cùng 14 claim public và các seed 11, 22, 33, 44, 55, workflow đạt pass rate 100%, pass^5 100% và variance 0. Single và orchestrator cũng đạt các tỷ lệ này. Workflow có trung bình 1,86 event trace mỗi trial, so với 2,64 của single và 3,71 của orchestrator. Cost/success của workflow là 34,29 VND mô phỏng, cao hơn single (32,39 VND); nhóm chấp nhận chênh lệch này để dùng luồng tuần tự.
 
 ## Có đáng đổi lấy multi-agent không
 
-Nếu pass nhỉnh hơn mà cost và variance cao hơn, nhóm giữ hay đổi? Điều kiện nào làm quyết định đảo lại?
+Trên benchmark public hiện có, orchestrator không cải thiện pass rate hay pass^5 so với workflow, trong khi cost/success mô phỏng là 47,23 so với 34,29 VND. Vì vậy kết quả này chưa cho thấy lợi ích đủ rõ để chọn multi-agent. Nhóm có thể cân nhắc lại nếu dữ liệu, policy hoặc số nguồn điều tra thay đổi và đánh giá mới cho thấy lợi ích về độ chính xác hoặc kiểm soát lớn hơn chi phí tăng thêm. Swarm đạt pass rate 98,57%, pass^5 92,86% và cost/success 49,57 VND mô phỏng trên cùng bộ public.
 
 ## Trace và bằng chứng
 
-Trace của nhóm ghi những event nào? Field nào cố ý **không** ghi, và vì sao? Nếu trace nằm ngoài chỗ scanner quét được, đội security chứng minh thế nào là hệ thống không lộ secret?
+Workflow ghi các sự kiện như quote, quyết định và lỗi theo từng nhánh; `finish()` ghi trace JSON khi trả kết quả. Trace không cố ý chứa parent secret, raw headers, ticket thô hay thông tin cá nhân. Trace phải được ghi đúng contract và nằm trong phạm vi scanner kiểm tra; log nằm ngoài phạm vi đó không chứng minh được an toàn dữ liệu. Bằng chứng so sánh nằm trong `src/reports/benchmark.json`; crash suite nằm trong `src/reports/crash.json`. Crash suite kiểm tra host và swarm; T12 trong ma trận student kiểm tra crash rồi chạy lại cho workflow.
 
 ## Giới hạn
 
-MockLLM không phải model sản xuất. Latency để `unavailable`. Không sửa JSON cho đủ 0.75.
+MockLLM là mô phỏng, không đại diện đầy đủ cho model sản xuất. Cost là chi phí mô phỏng, không phải hóa đơn API; latency là `unavailable`. Benchmark public không thay thế đánh giá hidden.
