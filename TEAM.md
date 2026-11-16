@@ -29,7 +29,7 @@ Gợi ý chia vai:
 | --- | --- | --- | --- |
 | Nguyễn Lâm Hoàng | Workflow + integration; bonus B3 | `2fbe693` | `src/tests/test_workflow_integration.py` (28 ca), `src/tests/test_shapes_integration.py` (17 ca), `src/tests/test_bonus_swarm_verified.py` (101 ca) |
 | Nguyễn Tuấn Quang | Orchestrator + Handoff | `8939976` | `src/tests/test_orchestrator_handoff.py` (1 ca tích hợp) |
-
+| Nguyễn Tiến Khoa | Single| fe3f57d| `src/tests/test_single_agent.py` (11 ca mới) |
 ## Cá nhân
 
 Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
