@@ -1,54 +1,40 @@
-# Team
+# Nhóm
 
 ## Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: 4AnhEm
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Repo nhóm: `K5-L3A-DAY08-4AnhEm-FromWorkflowsToAgents`
+- URL repo: https://github.com/quocvietnguyen7055/K5-L3A-DAY08-4AnhEm-FromWorkflowsToAgents
+- Nhánh nộp: `main`
 
 ## Thành viên
 
+Danh tính được xác nhận trong GitHub issue #1. Nguyen Quoc Viet là nhóm trưởng. Vai trò chia theo bộ việc A–D (nhãn `A`–`D` của các GitHub issue). Email do từng thành viên tự cung cấp (issue #23, #24, nhánh `feat/Do-Duan`, báo cáo cá nhân).
+
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
-
-Gợi ý chia vai:
-
-- Nhóm 6 người: integration; workflow; single agent; orchestrator; ledger/policy/crash; eval/report.
-- Nhóm 4 người: workflow + integration; single; orchestrator + handoff; ledger + evaluation.
+| 1 | Nguyen Quoc Viet | 2A202603556 | rinthongminh@gmail.com | [quocvietnguyen7055](https://github.com/quocvietnguyen7055) | Nhóm trưởng; phần C: shape orchestrator và handoff |
+| 2 | Le Quang Linh | 2A202603583 | linhlqhe181396@fpt.edu.vn | [linhlqhe181396](https://github.com/linhlqhe181396) | Phần B: shape single (ReAct) |
+| 3 | Dau Phuc Duc | 2A202603580 | teflon125.work@gmail.com | [dpduc313](https://github.com/dpduc313) | Phần A: shape workflow, tích hợp, bonus B4 |
+| 4 | Do Duc Duan | 2A202603590 | duandd1101@gmail.com | [Do-Duan](https://github.com/Do-Duan) | Phần D: ledger, crash và đánh giá |
 
 ## Bảng đóng góp
 
-`python -m lab8.check_submission` đọc bảng này bằng máy: giữ nguyên tiêu đề `## Bảng đóng góp` và các cột. Mỗi người một dòng: commit có nội dung và ít nhất một test đã thêm hoặc sửa.
+Mỗi dòng chỉ ghi commit có nội dung do chính người đó đứng tên trên nhánh `main`, không tính các commit merge PR. Riêng test của Le Quang Linh nằm trong commit merge `a62b4b8` của chính Linh. Đối chiếu: `git log --author=<tên> --stat main`.
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Nguyen Quoc Viet (2A202603556) | Nhóm trưởng; phần C: shape orchestrator và handoff | `3614266` (shape), `01bdac2` (kiểm thử C2) | `src/tests/test_team_orchestrator.py` (15 test: handoff/trace an toàn trên 14 claim và C-002 seed 55 bị từ chối) |
+| Le Quang Linh (2A202603583) | Phần B: test shape single | `a62b4b8` (test single), `ac2901f` (báo cáo cá nhân) | `src/tests/test_team_single.py` (2 test: C-002 seed 55 không tin ticket; giới hạn bước và `run_id` trong trace) |
+| Dau Phuc Duc (2A202603580) | Phần A: test workflow, rà soát tái lập, ablation research card, tích hợp | `2307509` (test workflow), `7c40c0a` (ablation và research card), `541f382` (báo cáo cá nhân), `9bbf1a4` (email, vai trò), `00db032` (khôi phục file mẫu) | `src/tests/test_team_workflow.py` (33 test: T02 cả 5 seed theo order; trace và kết quả không lộ dữ liệu khách) |
+| Do Duc Duan (2A202603590) | Phần D: demo durability và crash trong báo cáo nhóm | `f39d8b4` (báo cáo nhóm, demo crash), `dd26bf9` (email, báo cáo cá nhân) | Chưa có (issue #18) |
 
-## Cá nhân
+## Báo cáo cá nhân
 
-Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
+Báo cáo cá nhân của từng thành viên nằm tại:
 
-```text
-report/team/MSSV_HoTen.md
-```
-
-Ví dụ: `report/team/20241234_NguyenVanAn.md`.
-
-Sao chép mục dưới đây cho từng thành viên.
-
-## MSSV_HoTen
-
-### Phần việc phụ trách
-
--
-
-### Đóng góp cụ thể
-
--
-
-### Bằng chứng
-
--
+- `report/team/2A202603556_NguyenQuocViet.md`
+- `report/team/2A202603583_LeQuangLinh.md`
+- `report/team/2A202603580_DauPhucDuc.md`
+- `report/team/2A202603590_DoDucDuan.md`
