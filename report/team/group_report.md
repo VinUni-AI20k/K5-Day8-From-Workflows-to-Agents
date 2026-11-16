@@ -52,15 +52,14 @@ Quote dương được truyền **nguyên vẹn** cùng `crash_at` vào `durabil
 
 Trace ghi `claim` (found, has_order_id), `order` (5 field allowlist: order_id, status, delay_days, shipping_fee_vnd, damage_verified), `quote`, `issue_refund` (ok, reason, conflict) và `decision`. Không ghi ticket, claim row, order row thô hay dòng ledger. Vì không có model call, Shape A rẻ nhất và không dao động theo seed.
 
-### Shape B — Single agent ReAct
+### Shape B — Single agent dùng ReAct
+Trương Việt Công (MSSV 2A202603585) phụ trách Shape B trên nhánh feature/single.
 
-Người phụ trách: Trương Việt Công, MSSV `2A202603585`, nhánh `feature/single` (PR #2).
+Shape B đọc claim trước khi chạy vòng ReAct, giới hạn tối đa 8 bước. Callback decide dùng kế hoạch đọc cố định theo thứ tự lookup_order, lookup_refund_history, lookup_policy. Các lượt gọi MockLLM được tính vào Budget. Claim không tồn tại trả failed, thiếu mã đơn trả needs_info, còn đơn ngoài phạm vi truy cập hoặc không tìm thấy trả escalated.
 
-Shape B đọc claim bằng `get_claim_view`; claim không tồn tại trả `failed`. Model đọc ticket một lần (`purpose="parse"`, có tính cost) nhưng nội dung ticket chỉ là dữ liệu. Thiếu `order_id` trả `needs_info`. Sau đó agent chạy vòng `run_react` với `max_steps=8` và `worker=True`; hàm `decide` chỉ được chọn ba tool đọc theo thứ tự `lookup_order` → `lookup_refund_history` → `lookup_policy`, không có tool ghi nào được đưa vào. Nếu đơn không nhìn thấy, agent dừng sớm và shape trả `escalated`. Chạm trần 8 bước thì trả `failed` (`step_cap`).
+Sau vòng lặp, compute_compensation tính mức bồi thường từ dữ liệu đơn và chính sách hiện hành. Ở C-002, ticket khai trễ 5 ngày nhưng dữ liệu đơn ghi 2 ngày nên Shape B từ chối hoàn tiền ở cả 5 seed. Khi quote dương, shape chuyển nguyên số tiền đề xuất vào issue_refund. Host kiểm approval, áp trần theo đơn và dùng ledger để tránh hoàn trùng khi retry. Ví dụ, ở C-014, quote là 150.000 VND, đơn đã được hoàn 30.000 VND nên host chỉ ghi thêm 120.000 VND.
 
-Sau vòng lặp, **code** (không phải model) tính quote bằng `compute_compensation` từ order row đã đọc; model chỉ soạn lời đáp với số đã tính. Quote bằng 0 trả `denied`. Quote dương được truyền nguyên vẹn cùng `crash_at` vào `issue_refund`; `lookup_refund_history` chỉ để agent quan sát, shape không tự trừ khoản đã hoàn. `InjectedCrash` được ghi vào trace rồi ném lại.
-
-Trace ghi `action` (tên tool), `observe` (tóm tắt theo allowlist: tầm nhìn và field đơn đã lọc của `lookup_order`, `refund_count`/`refunded_vnd` của lịch sử hoàn, số policy), `react` (lý do dừng, các tool đã quan sát), `quote` và `decision`. Không ghi ticket, principal hay row thô. Shape B có nhiều model call nhất (5.5/trial) nên cost cao hơn A khoảng 40% dù độ đúng như nhau.
+Trace ghi tên tool, tóm tắt quan sát, quote và quyết định cuối. Dữ liệu đơn trong trace lấy từ các trường cho phép của lookup_order. Mọi nhánh trả kết quả đi qua finish(). Shape truyền crash_at xuống host và ghi trace trước khi ném lại InjectedCrash để bên gọi tiếp tục xử lý.
 
 ### Shape C — Orchestrator và investigator chỉ đọc
 
@@ -78,6 +77,12 @@ Trace chỉ ghi kết quả tìm claim dạng boolean, handoff đã sanitize, kh
 
 ### Benchmark 4 shape trên bộ public
 
+### Kết quả Shape B
+Theo [benchmark.json](../../src/reports/benchmark.json), Shape B đạt 70/70 trial public trên 14 claim và 5 seed 11,22,33,44,55. Pass rate và pass^5 đều đạt 100%, tỷ lệ pass theo seed dao động 100%–100%, phương sai bằng 0. Chi phí mô phỏng là 47,94 VND/lần thành công. Mean/p95 theo số sự kiện trace lần lượt là 8,07/9. Một run đối chiếu là R-single-C-001-s11.
+
+Ma trận student lọc riêng Shape B đạt 62 test pass, gồm kịch bản retry T11 và crash/resume T12. Bốn test riêng của nhóm trong tests/test_team_single.py đều pass. Sau merge, kiểm tra approval ở seed 11 trên cả Workflow, Single và Orchestrator đạt 15/15 lượt. Approval bị thu hồi, hết hạn, thuộc claim khác và đơn đã hoàn đủ đều bị từ chối với audit policy_denied. Ca C-014 giữ tổng tiền hoàn ở mức 150.000 VND trên cả ba shape. Kết quả hidden đang chờ bộ dữ liệu student_drop/.
+
+### Kết quả riêng Shape C trước khi merge
 Nguồn: `src/reports/benchmark.json`, commit `e99c5f2`. 14 claim public × seed `11,22,33,44,55`, 70 trial mỗi shape, SQLite mới mỗi trial, cùng MockLLM, cùng bảng giá mô phỏng (`tool_call_vnd = 10`, 20/80 VND mỗi 1k token vào/ra).
 
 | Shape | Pass rate | pass^5 | Seed min–max | Variance | Cost/success (VND mô phỏng) | Mean / p95 steps | Mean model calls |
