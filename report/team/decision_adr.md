@@ -1,25 +1,25 @@
-# Decision record
+# Biên bản quyết định kiến trúc
 
 - Shape chọn: workflow
-- Commit hash: 3614266 (implementation and generated evidence)
+- Commit hash: 3614266 (mã nguồn và bằng chứng benchmark)
 - Run id dẫn chứng: R-workflow-C-001-s11
-- Pass rate / pass^5 / seed min-max / variance: 1.000 / 1.000 / 1.000–1.000 / 0.000000 (`reports/benchmark.json`, 70 trials)
+- Pass rate / pass^5 / seed min-max / variance: 1.000 / 1.000 / 1.000–1.000 / 0.000000 (`reports/benchmark.json`, 70 lượt chạy)
 - Cost per success (mô phỏng, VND): 27.86
 - Crash safety: 20/20 (`src/reports/crash.json`)
-- Secret leak / approval bypass: No leak or bypass detected in host, public student, trace and crash checks; hidden grader not run.
+- Secret leak / approval bypass: Không phát hiện rò rỉ hoặc vượt quyền trong kiểm tra host, bộ public, trace và crash; chưa chạy bộ chấm hidden.
 
-## Vì sao shape này
+## Vì sao chọn kiến trúc này
 
-Chọn workflow cho nhóm claim hoàn phí này vì workflow đạt 70/70 trial, pass^5 = 1.000 và cost/success mô phỏng thấp nhất (27.86 VND). Single và orchestrator cũng đạt 70/70 nhưng tốn lần lượt 31.54 và 46.43 VND/success. Swarm đạt 69/70, pass^5 = 0.929, variance = 0.000816 và tốn 49.57 VND/success. Kết quả dùng cùng 14 claim, 5 seed, MockLLM, tool price và evaluator; đây là bằng chứng trong fixture của lab, không phải kết luận cho tác vụ khác.
+Chọn workflow cho nhóm yêu cầu hoàn phí này vì workflow đạt 70/70 lượt, pass^5 = 1.000 và chi phí mô phỏng mỗi lần thành công thấp nhất (27.86 VND). Single và orchestrator cũng đạt 70/70 nhưng lần lượt tốn 31.54 và 46.43 VND mỗi lần thành công. Swarm đạt 69/70, pass^5 = 0.929, phương sai = 0.000816 và tốn 49.57 VND mỗi lần thành công. Kết quả dùng chung 14 yêu cầu, 5 seed, MockLLM, giá công cụ và bộ đánh giá. Đây là bằng chứng trong bộ dữ liệu lab, không phải kết luận cho mọi tác vụ.
 
-## Có đáng đổi lấy multi-agent không
+## Có nên đổi sang nhiều tác tử không?
 
-Trong corpus này, orchestrator không cải thiện pass rate so với workflow và tốn thêm khoảng 66.7% mỗi lần thành công. Swarm có thêm một lỗi ở C-002 seed 55: tin số ngày trong ticket thay vì order. Multi-agent chỉ đáng cân nhắc lại nếu workload có nhiều phần việc độc lập mà investigator tăng độ đúng đủ để bù chi phí, và kết quả được xác nhận trên workload đại diện mới.
+Trong bộ dữ liệu này, orchestrator không cải thiện tỷ lệ đạt so với workflow và tốn thêm khoảng 66.7% cho mỗi lần thành công. Swarm có thêm một lỗi ở C-002, seed 55: tin số ngày trong phiếu thay vì dữ liệu đơn hàng. Chỉ nên cân nhắc nhiều tác tử khi công việc có các phần độc lập và investigator cải thiện độ chính xác đủ bù chi phí; cần kiểm chứng trên bộ dữ liệu đại diện mới.
 
 ## Trace và bằng chứng
 
-Trace ghi các bước đã allowlist như claim/order identifiers, order fields được phép, quote, handoff đã lọc và quyết định; không ghi ticket nguyên văn, principal ID, raw headers, parent secret, địa chỉ, số điện thoại hay ghi chú nội bộ. Handoff được dựng bằng `make_handoff`; worker chỉ nhận tool đọc. Bằng chứng hiện có là các test host/public và crash suite. Hidden grader không có trong workspace nên chưa thể kết luận về hidden set.
+Trace chỉ ghi các trường đã cho phép như mã yêu cầu/đơn hàng, trường đơn hàng, báo giá, handoff đã lọc và quyết định. Trace không ghi nguyên văn phiếu, mã khách hàng, header thô, bí mật cha, địa chỉ, số điện thoại hoặc ghi chú nội bộ. Handoff được tạo bằng `make_handoff`; investigator chỉ có công cụ đọc. Bằng chứng hiện có gồm bộ kiểm tra host/public và crash. Không có bộ hidden trong workspace nên chưa thể kết luận về bộ đó.
 
 ## Giới hạn
 
-MockLLM không phải model sản xuất; chi phí là mô phỏng VND và latency không khả dụng. Public benchmark chỉ có 14 claim × 5 seed. Chưa chạy hidden self-check. Thành viên cần xác nhận attribution, cá nhân cần bổ sung báo cáo và nhóm cần thay nhãn commit sau code commit cuối.
+MockLLM không đại diện cho mô hình sản xuất; chi phí là số mô phỏng bằng VND và không đo độ trễ. Benchmark public chỉ có 14 yêu cầu × 5 seed. Chưa chạy tự kiểm tra hidden. Nhóm cần xác nhận vai trò, đóng góp và báo cáo cá nhân của từng thành viên trước khi nộp.
