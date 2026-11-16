@@ -3,7 +3,7 @@ import pytest
 from lab8.db import connect
 from lab8.durability import InjectedCrash, get_refund
 from lab8.schemas import Budget
-from lab8.shapes.cp3 import finish_refund
+from lab8.shapes.ledger import finish_refund
 from lab8.trace import Trace
 
 

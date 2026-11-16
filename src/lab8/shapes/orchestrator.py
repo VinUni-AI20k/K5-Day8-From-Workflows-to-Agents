@@ -6,11 +6,11 @@ import sqlite3
 from contextlib import closing
 
 from lab8.db import connect
-from lab8.durability import issue_refund
 from lab8.handoff import make_handoff
 from lab8.runtime import run_readonly_investigators
 from lab8.schemas import Budget, RunResult, make_run_id
 from lab8.shapes.common import finish
+from lab8.shapes.ledger import finish_refund
 from lab8.tools import compute_compensation, get_claim_view, tool_cost
 from lab8.trace import Trace
 
@@ -78,8 +78,8 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
     if crash_at is not None:
         # Persist the safe trace before the host can interrupt the run.
         trace.write()
-    outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
-    if outcome["ok"]:
-        return finish_claim("resolved", proposal)
-    status = "failed" if outcome["conflict"] else "denied"
-    return finish_claim(status, proposal, outcome["reason"])
+    return finish_refund(
+        conn, shape="orchestrator", claim_id=claim_id, seed=seed,
+        proposal_amount=proposal, budget=budget, trace=trace,
+        crash_at=crash_at,
+    )
