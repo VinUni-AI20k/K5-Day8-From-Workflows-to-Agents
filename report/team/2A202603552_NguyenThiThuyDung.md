@@ -25,7 +25,7 @@
 
 - Commit `85bc805` (orchestrator) và `c0ae98e` (CP3).
 - Ma trận student đã chạy: 248 bài pass, bao gồm các kịch bản T11 chạy lại và T12 crash rồi chạy lại trên các shape.
-- Test handoff mới: `src/tests/test_orchestrator_handoff_boundary.py` (chưa commit; bổ sung hash sau khi commit).
+- Test handoff mới: `src/tests/test_orchestrator_handoff_boundary.py`
 
 ## 5. Công cụ AI đã dùng
 
