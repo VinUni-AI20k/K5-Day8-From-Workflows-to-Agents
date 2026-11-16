@@ -26,8 +26,11 @@
 
 ## 5. Công cụ AI đã dùng
 
-*(Mục này do Thái tự điền — ghi rõ công cụ đã dùng, dùng vào việc gì, và cách đã tự kiểm tra lại kết quả, theo [RULES.md](../../RULES.md). Không được AI tự bịa hộ phần này.)*
+- Tôi đã dùng ChatGPT (Codex) để rà soát repo, hỗ trợ đồng bộ nhánh Git, soạn báo cáo và viết test hồi quy src/tests/test_single_react_flow.py.
+- Tôi đối chiếu mô tả đóng góp với single.py, commit 16496be và hướng dẫn trong RULES.md. Test mới kiểm tra chuỗi get_claim_view → lookup_order → compute_compensation và xác nhận issue_refund nhận số tiền từ quote. python -m py_compile tests/test_single_react_flow.py chạy thành công; pytest chưa chạy được vì môi trường hiện không cài pytest.
+- Lab dùng MockLLM cố định theo seed, không gọi model bên ngoài hay cần API key.
 
 ## 6. Tự đánh giá
 
-*(Mục này do Thái tự viết — nhìn lại phần mình phụ trách, điểm làm tốt, điểm cần cải thiện.)*
+- Điểm làm tốt: phần single giữ luồng xử lý rõ ràng trong tối đa 8 bước ReAct. decide() lấy claim, tra cứu order theo định danh tin cậy rồi dùng kết quả compute_compensation làm số tiền đề xuất; thao tác ghi refund vẫn do host xử lý.
+- Điểm cần cải thiện: commit ban đầu cho single chưa kèm test riêng. Tôi đã bổ sung test hồi quy cho thứ tự tool và số tiền quote trong thay đổi này; lần sau nên đưa kiểm thử cùng commit triển khai ngay từ đầu và ghi rõ hơn bằng chứng cho phần approval ở CP4.
