@@ -4,7 +4,7 @@
 
 - Họ tên: Nguyễn Hoàng Anh
 - MSSV: 2A202603385
-- Email: 
+- Email: 26ai.anhnh5@vinuni.edu.vn
 - GitHub: hoanganhchimxanh
 
 ## 2. Phần việc phụ trách
