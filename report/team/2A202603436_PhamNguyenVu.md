@@ -37,7 +37,9 @@ python -m lab8.benchmark --shapes single --cases data/public_claims.jsonl --seed
 
 ## 5. Công cụ AI đã dùng
 
-Codex hỗ trợ triển khai và kiểm thử Shape B (single).
+- **Công cụ** — Codex.
+- **Mục đích sử dụng** — Phân tích cấu trúc repo và contract chấm bài, hỗ trợ triển khai vòng ReAct trong `single.py` và bổ sung test hồi quy trong `test_single_agent.py`. Phần rà soát tập trung vào quyền chỉ đọc của agent, nội dung được ghi vào trace và tính an toàn của giao dịch khi chạy lại sau crash.
+- **Cách tự kiểm tra kết quả** — Đối chiếu diff với luật hoàn tiền và contract của `RunResult` và trace. Chạy `python -m lab8.smoke` và dùng lệnh ở mục 4 để kiểm tra bộ host (**55 passed**) và bộ student riêng của `single` (**62 passed**, gồm T11 và T12). Kiểm tra diff để xác nhận `metrics.py`, `durability.py`, `policy.py`, `config/*.yaml` và `data/*` giữ nguyên. [Contract](../../docs/contracts.md) · [Luật nghiệp vụ](../../docs/business_rules.md) · [Quy định bài lab](../../RULES.md)
 
 ## 6. Tự đánh giá
 
