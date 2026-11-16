@@ -36,6 +36,10 @@ Bộ kiểm tra crash đạt 20/20. Cổng kiểm tra host: 54 đạt. Ma trận
 
 Ba shape ban đầu là stub. Đã triển khai theo contract, chuyển tiếp điểm crash vào durability và giữ host làm nơi duy nhất ghi refund. Kết quả được kiểm tra bằng cổng host, toàn bộ ma trận student, benchmark và crash suite. Trace không ghi nguyên văn nội dung phiếu.
 
+Thử nghiệm `python -m lab8.demo.buggy_workflow` in `unsafe refund rows: 2`, minh họa checkpoint riêng lẻ không bảo đảm ghi tiền đúng một lần: nếu tiến trình dừng sau khi tạo refund nhưng trước khi lưu checkpoint, lần chạy lại có thể tạo refund thứ hai. Với swarm trên cùng DB `data/crash.sqlite`, claim `C-012`, seed `11`, chạy lần đầu với `--crash-at after_effect_before_checkpoint` báo crash sau effect; khi đó ledger có 1 refund và 1 audit `refund_committed`. Chạy lại bỏ `--crash-at` trả `resolved`; tổng vẫn là 1 refund và 1 audit. Ledger/idempotency key `refund:C-012` giúp lần resume nhận ra effect đã có.
+
+Ba điểm crash cần phân biệt: `before_effect` xảy ra trước khi ghi refund nên resume có thể ghi một effect; `after_effect_before_checkpoint` xảy ra sau effect nhưng trước checkpoint nên resume phải tránh ghi trùng; `after_checkpoint` xảy ra sau khi cả effect và checkpoint đã lưu nên resume cũng không được tạo effect mới. Cặp chạy trên xác nhận trực tiếp điểm giữa; kết quả toàn bộ các điểm được kiểm tra bằng crash suite 20/20.
+
 ## 6. Tổng hợp đóng góp
 
 Cả bốn thành viên cùng thực hiện các phần việc và kiểm tra. Nguyen Quoc Viet là nhóm trưởng. Bảng đóng góp và bốn báo cáo cá nhân trong `TEAM.md` / `report/team/` ghi nhận phần việc chung, cùng commit và kết quả kiểm tra.
