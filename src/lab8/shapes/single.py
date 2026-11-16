@@ -79,7 +79,7 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
     outcome = run_react(conn, budget, observation=observation, decide=decide, max_steps=8, worker=True)
     final = outcome["final"]
     trace.add("agent", {"stopped": outcome["stopped"], "status": final.get("status")})
-    trace.add("observation", outcome.get("observation", {}))
+    trace.add("observation", {"last_tool": outcome.get("observation", {}).get("last_tool")})
 
     status = final.get("status", "failed")
     proposal = int(final.get("proposal_amount", 0))
