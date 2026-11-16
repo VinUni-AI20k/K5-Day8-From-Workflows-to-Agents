@@ -29,6 +29,7 @@
 
 ## 4. Bằng chứng
 
+- **Commit**: `6b386ed`
 - **Bộ kiểm thử tự động**:
   - Kiểm thử máy chủ (Host tests): `python -m pytest -q` đạt `63/63 passed`.
   - Kiểm thử sinh viên (Student tests): `python -m pytest -q -m student -o addopts=` đạt `248/248 passed` (trong đó 62 test case dành riêng cho shape Orchestrator đều vượt qua 100%).

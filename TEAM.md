@@ -23,7 +23,7 @@
 | --- | --- | --- | --- |
 | Nguyễn Võ Thái Bảo | Workflow | cb1cb3f | test_workflow_shape.py |
 | Nguyễn Trường Duy | Single ReAct | 67a3a24 | test_single_shape.py |
-| Đoàn Văn Hiệp | Orchestrator | ebd88eb | test_orchestrator_handoff_trace.py |
+| Đoàn Văn Hiệp | Orchestrator | 6b386ed | test_orchestrator_handoff_trace.py |
 
 ## Cá nhân
 
@@ -89,6 +89,6 @@ Sao chép mục dưới đây cho từng thành viên.
 
 ### Bằng chứng
 
-- Commit: `ebd88eb`
+- Commit: `6b386ed`
 - Test: `test_orchestrator_handoff_trace.py`
 - Báo cáo cá nhân: `report/team/2A202603565_DoanVanHiep.md`

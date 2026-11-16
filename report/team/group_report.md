@@ -6,7 +6,7 @@ Số liệu dưới đây lấy từ các file sinh bởi công cụ trong `src/
 
 - Tên nhóm: NhomBDH (chi tiết trong `TEAM.md`).
 - Thành viên: xem `TEAM.md`.
-- Commit chốt: `ebd88eb` (hoàn thiện đầy đủ cả 3 shape: workflow, single, orchestrator).
+- Commit chốt: `6b386ed` (hoàn thiện đầy đủ cả 3 shape: workflow, single, orchestrator).
 
 ## 2. Mục tiêu và cách tiếp cận
 
