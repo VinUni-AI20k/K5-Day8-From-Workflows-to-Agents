@@ -2,16 +2,16 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm: Solo Developer (Nguyen Khoi Vinh)
+- Tên nhóm: NKV
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: main, commit 28250e3
+- Repo nhóm: `K5-L3A-DAY08-NKV-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo, nhánh nộp, commit chốt: main, commit 511f6d9
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 | Nguyễn Khởi Vinh | 20240000 | vinh.nk.2753@gmail.com | vinhnk2753-blip | Core Architecture & Shapes Implementation |
+|   1 | Nguyễn Khánh Vinh | 2A202603390 | vinh.nk.2753@gmail.com | vinhnk2753-blip | Core Architecture & Shapes Implementation |
 
 Gợi ý chia vai:
 
@@ -24,7 +24,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Khởi Vinh | Core Architecture & Shapes | 9b8cc3e | tests/test_individual_vinhnk.py |
+| Nguyễn Khánh Vinh | Core Architecture & Shapes | 511f6d9 | tests/test_individual_vinhnk.py |
 
 ## Cá nhân
 
@@ -38,7 +38,7 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Sao chép mục dưới đây cho từng thành viên.
 
-## 20240000_NguyenKhoiVinh
+## 2A202603390_NguyenKhanhVinh
 
 ### Phần việc phụ trách
 

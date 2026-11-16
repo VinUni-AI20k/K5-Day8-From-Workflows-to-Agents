@@ -1,4 +1,4 @@
-"""Individual technical test suite by Nguyen Khoi Vinh (vinhnk).
+"""Individual technical test suite by Nguyen Khanh Vinh (vinhnk - 2A202603390).
 
 Verifies core idempotency and policy bounds:
 1. Re-running the same claim multiple times across shapes produces exactly one refund ledger row.

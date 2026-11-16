@@ -1,9 +1,9 @@
-# Báo cáo cá nhân — 20240000_NguyenKhoiVinh
+# Báo cáo cá nhân — 2A202603390_NguyenKhanhVinh
 
 ## 1. Thông tin thành viên
 
-- Họ tên: Nguyễn Khởi Vinh
-- MSSV: 20240000 (Vui lòng cập nhật MSSV chính xác của bạn)
+- Họ tên: Nguyễn Khánh Vinh
+- MSSV: 2A202603390
 - Email: vinh.nk.2753@gmail.com
 - GitHub: vinhnk2753-blip
 

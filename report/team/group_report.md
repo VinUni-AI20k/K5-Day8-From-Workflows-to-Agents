@@ -4,7 +4,7 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 
 ## 1. Thông tin nhóm
 
-- Tên nhóm: Solo Developer (Nguyễn Khởi Vinh)
+- Tên nhóm: NKV (Nguyễn Khánh Vinh - MSSV: 2A202603390)
 - Thành viên: xem `TEAM.md`
 - Commit chốt (trùng `report/team/decision_adr.md`): 28250e3
 
