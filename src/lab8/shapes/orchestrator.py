@@ -21,7 +21,7 @@ from __future__ import annotations
 import sqlite3
 
 from lab8.db import connect
-from lab8.durability import issue_refund
+from lab8.durability import InjectedCrash, issue_refund
 from lab8.handoff import make_handoff
 from lab8.mock_llm import complete
 from lab8.runtime import run_readonly_investigators
@@ -38,10 +38,10 @@ def run_claim(
     store_path: str,
     crash_at: str | None = None,
 ) -> RunResult:
-    del crash_at
+    """Điểm vào chuẩn của Shape C: Mở kết nối và luôn đóng trong finally."""
     conn = connect(store_path)
     try:
-        return _run(conn, claim_id, seed=seed)
+        return _run(conn, claim_id, seed=seed, crash_at=crash_at)
     finally:
         conn.close()
 
@@ -51,6 +51,7 @@ def _run(
     claim_id: str,
     *,
     seed: int,
+    crash_at: str | None,
 ) -> RunResult:
     budget = Budget()
     run_id = make_run_id("orchestrator", claim_id, seed)
@@ -148,8 +149,13 @@ def _run(
             error_reason=quote_payload.get("reason"),
         )
 
-    # 9. Gõ cửa Host ghi tiền với quote đầy đủ
-    outcome = issue_refund(conn, claim_id, proposal)
+    # 9. Gõ cửa Host ghi tiền: Truyền quote đầy đủ, chuyển tiếp crash_at và không nuốt InjectedCrash
+    try:
+        outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
+    except InjectedCrash:
+        trace.add("crash", {"at": crash_at})
+        trace.write()
+        raise
 
     if not outcome["ok"]:
         res_status = "failed" if outcome["conflict"] else "denied"
