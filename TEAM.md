@@ -26,6 +26,6 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Vũ Quang Thái | Shape single; approval | `16496be` (single); `3ce0efe` (approval) | |
+| Vũ Quang Thái | Shape single | `16496be` (single) | |
 | Nguyễn Thị Thùy Dung | Orchestrator; CP3; crash và secret | `85bc805` (orchestrator); `c0ae98e` (CP3); `e629726` (CP4) | `src/tests/test_shape_trace_privacy.py` (commit `e629726`) |
-| Lưu Thanh Mỹ | Shape workflow; benchmark,  hidden, quyết định kiến trúc | `76aab20` (workflow) | |
+| Lưu Thanh Mỹ | Shape workflow; benchmark, hidden, quyết định kiến trúc; vá rò ticket và khóa tham số tool trong single.py | `76aab20` (workflow); `76709c4` (trace privacy + arg integrity); `2ddce84` (benchmark) | `src/tests/test_shape_trace_privacy.py`, `src/tests/test_single_arg_integrity.py` (commit `76709c4`) |
