@@ -2,16 +2,16 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: MienNui
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- Repo nhóm: `K5-L3A-DAY08-MienNui-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
 - URL repo, nhánh nộp, commit chốt:
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 | Nguyễn Lâm Hoàng | 2A202603448 | | | Workflow + integration |
 |   2 |        |      |       |        |         |
 
 Gợi ý chia vai:
@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Nguyễn Lâm Hoàng | Workflow + integration | `2fbe693` | `src/tests/test_workflow_integration.py` (28 ca kiểm thử) |
 
 ## Cá nhân
 
@@ -39,16 +39,17 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Sao chép mục dưới đây cho từng thành viên.
 
-## MSSV_HoTen
+## 2A202603448_NguyenLamHoang
 
 ### Phần việc phụ trách
 
--
+- Shape workflow và tích hợp với host: contract, approval, ledger, trace và crash/resume.
 
 ### Đóng góp cụ thể
 
--
+- Triển khai `src/lab8/shapes/workflow.py`, bổ sung 28 ca kiểm thử tích hợp, chạy benchmark workflow trên 14 claim × 5 seed.
 
 ### Bằng chứng
 
--
+- [Báo cáo cá nhân](report/team/2A202603448_NguyenLamHoang.md).
+- [Benchmark workflow](src/reports/workflow_benchmark.json): 70/70 trial pass.
