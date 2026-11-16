@@ -11,7 +11,7 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 | Nguyễn Lâm Hoàng | 2A202603448 | | | Workflow + integration |
+|   1 | Nguyễn Lâm Hoàng | 2A202603448 | 26ai.hoangnl@vinuni.edu.vn | [hoangnguyenai](https://github.com/hoangnguyenai) | Workflow + integration |
 |   2 |        |      |       |        |         |
 
 Gợi ý chia vai:

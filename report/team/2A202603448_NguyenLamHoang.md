@@ -4,8 +4,8 @@
 
 - Họ tên: Nguyễn Lâm Hoàng
 - MSSV: 2A202603448
-- Nhóm: MienNui
-- Vai trò: Workflow + integration
+- Email: 26ai.hoangnl@vinuni.edu.vn
+- GitHub: https://github.com/hoangnguyenai
 
 ## 2. Phần việc phụ trách
 
