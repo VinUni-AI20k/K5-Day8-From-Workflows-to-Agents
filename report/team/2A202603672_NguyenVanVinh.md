@@ -16,7 +16,7 @@ Tôi phụ trách **Role 2: Single agent (ReAct)**, tức shape B `single`:
 
 ## 3. Đóng góp cụ thể
 
-**Commit chính:** _(điền hash sau khi commit)_
+**Commit chính:** `cc29c4d`
 
 **Thiết kế shape `single`:**
 

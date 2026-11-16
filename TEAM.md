@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Văn Vinh | Single agent (ReAct): viết `src/lab8/shapes/single.py` — vòng ReAct ≤ 8 bước chỉ dùng tool đọc, tiền do `compute_compensation` tính, ghi refund qua `durability.issue_refund` với quote đầy đủ và `crash_at`, trace không ghi ticket/secret | _(điền hash sau khi commit)_ | `src/tests/test_single_shape.py` (33 test: T02 bị từ chối ở cả 5 seed, trace không lộ `CANARY_SECRET_`/ticket, ReAct chỉ gọi tool đọc trong trần 8 bước) |
+| Nguyễn Văn Vinh | Single agent (ReAct): viết `src/lab8/shapes/single.py` — vòng ReAct ≤ 8 bước chỉ dùng tool đọc, tiền do `compute_compensation` tính, ghi refund qua `durability.issue_refund` với quote đầy đủ và `crash_at`, trace không ghi ticket/secret | `cc29c4d` | `src/tests/test_single_shape.py` (33 test: T02 bị từ chối ở cả 5 seed, trace không lộ `CANARY_SECRET_`/ticket, ReAct chỉ gọi tool đọc trong trần 8 bước) |
 
 ## Cá nhân
 
