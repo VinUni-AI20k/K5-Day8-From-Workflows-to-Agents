@@ -8,7 +8,7 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 - Thành viên: xem `TEAM.md`
 - Repo: [K5-L3A-DAY08-4ThangSinhVien-FromWorkflowsToAgents](https://github.com/hoanganhchimxanh/K5-L3A-DAY08-4ThangSinhVien-FromWorkflowsToAgents), nhánh `main`.
 - Commit mã nguồn dùng cho lần đo CP5: `96ab7201c69c66c532e779e0ef05f9a7ecf2362a`.
-- Commit chốt bài nộp: chưa chốt; người B cần xác nhận trong `report/team/decision_adr.md`, rồi đồng bộ mục này. Commit đo không đồng nghĩa commit chốt.
+- Commit chốt mã nguồn: `96ab720`, trùng `report/team/decision_adr.md` do B cập nhật trong `c21031b`. Tài liệu và bằng chứng CP5 được bổ sung bằng các commit tiếp theo.
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -82,7 +82,7 @@ Số liệu dưới đây đọc từ `src/reports/benchmark.json` do lệnh chu
 
 Run id dẫn chứng: `R-workflow-C-001-s11`, `R-single-C-001-s11`, `R-orchestrator-C-001-s11`, `R-swarm-C-001-s11` đều pass. Trial fail duy nhất là `R-swarm-C-002-s55`, lý do `status resolved != denied`: ticket ghi trễ 5 ngày nhưng order ghi 2 ngày. Đây là điểm yếu có chủ đích của swarm.
 
-Workflow là ứng viên đề xuất của A: cùng độ đúng public với B/C, chi phí mô phỏng thấp nhất và không cần model. Quyết định chính thức và điều kiện đổi kiến trúc do B hoàn thiện trong [decision_adr.md](decision_adr.md). C phụ trách [research_card.md](research_card.md) và một ablation. Bảng này chưa cô lập tác động của topology vì số lời gọi model/tool và cách triển khai cũng khác nhau.
+Nhóm chọn workflow theo [decision_adr.md](decision_adr.md), đã được B cập nhật trong `c21031b`: cùng độ đúng public với B/C, chi phí mô phỏng thấp nhất và không cần model. Điều kiện đổi kiến trúc ghi trong ADR; C phụ trách [research_card.md](research_card.md) và một ablation. Bảng này chưa cô lập tác động của topology vì số lời gọi model/tool và cách triển khai cũng khác nhau; kết luận về hiệu quả và an toàn vẫn giới hạn ở các ca đã kiểm tra.
 
 Lệnh đã thực chạy trong `src/`, bằng Python 3.13.14 trên Windows (dùng Python của môi trường `.venv` đã cài):
 
@@ -96,10 +96,10 @@ python -m lab8.check_submission
 | --- | --- |
 | Toàn bộ host, student và test bổ sung | 327 passed in 12.70s |
 | Crash JSON đã được D commit trong `96ab720` | 20/20 |
-| `lab8.check_submission` tại máy A | 8 FAIL, 1 WARN: 7 dòng ADR trống, research card trống; cảnh báo có file chưa commit |
+| `lab8.check_submission` sau khi tích hợp ADR `c21031b` | 1 FAIL ở research card trống; 1 WARN vì còn file chưa commit |
 | Hidden self-check | Chưa chạy: workspace chưa có `student_drop/` |
 
-Checker đọc được benchmark local, crash 20/20, bảng đóng góp và ba shape đạt 12/12 claim public ở seed 11. Đây chưa phải `0 FAIL`, chưa xác nhận bài nhóm sẵn sàng nộp. B/C cần hoàn thiện ADR/research card; D đưa benchmark vào Git và chạy checker lại sau tích hợp. Kết quả public không chứng minh đạt ngưỡng hidden 0.75.
+Checker đọc được benchmark local, crash 20/20, ADR chọn workflow, bảng đóng góp và ba shape đạt 12/12 claim public ở seed 11. Đây chưa phải `0 FAIL`, chưa xác nhận bài nhóm sẵn sàng nộp. C cần hoàn thiện research card; D đưa benchmark vào Git và chạy checker lại sau tích hợp. Kết quả public không chứng minh đạt ngưỡng hidden 0.75.
 
 ## 5. Khó khăn và cách xử lý
 
@@ -112,7 +112,7 @@ Một cách xác minh là chỉ định thư mục tạm mới trong workspace b
 | Thành viên | Đóng góp đã có bằng chứng và phân công CP5 |
 | --- | --- |
 | Nguyễn Tuấn Hiếu — A | Workflow (`28717d8`), test checkpoint/crash (`33d04f3`); tổng hợp báo cáo nhóm và TEAM. |
-| Nguyễn Hoàng Anh — B | Single (`c47102a`), test safety/budget (`4b462c5`); phụ trách ADR. |
+| Nguyễn Hoàng Anh — B | Single (`c47102a`), test safety/budget (`4b462c5`); ADR chọn workflow (`c21031b`). |
 | Phạm Hữu Đức — C | Orchestrator và test (`8966ddd`); phụ trách research card và ablation. |
 | Võ Huy Hoàng — D | Durability bổ sung (`d70fc4a`), bằng chứng CP4 và crash 20/20 (`96ab720`); phụ trách benchmark/checker. |
 

@@ -8,7 +8,7 @@
 - URL repo: https://github.com/hoanganhchimxanh/K5-L3A-DAY08-4ThangSinhVien-FromWorkflowsToAgents
 - Nhánh nộp: `main`.
 - Commit mã nguồn đã kiểm thử và đo CP5: `96ab7201c69c66c532e779e0ef05f9a7ecf2362a`.
-- Commit chốt bài nộp: chưa chốt; người B xác nhận trong `report/team/decision_adr.md`, sau đó đồng bộ tại đây và báo cáo nhóm.
+- Commit chốt mã nguồn: `96ab720`, khớp `report/team/decision_adr.md` do B cập nhật trong `c21031b`. Tài liệu và bằng chứng CP5 được bổ sung bằng các commit tiếp theo.
 
 ## Thành viên
 
@@ -36,7 +36,7 @@ Email ghi `(Git)` lấy từ author commit; trường chưa có bằng chứng �
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Hoàng Anh | B — Single, safety, budget/token | `c47102a`, `4b462c5` | `src/tests/test_single_safety.py`: unknown claim, budget/token, injection và ba cửa sổ crash (7 ca) |
+| Nguyễn Hoàng Anh | B — Single, safety, budget/token và ADR | `c47102a`, `4b462c5`, `c21031b` | `src/tests/test_single_safety.py`: unknown claim, budget/token, injection và ba cửa sổ crash (7 ca) |
 | Võ Huy Hoàng | D — Test/Host, durability, approval và bằng chứng CP4 | `d70fc4a`, `96ab720` | `src/tests/test_durability_shapes.py::test_resume_other_crash_windows_keeps_one_refund` (6 ca) |
 | Nguyễn Tuấn Hiếu | A — Workflow, idempotency, checkpoint và tổng hợp | `28717d8`, `33d04f3` | `src/tests/test_workflow_safety.py`: approval sai claim, injection, ba cửa sổ crash, mất checkpoint và amount conflict (9 ca) |
 | Phạm Hữu Đức | C — Orchestrator và tool đọc qua handoff | `8966ddd` | `src/tests/test_orchestrator.py`: `test_orchestrator_c001_resolves`, `test_orchestrator_missing_order_needs_info`, `test_orchestrator_unknown_claim_fails` (3 ca) |
@@ -48,9 +48,9 @@ Các commit có thật trong lịch sử `main`. Phân công ở trên không đ
 - Lần chạy tích hợp trên commit `96ab720` đạt **327 passed**.
 - `src/reports/crash.json` đã được D đưa vào `96ab720`, đạt **20/20**.
 - A đã tổng hợp benchmark bốn shape × 14 claim × 5 seed trong [báo cáo nhóm](report/team/group_report.md), từ lệnh chuẩn thực chạy tại máy A. File JSON local chưa nằm trong lịch sử Git ở phần việc A; D kiểm tra/tái chạy và commit `src/reports/benchmark.json`.
-- B cần hoàn thiện `report/team/decision_adr.md`, chốt shape, commit đo và run id.
+- B đã hoàn thiện `report/team/decision_adr.md` trong `c21031b`: chọn workflow, commit mã nguồn `96ab720`, run id `R-workflow-C-001-s11`.
 - C cần hoàn thiện `report/team/research_card.md`, gồm một ablation thực chạy và giới hạn kết luận.
-- Lần chạy `lab8.check_submission` tại máy A đọc được benchmark local và crash, còn **8 FAIL, 1 WARN** do ADR/research card trống và thay đổi chưa commit. D cần chạy lại sau tích hợp để đạt **0 FAIL**.
+- Sau khi tích hợp ADR `c21031b`, lần chạy `lab8.check_submission` tại máy A đọc được benchmark local, crash và ADR; còn **1 FAIL** do research card trống và **1 WARN** vì file chưa commit. D cần chạy lại sau tích hợp để đạt **0 FAIL**.
 - Workspace máy A chưa có `student_drop/`; chưa ghi nhận hidden self-check hoặc điểm hidden.
 - Mỗi thành viên xác nhận thông tin cá nhân, bổ sung báo cáo riêng và tự nộp cùng link repo trên LMS. Trạng thái này chưa xác nhận bài nhóm đã sẵn sàng nộp.
 
@@ -68,7 +68,7 @@ Các commit có thật trong lịch sử `main`. Phân công ở trên không đ
 
 - CP2: hoàn thiện single agent với vòng ReAct giới hạn 8 bước.
 - CP3: bổ sung test secret/injection, budget/token và crash/resume của single.
-- CP5: phụ trách ADR và luận cứ chọn kiến trúc; chưa ghi nhận ADR hoàn thiện ở snapshot đo.
+- CP5: đã cập nhật ADR trong `c21031b`, chọn workflow và chốt commit mã nguồn `96ab720` với số liệu public.
 - Báo cáo cá nhân cần tạo riêng: `report/team/2A202603385_NguyenHoangAnh.md`.
 
 ### Phạm Hữu Đức — 2A202603380
