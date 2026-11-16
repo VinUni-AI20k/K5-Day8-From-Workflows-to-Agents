@@ -11,8 +11,10 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
+|   1 | Nguyễn Lê Hải Nam | 2A202603699 | nam.nlh2001@gmail.com |        |         |
+|   2 | Lê Thái Dương     | 2A202603415 |       |        |         |
+|   3 | Vũ Văn Hào     | 2A202603419 |       |        |         |
+|   4 | Nguyễn Triều Dương | 2A202603524 |       |        |         |
 
 Gợi ý chia vai:
 
