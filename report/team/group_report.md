@@ -8,8 +8,7 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 - Thành viên: xem `TEAM.md`
 - Repo: [K5-L3A-DAY08-4ThangSinhVien-FromWorkflowsToAgents](https://github.com/hoanganhchimxanh/K5-L3A-DAY08-4ThangSinhVien-FromWorkflowsToAgents), nhánh `main`.
 - Commit mã nguồn dùng cho lần đo CP5: `96ab7201c69c66c532e779e0ef05f9a7ecf2362a`.
-- Commit chốt mã nguồn: `96ab720`, trùng `report/team/decision_adr.md` do B cập nhật trong `c21031b`. Tài liệu và bằng chứng CP5 được bổ sung bằng các commit tiếp theo.
-
+- Commit chốt mã nguồn: `18d15dbd6d27f151b7906bfb2d8466db40d5df06`
 ## 2. Mục tiêu và cách tiếp cận
 
 Nhóm xử lý claim hoàn phí vận chuyển LogiX-VN bằng ba shape tự triển khai: workflow, single agent và orchestrator; sử dụng swarm tham chiếu để đối chứng. Mục tiêu là chọn mức tự chủ phù hợp dựa trên độ đúng, độ ổn định và chi phí mô phỏng.
