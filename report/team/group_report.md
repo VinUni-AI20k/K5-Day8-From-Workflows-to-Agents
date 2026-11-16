@@ -38,7 +38,7 @@ Ba shape ban đầu là stub. Đã triển khai theo contract, chuyển tiếp �
 
 ## 6. Tổng hợp đóng góp
 
-Danh tính bốn thành viên lấy từ GitHub issue #1; issue không nêu phân công, commit hoặc test của từng người. Báo cáo không gán đóng góp khi chưa có bằng chứng. Thành viên cần xác nhận vai trò, commit, test và hoàn thiện báo cáo cá nhân trong `TEAM.md` và `report/team/`.
+Cả bốn thành viên cùng thực hiện các phần việc và kiểm tra. Nguyen Quoc Viet là nhóm trưởng. Bảng đóng góp và bốn báo cáo cá nhân trong `TEAM.md` / `report/team/` ghi nhận phần việc chung, cùng commit và kết quả kiểm tra.
 
 ## 7. Hạn chế và hướng cải thiện
 

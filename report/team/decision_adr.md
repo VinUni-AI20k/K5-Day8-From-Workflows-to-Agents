@@ -22,4 +22,4 @@ Trace chỉ ghi các trường đã cho phép như mã yêu cầu/đơn hàng, t
 
 ## Giới hạn
 
-MockLLM không đại diện cho mô hình sản xuất; chi phí là số mô phỏng bằng VND và không đo độ trễ. Benchmark public chỉ có 14 yêu cầu × 5 seed. Chưa chạy tự kiểm tra hidden. Nhóm cần xác nhận vai trò, đóng góp và báo cáo cá nhân của từng thành viên trước khi nộp.
+MockLLM không đại diện cho mô hình sản xuất; chi phí là số mô phỏng bằng VND và không đo độ trễ. Benchmark public chỉ có 14 yêu cầu × 5 seed. Chưa chạy tự kiểm tra hidden. Đóng góp chung được ghi trong `TEAM.md` và bốn báo cáo cá nhân.
