@@ -2,22 +2,21 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: Vibeforlife
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Repo nhóm: `K5-L3A-Day08-Vibeforlife-From-Workflows-to-Agents`
+- URL repo, nhánh nộp, commit chốt: https://github.com/Stormaka/K5-L3A-Day08-Vibeforlife-From-Workflows-to-Agents · nhánh `main` · commit chốt trùng `- Commit hash:` trong `report/team/decision_adr.md`
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
+|   1 | Hoàng Bảo Nguyên | 2A202603384 | (thành viên tự điền email) | Stormaka | Nhóm trưởng — workflow + integration + ADR |
+|   2 | (thành viên tự điền) | | | | single (ReAct) |
+|   3 | Bùi Quang Huy | 2A202603469 | 26ai.huybq2@vinuni.edu.vn | harveybui888-max | orchestrator + handoff |
+|   4 | Lê Quang Vinh | 2A202603363 | 26ai.vinhlq2@vinuni.edu.vn | lequangvinh21 | benchmark/crash/report + bonus B3 (kiểm chứng chéo) |
 
-Gợi ý chia vai:
-
-- Nhóm 6 người: integration; workflow; single agent; orchestrator; ledger/policy/crash; eval/report.
-- Nhóm 4 người: workflow + integration; single; orchestrator + handoff; ledger + evaluation.
+Phân vai theo gợi ý nhóm 4 người: workflow + integration (nhóm trưởng); single; orchestrator + handoff; eval/report + bonus.
 
 ## Bảng đóng góp
 
@@ -25,30 +24,16 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Hoàng Bảo Nguyên | workflow + integration + ADR | commit chốt trên `main` (xem ADR); nhánh cá nhân `HoangBaoNguyen-2A202603384` | `tests/test_workflow_member.py` (6 test: từ chối ticket nói quá trên 5 seed; trace không chứa chữ ticket) |
+| (Thành viên 2 — tự điền) | single ReAct | (tự điền sau khi merge nhánh cá nhân vào `main`) | `tests/test_single_member.py` (2 test: ReAct trong step cap; không mắc điểm yếu seed 55) |
+| Bùi Quang Huy | orchestrator + handoff | `7d4779c` trên nhánh cá nhân `BuiQuangHuy-2A202603469` | `tests/test_orchestrator_member.py` (2 test: handoff sanitize trong trace; không lộ PII đơn của người khác) |
+| Lê Quang Vinh | QA/eval/report + test toàn vẹn chứng từ | commit trên nhánh `LeQuangVinh-2A202603363` (hash điền sau khi push) | `tests/test_eval_integrity.py` (4 test: lưới benchmark đúng contract, crash 20/20, số ADR khớp benchmark, bonus đủ 3 biến thể) |
 
 ## Cá nhân
 
-Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
+Báo cáo cá nhân nằm trong `report/team/`:
 
-```text
-report/team/MSSV_HoTen.md
-```
-
-Ví dụ: `report/team/20241234_NguyenVanAn.md`.
-
-Sao chép mục dưới đây cho từng thành viên.
-
-## MSSV_HoTen
-
-### Phần việc phụ trách
-
--
-
-### Đóng góp cụ thể
-
--
-
-### Bằng chứng
-
--
+- `report/team/2A202603384_HoangBaoNguyen.md` — đã nộp
+- `report/team/2A202603469_BuiQuangHuy.md` — đã nộp
+- `report/team/2A202603363_LeQuangVinh.md` — đã nộp
+- Thành viên 2 (single): copy mẫu `report/team/MSSV_HoTen.md`, điền và push trước deadline.
