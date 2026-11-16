@@ -12,7 +12,7 @@
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |    Đồng Ngọc Phúc    |  2A202603399    |    dnphuc04@gmail.com   |    dnphuc04    | Workflow + tích hợp + chốt bài nộp |
-|   2 |   Nguyễn Trần Tiến     |   2A202603504   |       |        | Single agent + ReAct + budget |
+|   2 |   Nguyễn Trần Tiến     |   2A202603504   |    nguyentien2004abc@gmail.com   |    tiennguyen-ctrl    | Single agent + ReAct + budget |
 |   3 |    Nguyễn Tiến Hưng    |   2A202603411   |       |        | Orchestrator + handoff + trace an toàn |
 |   4 |    Nguyễn Huy Hoàng    |      |       |        | Kiểm thử policy/durability + benchmark + đánh giá |
 
