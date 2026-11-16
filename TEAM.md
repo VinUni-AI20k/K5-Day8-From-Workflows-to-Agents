@@ -2,17 +2,19 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm:Random
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Repo nhóm: `K5-L3A-DAY08-Random-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo, nhánh nộp, commit chốt:https://github.com/Dovanngoc05/K5-L3A-DAY08-Random-FromWorkflowsToAgents
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 |    Đỗ Văn Ngọc    |2A202603391      |       |        | Single agent        |
 |   2 |        |      |       |        |         |
+|   3 | DoanNhatAnh | 2A202603408 | nhatanhdoan1@gmail.com | [nhatanh2901](https://github.com/nhatanh2901) | Orchestrator, handoff và bảo mật trace |
+|   4 | Nguyễn Trần Anh Khôi | 2A202603422 | khoinguyentran1111@gmail.com | khoinguyentran1111 | Ledger + evaluation |
 
 Gợi ý chia vai:
 
@@ -25,9 +27,12 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| DoanNhatAnh (2A202603408) | Orchestrator + handoff + bảo mật | [158d999](https://github.com/Dovanngoc05/K5-L3A-DAY08-Random-FromWorkflowsToAgents/commit/158d999) | `src/tests/test_orchestrator_security.py`: kiểm tra ticket injection, handoff chỉ đọc, trace không lộ dữ liệu và hai nhánh trả về sớm |
+| Nguyễn Trần Anh Khôi (2A202603422) | Ledger + evaluation | [ff49706](https://github.com/Dovanngoc05/K5-L3A-DAY08-Random-FromWorkflowsToAgents/commit/ff49706) | `src/tests/test_ledger_shapes.py`: crash ở cả 3 điểm rồi resume, retry, approval thiếu/thu hồi/mượn claim khác, trần theo đơn, bất biến ledger và quét secret/PII trên cả corpus (10 test × 4 shape) |
 
 ## Cá nhân
+
+Báo cáo của DoanNhatAnh: [2A202603408_DoanNhatAnh.md](report/team/2A202603408_DoanNhatAnh.md).
 
 Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
 
