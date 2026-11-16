@@ -4,7 +4,7 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 
 ## 1. Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: NhomV3
 - Thành viên: xem `TEAM.md`
 - Commit chốt (trùng `report/team/decision_adr.md`):
 
@@ -18,13 +18,29 @@ Nhóm hiểu bài toán thế nào, chia việc ra sao, thứ tự làm bốn sh
 
 Mô tả ba shape nhóm viết (workflow, single, orchestrator): mỗi shape đọc gì, quyết định gì, gọi host ra sao. Chỉ rõ ranh giới code / model (tham khảo [docs/architecture.md](../../docs/architecture.md)), cách handoff được sanitize và trace ghi những event nào.
 
-...
+### Shape C — Orchestrator và investigator chỉ đọc
+
+Người phụ trách: Nguyễn Quốc Hưng, MSSV `2A202603553`, nhánh `hung` trong repo `congcoderht/K5-L3A-Day08-NhomV3-FromWorkflowsToAgents`.
+
+Shape C đọc claim bằng `get_claim_view`, nhưng không chuyển ticket hay toàn bộ claim view sang investigator. Claim không tồn tại trả `failed`; thiếu `order_id` trả `needs_info`. Handoff được dựng bằng `make_handoff`, có `facts={}`, scope `owner_order_only` và chỉ hai tool `lookup_order`, `lookup_policy`. Investigator chạy qua `run_readonly_investigators`, đọc đơn trong phạm vi principal và policy hiện hành. Đơn không nhìn thấy trả `escalated`.
+
+Orchestrator tính quote bằng `compute_compensation` trên order view. Quote bằng 0 trả `denied`. Quote dương được chuyển nguyên vẹn vào `durability.issue_refund`; host kiểm approval đúng claim, giới hạn theo đơn và idempotency. Shape không tự trừ khoản đã hoàn. Vì vậy T14 giữ `proposal_amount=150000` nhưng refund thực tế là `120000`. Khi host từ chối, quote vẫn được giữ và audit `policy_denied` do host ghi. Xung đột số tiền khi retry trả `failed`.
+
+MockLLM chỉ nhận handoff đã lọc để xác nhận kế hoạch và quyết định có cấu trúc để soạn lời đáp; không quyết định số tiền hoặc cấp quyền ghi. Mọi lời gọi model và tool đọc được tính vào `Budget`. `crash_at` được truyền xuống host; shape không bắt `InjectedCrash`, và connection luôn được đóng trong `finally`.
+
+Trace chỉ ghi kết quả tìm claim dạng boolean, handoff đã sanitize, khả năng nhìn thấy đơn, số policy, quote, yêu cầu/kết quả của host và quyết định cuối. Không ghi ticket, principal, claim/order row thô, secret, header, SĐT, địa chỉ, tên hàng hay internal note. Trace được ghi trước khi gọi host để còn bằng chứng nếu crash; mọi nhánh trả kết quả đều qua `finish()` để đồng bộ trace, ledger và audit.
 
 ## 4. Kết quả
 
 Bảng so sánh 4 shape trên bộ public (từ `src/reports/benchmark.json`): pass rate, pass^5, seed min–max, variance, cost/success, mean/p95 steps. Kèm crash safety (`src/reports/crash.json`) và, nếu có, kết quả tự kiểm trên `student_drop/`.
 
-...
+### Kết quả riêng Shape C trước khi merge
+
+Bằng chứng: `src/reports/orchestrator_benchmark.json`, chạy 14 claim public × 5 seed `11,22,33,44,55`, tổng 70 trial. Shape C đạt pass rate `1.0`, pass^5 `1.0`, seed min–max `1.0–1.0`, variance `0.0`, cost/success mô phỏng `49.00142857142857 VND`, mean/p95 steps `6.0/7.0`. Run id ví dụ: `R-orchestrator-C-001-s11`. Đây là kết quả public, không phải điểm hidden hay bảng so sánh cuối của cả nhóm.
+
+Ma trận student riêng Shape C đạt `62 passed`; 19 test mới trong `tests/test_team_orchestrator.py` đều pass. Bộ test mặc định đạt `73 passed`. Các test mới phủ ticket injection chứa secret/PII, allowlist của handoff, các nhánh trả sớm, approval hỏng, full quote khi top-up, ba cửa sổ crash và xung đột số tiền khi retry. Có test cố ý tạo leak qua stdout/file phụ để kiểm audit phát hiện được mà không chép secret vào report, và test đối chiếu outcome/budget của hai biến thể R3.
+
+Công cụ `python -m tests.audit_team_security` bắt stdout/stderr trong bộ nhớ và quét cả kết quả, trace cùng các file phụ có tên theo run id. Bản trước merge ghi nhận 70 trial Shape C có trace hợp lệ, không phát hiện secret/PII hoặc field của raw row. Workflow và single trong main vẫn là stub, nên chưa thể kết luận an toàn cho hai bản triển khai của đồng đội. Cần chạy lại công cụ trên cả ba shape sau merge. Crash suite host đã sinh `src/reports/crash.json`, đạt `20/20`; điều này được báo riêng với test crash/resume của Shape C.
 
 Quyết định kiến trúc và lý do: xem `report/team/decision_adr.md`. Phiếu nghiên cứu và ablation: xem `report/team/research_card.md`.
 
@@ -32,7 +48,9 @@ Quyết định kiến trúc và lý do: xem `report/team/decision_adr.md`. Phi�
 
 Lỗi gặp phải (kèm lệnh, output hoặc ảnh chụp) và cách nhóm xử lý.
 
-...
+Phần người 3: môi trường Windows có thư mục temp mặc định của pytest không truy cập được (`PermissionError: WinError 5`). Đã dùng `PYTEST_DEBUG_TEMPROOT` trỏ tới thư mục `.qa/pytest-temp` trong `src/`, rồi chạy lại các bộ test. Không sửa test hoặc mã host để né lỗi.
+
+Đã đối chiếu bản bàn giao với nhánh `hung` của repo nhóm V3 ở commit `034c6c421c198dae67a9211d15e2587d5a378972`: nguồn của nhánh khớp starter đã dùng để kiểm thử. Code Shape A/B trên nhánh này vẫn là stub; commit nộp cuối và `student_drop/` chưa có trong bản bàn giao. Quyết định kiến trúc cuối, điểm hidden và kiểm tra `0 FAIL` cần hoàn tất sau khi merge code của cả nhóm.
 
 ## 6. Tổng hợp đóng góp
 
@@ -46,4 +64,5 @@ MockLLM không phải model sản xuất; latency là `unavailable`. Nêu thêm 
 
 ## 8. Tài liệu tham khảo
 
-...
+- Contract, luật nghiệp vụ và runtime do đề Lab 8 cung cấp.
+- Tara Bogavelli, Hari Subramani, Roshnee Sharma (2026), [AgentArch: A Benchmark for Evaluating Agent Architectures in Enterprise Workflows](https://aclanthology.org/2026.aacl-long.44/), AACL-IJCNLP. Dùng cho R3; không suy rộng kết quả MockLLM thành hiệu quả của model thật.
