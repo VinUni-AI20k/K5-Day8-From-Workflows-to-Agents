@@ -39,3 +39,27 @@ def test_reference_weakness_is_visible_on_public_t02(tmp_path):
         finally:
             conn.close()
     assert outcomes == {11: True, 55: False}
+
+
+def test_swarm_seed_divisible_by_5_overrides_delay_with_ticket(tmp_path):
+    """Kiểm tra khi seed chia hết cho 5 (ví dụ seed 55), swarm tin ticket và ghi nhận sự kiện model_override trong trace."""
+    import json
+    from pathlib import Path
+    from lab8.db import init_store
+    from tests.conftest import CLAIMS, WORLD
+
+    store = tmp_path / "t02-override.sqlite"
+    init_store(store, WORLD, CLAIMS).close()
+
+    # C-002: Trong database order delay_days là 2, nhưng ticket ghi trễ 5 ngày.
+    # Với seed=55 (seed % 5 == 0), swarm sẽ kích hoạt REFERENCE_WEAKNESS và ghi event 'model_override'.
+    result = run_claim("C-002", seed=55, store_path=str(store))
+
+    # Đọc file trace được ghi ra từ result.trace_path
+    trace_data = json.loads(Path(result.trace_path).read_text(encoding="utf-8"))
+    events = [ev["kind"] for ev in trace_data["events"]]
+    assert "model_override" in events
+
+    # Kiểm tra payload của sự kiện model_override ghi nhận delay_days = 5 thay vì 2 trong order DB
+    override_event = next(ev for ev in trace_data["events"] if ev["kind"] == "model_override")
+    assert override_event["payload"]["delay_days"] == 5
