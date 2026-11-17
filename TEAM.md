@@ -2,20 +2,20 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm: GiCungDuoc
+- Lớp: L3B
+- Repo nhóm: `K5-L3B-DAY08-GiCungDuoc-FromWorkflowsToAgents`
+- URL repo, nhánh nộp, commit chốt: https://github.com/pqhuy454/K5-L3B-DAY08-GiCungDuoc-FromWorkflowsToAgents | nhánh `main` | commit `<cập nhật ở CP5>`
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        | Lead & QA Integration |
-|   2 |        |      |       |        | Shape A: Workflow Engineer |
-|   3 | Đặng Đức Minh | 2A202603886 | ddminh1102@gmail.com | DMinh1102 | Shape B: Single ReAct Specialist |
-|   4 |        |      |       |        | Shape C: Orchestrator & Security Lead |
-|   5 |        |      |       |        | Durability, Eval & Benchmark Lead |
+|   1 | Phạm Quốc Huy | 2A202603897 | huymix2k4@gmail.com | pqhuy454 | Lead & QA Integration |
+|   2 | Trịnh Gia Huy | 2A202603924 | trgyahuy1710@gmail.com | TrGiaHuy1710-valid | Durability, Eval & Benchmark Lead |
+|   3 | Trần Tùng Lâm | 2A202603893 | lamtt262004@gmail.com | lamtt262004 | Shape A Workflow Lead |
+|   4 | Đặng Đức Minh | 2A202603886 | ddminh1102@gmail.com | DMinh1102 | Shape B Single ReAct |
+|   5 | Nguyễn Thành Tâm | 2A202603933 | ngthanhtamtb@gmail.com | ngthanhtamtb | Shape C & Security Lead |
 
 Gợi ý chia vai:
 
@@ -29,7 +29,11 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Đặng Đức Minh | Shape B: Single ReAct Specialist | feat(shape-b) | src/tests/test_student_single.py |
+| Phạm Quốc Huy | Lead & QA Integration | `<cập nhật sau khi commit>` | `src/tests/test_student_integration.py` |
+| Trịnh Gia Huy | Durability, Eval & Benchmark Lead | `<chờ commit>` | `chờ` |
+| Trần Tùng Lâm | Shape A Workflow Lead | `<chờ commit>` | `chờ` |
+| Đặng Đức Minh | Shape B Single ReAct | `<chờ commit>` | `chờ` |
+| Nguyễn Thành Tâm | Shape C & Security Lead | `<chờ commit>` | `chờ` |
 
 ## Cá nhân
 
