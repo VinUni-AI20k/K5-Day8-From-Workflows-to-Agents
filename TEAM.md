@@ -21,9 +21,9 @@
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Phạm Công Dũng (`dungpham108`) | Shape A (`workflow.py`), tích hợp hệ thống, chạy benchmark, crash suite & `student_drop` self-check, soạn `decision_adr.md` | `034c6c4` | `src/tests/test_SV01_dungpham108_workflow_idempotency.py`: `test_sv01_workflow_retry_idempotency_and_crash_recovery`, `test_sv01_workflow_per_order_cap_and_full_quote_forwarding`, `test_sv01_workflow_missing_order_and_cross_principal_escalation` |
-| Trần Thanh Tùng (`tungtran306`) | Shape B (`single.py` ReAct agent), kiểm thử chống prompt injection/ticket lie & chặn approval mượn/hết hạn, soạn `research_card.md` | `034c6c4` | `src/tests/test_SV02_tungtran306_single_policy.py`: `test_sv02_single_react_ignores_ticket_delay_lie_on_all_seeds`, `test_sv02_single_react_blocks_borrowed_and_expired_approvals`, `test_sv02_single_react_resists_prompt_injection_and_respects_step_cap` |
-| Nguyễn Đức Trọng (`trongnguyen104`) | Shape C (`orchestrator.py` + `handoff.v1`), kiểm toán trace/PII, Bonus B3 (`bonus/swarm_verified.py`), soạn `group_report.md` & `bonus_report.md` | `034c6c4` | `src/tests/test_SV03_trongnguyen104_orchestrator_handoff.py`: `test_sv03_orchestrator_handoff_allowlist_and_secret_redaction`, `test_sv03_orchestrator_stacking_and_partial_approval_cap`, `test_sv03_orchestrator_crash_propagation_and_resume`; `src/tests/test_bonus_swarm_verified.py`: `test_bonus_verifier_overrides_swarm_weakness_on_public_t02`, `test_bonus_adversarial_pack_passes_all_cases_and_seeds` |
+| Phạm Công Dũng (`dungpham108`) | Shape A (`workflow.py`), tích hợp hệ thống, chạy benchmark, crash suite & `student_drop` self-check, soạn `decision_adr.md` | `034c6c4` | `src/tests/test_2A202603428_dungpham108_workflow_idempotency.py`: `test_2A202603428_workflow_retry_idempotency_and_crash_recovery`, `test_2A202603428_workflow_per_order_cap_and_full_quote_forwarding`, `test_2A202603428_workflow_missing_order_and_cross_principal_escalation` |
+| Trần Thanh Tùng (`tungtran306`) | Shape B (`single.py` ReAct agent), kiểm thử chống prompt injection/ticket lie & chặn approval mượn/hết hạn, soạn `research_card.md` | `034c6c4` | `src/tests/test_2A202603418_tungtran306_single_policy.py`: `test_2A202603418_single_react_ignores_ticket_delay_lie_on_all_seeds`, `test_2A202603418_single_react_blocks_borrowed_and_expired_approvals`, `test_2A202603418_single_react_resists_prompt_injection_and_respects_step_cap` |
+| Nguyễn Đức Trọng (`trongnguyen104`) | Shape C (`orchestrator.py` + `handoff.v1`), kiểm toán trace/PII, Bonus B3 (`bonus/swarm_verified.py`), soạn `group_report.md` & `bonus_report.md` | `034c6c4` | `src/tests/test_2A202603367_trongnguyen104_orchestrator_handoff.py`: `test_2A202603367_orchestrator_handoff_allowlist_and_secret_redaction`, `test_2A202603367_orchestrator_stacking_and_partial_approval_cap`, `test_2A202603367_orchestrator_crash_propagation_and_resume`; `src/tests/test_bonus_swarm_verified.py`: `test_bonus_verifier_overrides_swarm_weakness_on_public_t02`, `test_bonus_adversarial_pack_passes_all_cases_and_seeds` |
 
 ## Cá nhân
 
@@ -37,7 +37,7 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Sao chép mục dưới đây cho từng thành viên.
 
-## SV01_PhamCongDung
+## 2A202603428_PhamCongDung
 
 ### Phần việc phụ trách
 
@@ -48,15 +48,15 @@ Sao chép mục dưới đây cho từng thành viên.
 ### Đóng góp cụ thể
 
 - Cài đặt `run_claim` trong `src/lab8/shapes/workflow.py`: đọc dữ liệu qua allowlist `get_claim_view` và `lookup_order`, tính tiền bằng `compute_compensation`, chuyển tiếp quote đầy đủ cùng `crash_at` vào `durability.issue_refund`, ghi trace chuẩn Contract v1 ở mọi nhánh trả về.
-- Viết bộ unit test `src/tests/test_SV01_dungpham108_workflow_idempotency.py` (không gắn `@pytest.mark.student`, chạy trực tiếp trong cổng host `python -m pytest -q`) gồm 3 hàm: `test_sv01_workflow_retry_idempotency_and_crash_recovery`, `test_sv01_workflow_per_order_cap_and_full_quote_forwarding`, `test_sv01_workflow_missing_order_and_cross_principal_escalation`.
+- Viết bộ unit test `src/tests/test_2A202603428_dungpham108_workflow_idempotency.py` (không gắn `@pytest.mark.student`, chạy trực tiếp trong cổng host `python -m pytest -q`) gồm 3 hàm: `test_2A202603428_workflow_retry_idempotency_and_crash_recovery`, `test_2A202603428_workflow_per_order_cap_and_full_quote_forwarding`, `test_2A202603428_workflow_missing_order_and_cross_principal_escalation`.
 
 ### Bằng chứng
 
 - Code: `src/lab8/shapes/workflow.py`
-- Test: `src/tests/test_SV01_dungpham108_workflow_idempotency.py`
+- Test: `src/tests/test_2A202603428_dungpham108_workflow_idempotency.py`
 - Report: `src/reports/benchmark.json`, `src/reports/crash.json`, `src/reports/hidden_selfcheck.json`, `report/team/decision_adr.md`
 
-## SV02_TranThanhTung
+## 2A202603418_TranThanhTung
 
 ### Phần việc phụ trách
 
@@ -67,15 +67,15 @@ Sao chép mục dưới đây cho từng thành viên.
 ### Đóng góp cụ thể
 
 - Cài đặt hàm `decide(obs)` trong `src/lab8/shapes/single.py` điều phối tuần tự `lookup_order` → `lookup_refund_history` → `compute_compensation`, ghi nhận đầy đủ `Budget` (model calls và tool calls) và trace Contract v1.
-- Viết bộ unit test `src/tests/test_SV02_tungtran306_single_policy.py` (chạy trong cổng host `python -m pytest -q`) gồm 3 hàm: `test_sv02_single_react_ignores_ticket_delay_lie_on_all_seeds`, `test_sv02_single_react_blocks_borrowed_and_expired_approvals`, `test_sv02_single_react_resists_prompt_injection_and_respects_step_cap`.
+- Viết bộ unit test `src/tests/test_2A202603418_tungtran306_single_policy.py` (chạy trong cổng host `python -m pytest -q`) gồm 3 hàm: `test_2A202603418_single_react_ignores_ticket_delay_lie_on_all_seeds`, `test_2A202603418_single_react_blocks_borrowed_and_expired_approvals`, `test_2A202603418_single_react_resists_prompt_injection_and_respects_step_cap`.
 
 ### Bằng chứng
 
 - Code: `src/lab8/shapes/single.py`
-- Test: `src/tests/test_SV02_tungtran306_single_policy.py`
+- Test: `src/tests/test_2A202603418_tungtran306_single_policy.py`
 - Report: `report/team/research_card.md`, `src/reports/benchmark.json`, `src/reports/hidden_selfcheck.json`
 
-## SV03_NguyenDucTrong
+## 2A202603367_NguyenDucTrong
 
 ### Phần việc phụ trách
 
@@ -87,10 +87,10 @@ Sao chép mục dưới đây cho từng thành viên.
 
 - Cài đặt `src/lab8/shapes/orchestrator.py`: tạo gói `handoff.v1` qua allowlist, chạy investigator chỉ đọc, tính quote từ dữ liệu có cấu trúc và gọi `durability.issue_refund` tại orchestrator.
 - Cài đặt `src/bonus/swarm_verified.py` bổ sung tầng code verifier chặn lỗi khuếch đại từ `model_override` ở seed chia hết cho 5; xây dựng 8 ca đối kháng trong `src/bonus/cases.jsonl`.
-- Viết `src/tests/test_SV03_trongnguyen104_orchestrator_handoff.py` (`test_sv03_orchestrator_handoff_allowlist_and_secret_redaction`, `test_sv03_orchestrator_stacking_and_partial_approval_cap`, `test_sv03_orchestrator_crash_propagation_and_resume`) và `src/tests/test_bonus_swarm_verified.py`.
+- Viết `src/tests/test_2A202603367_trongnguyen104_orchestrator_handoff.py` (`test_2A202603367_orchestrator_handoff_allowlist_and_secret_redaction`, `test_2A202603367_orchestrator_stacking_and_partial_approval_cap`, `test_2A202603367_orchestrator_crash_propagation_and_resume`) và `src/tests/test_bonus_swarm_verified.py`.
 
 ### Bằng chứng
 
 - Code: `src/lab8/shapes/orchestrator.py`, `src/bonus/swarm_verified.py`, `src/bonus/cases.jsonl`, `src/bonus/world.json`
-- Test: `src/tests/test_SV03_trongnguyen104_orchestrator_handoff.py`, `src/tests/test_bonus_swarm_verified.py`
+- Test: `src/tests/test_2A202603367_trongnguyen104_orchestrator_handoff.py`, `src/tests/test_bonus_swarm_verified.py`
 - Report: `report/team/group_report.md`, `report/team/bonus_report.md`, `src/reports/bonus_benchmark.json`, `src/reports/bonus_adversarial.json`, `src/reports/hidden_selfcheck.json`
