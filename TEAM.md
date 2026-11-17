@@ -29,8 +29,8 @@ Gợi ý chia vai:
 | --- | --- | --- | --- |
 | Phùng Quang Trà | workflow (A) + integration | `f0fb63f` | `src/tests/test_workflow_shape.py` (22 test) |
 | Vũ Nam Khánh | single agent (B) | `13f5978` | Ma trận student Single Agent (62 test: T01–T14, retry, crash) |
-| Nguyễn Tuấn Anh | orchestrator (C) + handoff | _(điền sau commit)_ | `src/tests/test_orchestrator_shape.py` (23 test) |
-| | ledger/crash + evaluation | | |
+| Nguyễn Tuấn Anh | orchestrator (C) + handoff | `2346e37` | `src/tests/test_orchestrator_shape.py` (23 test) |
+| Phạm Duy Thành | ledger/crash + evaluation | `175d770` (giai đoạn 1–2); `db22c3b` (single/evaluation); phần hoàn thiện sau `4f2060d` chưa commit | `src/tests/test_team_crash_recovery.py` (24 test đủ ba shape), `src/tests/test_research_draft_ablation.py` (72 test) |
 
 ## Cá nhân
 
@@ -132,7 +132,7 @@ Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` 
 - `python -m lab8.check_submission` → `[ OK ] shape orchestrator: format đúng, 12/12 claim public pass ở seed 11`.
 - Báo cáo cá nhân: [report/team/2A202604089_NguyenTuanAnh.md](report/team/2A202604089_NguyenTuanAnh.md).
 
-## Thành viên 4 — MSSV_HoTen
+## Thành viên 4 — 2A202604075_PhamDuyThanh
 
 ### Phần việc phụ trách
 
@@ -140,8 +140,20 @@ Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` 
 
 ### Đóng góp cụ thể
 
--
+- Giai đoạn 1–2 (2026-11-17): bổ sung 8 test crash/retry/approval cho workflow, kiểm đủ ba crash point, mở lại kết nối, resume và retry nhiều lần; C-014 chỉ trả thêm 120.000 đồng.
+- Thêm helper ablation `workflow_no_draft` và 72 test về kết quả nghiệp vụ, accounting, trace và khôi phục patch. Helper dùng cho research card bắt buộc, không đăng ký bonus.
+- Tạo baseline 280 trial bằng benchmark chính thức, crash report 20/20 và ablation 140 trial; điền research card R4 cùng phần kết quả ban đầu của báo cáo nhóm.
+- Sau merge `1f7d89d`: mở rộng tám kịch bản recovery/approval sang single thành 16 test; cập nhật này đã commit tại `db22c3b`.
+- Sau merge orchestrator tại `4f2060d`: mở rộng thành 24 test dùng chung cho đủ workflow/single/orchestrator, tạo lại benchmark/crash, hoàn thiện ADR chọn workflow và cập nhật báo cáo theo đủ bốn shape. Phần hoàn thiện mới chưa commit.
+- Không sửa code shape của thành viên khác hoặc thước đo của lab. Chưa có kết quả hidden, không suy ra đạt ngưỡng hidden từ public.
+- Code và tài liệu giai đoạn này được soạn với trợ lý Codex theo yêu cầu; thành viên cần tự đọc, chạy lại và bổ sung tự đánh giá trước khi nộp.
 
 ### Bằng chứng
 
--
+- Checkpoint giai đoạn 1–2 tại `175d770`: 80 test mới pass, 156 test mặc định pass, 124 student test workflow/swarm pass.
+- Checkpoint sau merge single: 16 test recovery/approval dùng chung workflow/single, tổng 164 test mặc định pass; 186 student test không gồm orchestrator pass. Benchmark mới: workflow/single 70/70, swarm 69/70; chỉ orchestrator còn stub.
+- Checkpoint hiện tại: 195 test mặc định pass, 248 student test pass; 24 test recovery/approval riêng của Thành kiểm đủ ba shape. Workflow/single/orchestrator 70/70 trial mỗi shape; swarm 69/70 (lỗi tham chiếu C-002 seed 55).
+- `src/reports/crash.json`: 20/20. Đây là crash suite host/swarm; 24 test riêng bổ sung bằng chứng cho ba shape nhóm viết.
+- `src/reports/research_ablation.json`: mỗi variant 70/70 pass; cost/success 28.862857 → 27.857143 VND mô phỏng.
+- Báo cáo cá nhân: [report/team/2A202604075_PhamDuyThanh.md](report/team/2A202604075_PhamDuyThanh.md).
+- Commit kỹ thuật: `175d770` và `db22c3b`; `4f2060d` là merge commit có đủ code nguồn được đánh giá. Hash nguồn trong ADR là `4f2060dc4729fa13d235ef41d4ed88480331b4f8`; phần hoàn thiện test/tài liệu sau đó chưa commit, chưa khai đã push/merge bản nộp.
