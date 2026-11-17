@@ -2,10 +2,10 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm: Nhóm 145
+- Lớp: L3B
+- Repo nhóm: K5-L3B-DAY8-Nhom145-From-Workflows-to-Agents
+- URL repo, nhánh nộp, commit chốt: https://github.com/ngdinhtruong28/K5-L3B-DAY8-Nhom145-From-Workflows-to-Agents.git
 
 ## Thành viên
 
@@ -13,6 +13,10 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |        |      |       |        |         |
 |   2 |        |      |       |        |         |
+|   3 |        |      |       |        |         |
+|   4 |        |      |       |        |         |
+|   5 | Nguyễn Đình Trường |2A202603837|truong.ngdinh2003@gmail.com|ngdinhtruong28|         |
+
 
 Gợi ý chia vai:
 
