@@ -47,15 +47,21 @@ def run_claim(
         conn.close()
 
 
-def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | None) -> RunResult:
+def _run(
+    conn: sqlite3.Connection,
+    claim_id: str,
+    *,
+    seed: int,
+    crash_at: str | None,
+) -> RunResult:
     budget = Budget()
     run_id = make_run_id("single", claim_id, seed)
-    trace = Trace(run_id)
+    trace = _Trace(run_id)
 
-    # 1. Đọc claim view an toàn
-    claim_view = get_claim_view(conn, claim_id)
+    # 1. Khởi tạo và đọc claim view ban đầu
     budget.add_tool(tool_cost())
-    if not claim_view.get("found"):
+    claim = get_claim_view(conn, claim_id)
+    if not claim.get("found"):
         trace.add("error", {"reason": "unknown_claim"})
         return finish(
             conn,
@@ -69,8 +75,10 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
             error_reason="unknown_claim",
         )
 
-    # 2. Xử lý thiếu order_id -> needs_info
-    if not claim_view.get("order_id"):
+    trace.add("claim", {"claim_id": claim_id, "order_id": claim.get("order_id")})
+
+    # Thiếu order_id -> needs_info
+    if not claim.get("order_id"):
         complete(budget, seed=seed, purpose="draft", prompt="needs_info")
         trace.add("decision", {"status": "needs_info"})
         return finish(
@@ -85,99 +93,86 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
             error_reason="missing_order_id",
         )
 
-    # 3. Hàm ReAct decide: chọn tool đọc, không gọi issue_refund
-    def decide(seen: dict[str, Any]) -> dict[str, Any]:
-        complete(budget, seed=seed, purpose="decide", prompt=f"step for {claim_id}")
-        last_tool = seen.get("last_tool")
-        last_result = seen.get("last_result") or {}
+    # 2. Vòng ReAct có giới hạn tối đa 8 bước
+    step_count = 0
+    saved_quote_payload: dict[str, Any] = {}
 
-        if last_tool is None:
+    def decide(seen: dict[str, Any]) -> dict[str, Any]:
+        nonlocal step_count, saved_quote_payload
+        step_count += 1
+        complete(budget, seed=seed, purpose="react", prompt=f"step_{step_count}")
+
+        # Bước 1: Tra cứu đơn hàng
+        if "last_tool" not in seen:
+            trace.add("react_action", {"step": step_count, "tool": "lookup_order"})
             return {
                 "tool": "lookup_order",
                 "args": {
-                    "order_id": claim_view["order_id"],
-                    "principal_id": claim_view["principal_id"],
+                    "order_id": claim["order_id"],
+                    "principal_id": claim["principal_id"],
                 },
             }
 
-        if last_tool == "lookup_order":
-            if not last_result.get("visible"):
+        # Bước 2: Đọc kết quả order
+        if seen.get("last_tool") == "lookup_order":
+            order_view = seen.get("last_result") or {}
+            trace.add(
+                "react_observation",
+                {
+                    "step": step_count,
+                    "visible": order_view.get("visible"),
+                    "reason": order_view.get("reason"),
+                },
+            )
+            if not order_view.get("visible"):
                 return {
                     "final": {
                         "status": "escalated",
-                        "error_reason": last_result.get("reason"),
+                        "error_reason": order_view.get("reason"),
+                        "proposal_amount": 0,
                     }
                 }
+            # Gọi tool tính bồi thường từ order
+            trace.add("react_action", {"step": step_count, "tool": "compute_compensation"})
             return {
                 "tool": "compute_compensation",
-                "args": {"order": last_result["order"]},
+                "args": {"order": dict(order_view["order"])},
             }
 
-        if last_tool == "compute_compensation":
-            proposal = int(last_result.get("amount_vnd", 0))
+        # Bước 3: Đọc kết quả tính bồi thường
+        if seen.get("last_tool") == "compute_compensation":
+            quote_payload = seen.get("last_result") or {}
+            saved_quote_payload = quote_payload
+            proposal = int(quote_payload.get("amount_vnd", 0))
+            trace.add("quote", quote_payload)
             if proposal <= 0:
                 return {
                     "final": {
                         "status": "denied",
+                        "error_reason": quote_payload.get("reason"),
                         "proposal_amount": 0,
-                        "error_reason": last_result.get("reason"),
                     }
                 }
             return {
                 "final": {
-                    "status": "quote_ready",
+                    "status": "ready_to_refund",
                     "proposal_amount": proposal,
-                    "quote": last_result,
                 }
             }
 
-        return {"final": {"status": "failed", "error_reason": "unexpected_step"}}
+        return {"final": {"status": "failed", "error_reason": "unexpected_react_state"}}
 
-    # Chạy vòng lặp ReAct với max_steps=8 và cờ worker=True (chặn tool ghi)
-    react_result = run_react(
+    react_outcome = run_react(
         conn,
         budget,
-        observation={"claim": claim_view},
+        observation={"claim": claim},
         decide=decide,
         max_steps=8,
         worker=True,
     )
 
-    final = react_result.get("final") or {}
-    final_status = final.get("status")
-
-    if final_status == "escalated":
-        complete(budget, seed=seed, purpose="draft", prompt="escalated")
-        trace.add("decision", {"status": "escalated"})
-        return finish(
-            conn,
-            shape="single",
-            claim_id=claim_id,
-            seed=seed,
-            status="escalated",
-            proposal_amount=0,
-            budget=budget,
-            trace=trace,
-            error_reason=final.get("error_reason"),
-        )
-
-    if final_status == "denied":
-        complete(budget, seed=seed, purpose="draft", prompt="denied")
-        trace.add("decision", {"status": "denied"})
-        return finish(
-            conn,
-            shape="single",
-            claim_id=claim_id,
-            seed=seed,
-            status="denied",
-            proposal_amount=0,
-            budget=budget,
-            trace=trace,
-            error_reason=final.get("error_reason"),
-        )
-
-    if final_status != "quote_ready":
-        trace.add("error", {"reason": final.get("error_reason", "react_failed")})
+    if react_outcome.get("stopped") == "step_cap":
+        trace.add("decision", {"status": "failed", "reason": "step_cap"})
         return finish(
             conn,
             shape="single",
@@ -187,14 +182,30 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
             proposal_amount=0,
             budget=budget,
             trace=trace,
-            error_reason=final.get("error_reason", "react_failed"),
+            error_reason="step_cap",
         )
 
-    # 4. Khi quote > 0: Host gọi durability.issue_refund truyền quote đầy đủ
-    proposal = int(final["proposal_amount"])
-    trace.add("quote", final.get("quote", {"amount_vnd": proposal}))
-    complete(budget, seed=seed, purpose="draft", prompt=f"proposal={proposal}")
+    final = react_outcome.get("final") or {}
+    status = final.get("status")
+    proposal = int(final.get("proposal_amount", 0))
 
+    if status in ("needs_info", "escalated", "denied", "failed"):
+        complete(budget, seed=seed, purpose="draft", prompt=f"status={status}")
+        trace.add("decision", {"status": status, "reason": final.get("error_reason")})
+        return finish(
+            conn,
+            shape="single",
+            claim_id=claim_id,
+            seed=seed,
+            status=status,
+            proposal_amount=0,
+            budget=budget,
+            trace=trace,
+            error_reason=final.get("error_reason"),
+        )
+
+    # 3. Host ghi refund nếu status == "ready_to_refund" (CP3: truyền crash_at)
+    complete(budget, seed=seed, purpose="draft", prompt=f"proposal={proposal}")
     try:
         outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
     except InjectedCrash:
@@ -203,22 +214,19 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
         raise
 
     if not outcome["ok"]:
-        status = "failed" if outcome["conflict"] else "denied"
-        trace.add("decision", {"status": status, "reason": outcome["reason"]})
+        final_status = "failed" if outcome["conflict"] else "denied"
         return finish(
             conn,
             shape="single",
             claim_id=claim_id,
             seed=seed,
-            status=status,
+            status=final_status,
             proposal_amount=proposal,
             budget=budget,
             trace=trace,
             error_reason=outcome["reason"],
         )
 
-    # 5. Hoàn thành ghi nhận hợp lệ
-    trace.add("decision", {"status": "resolved"})
     return finish(
         conn,
         shape="single",
@@ -230,3 +238,20 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
         trace=trace,
         error_reason=None,
     )
+
+
+class _Trace:
+    """Local alias so a crash can still flush. Wraps lab8.trace.Trace."""
+
+    def __init__(self, run_id: str) -> None:
+        self._inner = Trace(run_id)
+
+    def add(self, kind: str, payload: dict) -> None:
+        self._inner.add(kind, payload)
+
+    def write(self) -> str:
+        return self._inner.write()
+
+    @property
+    def run_id(self) -> str:
+        return self._inner.run_id
