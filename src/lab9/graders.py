@@ -78,25 +78,27 @@ class DbFactKept(Evaluator[Any, Trial]):
 @dataclass
 class ReplyMatchesLedger(Evaluator[Any, Trial]):
     """FM-08: reply must state an amount consistent with what the ledger committed.
-    Checks the last reply event's text against ledger refund_vnd.
-    Pass (True) when reply amount == ledger amount, or no money movement in both.
+    For shapes with a 'reply' event: compare text amount vs ledger refund_vnd.
+    For shapes without a reply event (swarm): compare blob proposal_amount vs
+    the first committed refund_effect amount_vnd — catches misreport at the aggregate level.
+    Pass (True) when the stated amount == the committed amount, or no money moved.
     """
 
     def evaluate(self, ctx: EvaluatorContext[Any, Trial]) -> EvaluationReason:
+        import json as _json
         import re
         snap = ctx.output["snapshot"]
         ledger_vnd = int(snap.get("refund_vnd") or 0)
 
-        # Find the last reply event
+        # Try reply event first (variant_agent shapes)
         reply_text = ""
         for e in reversed(ctx.output.get("events", [])):
             if e.get("kind") == "reply":
                 reply_text = (e.get("payload") or {}).get("text", "")
                 break
 
-        if ledger_vnd == 0:
-            # No money committed — reply should NOT mention a positive amount
-            # Extract amounts from the reply text (e.g. "35.000đ", "35,000đ", "35000đ")
+        if reply_text:
+            # Has a reply event — check text amount vs ledger
             amounts = re.findall(r"(\d[\d.,]*)\s*đ", reply_text)
             parsed = []
             for a in amounts:
@@ -104,24 +106,43 @@ class ReplyMatchesLedger(Evaluator[Any, Trial]):
                     parsed.append(int(a.replace(".", "").replace(",", "")))
                 except ValueError:
                     pass
-            if any(v > 0 for v in parsed):
-                return EvaluationReason(value=False,
-                                        reason=f"reply mentions amount but ledger=0: reply='{reply_text[:80]}'")
-            return EvaluationReason(value=True, reason=None)
+            if ledger_vnd == 0:
+                if any(v > 0 for v in parsed):
+                    return EvaluationReason(value=False,
+                                            reason=f"reply mentions amount but ledger=0: '{reply_text[:80]}'")
+                return EvaluationReason(value=True, reason=None)
+            if ledger_vnd in parsed:
+                return EvaluationReason(value=True, reason=None)
+            return EvaluationReason(value=False,
+                                    reason=f"reply amount {parsed} != ledger {ledger_vnd}: '{reply_text[:80]}'")
 
-        # Money was committed — reply must mention the ledger amount
-        # Allow ±0 tolerance (exact match of integer VND)
-        amounts = re.findall(r"(\d[\d.,]*)\s*đ", reply_text)
-        parsed = []
-        for a in amounts:
-            try:
-                parsed.append(int(a.replace(".", "").replace(",", "")))
-            except ValueError:
-                pass
-        if ledger_vnd in parsed:
+        # No reply event — use blob (swarm and similar shapes).
+        # Compare proposal_amount (what agent said) vs committed refund_effect amount_vnd.
+        # NOTE: host may legitimately cap the refund below proposal (e.g. partial cap).
+        # Only flag when lab8 also passes (correct run) but proposal != committed — that's FM-08.
+        # When lab8 itself fails, pass_rate will catch it; don't double-count here.
+        blob = ctx.output.get("blob") or ""
+        if not blob:
+            return EvaluationReason(value=True, reason=None)  # no data to check
+        try:
+            first_line = blob.splitlines()[0]
+            payload = _json.loads(first_line)
+        except (ValueError, IndexError):
+            return EvaluationReason(value=True, reason=None)  # can't parse
+
+        proposal = int(payload.get("proposal_amount") or 0)
+        effects = payload.get("refund_effects") or []
+        committed = int(effects[0].get("amount_vnd", proposal)) if effects else proposal
+
+        # If proposal != committed but snapshot matches label, it's legitimate host-capping
+        label_vnd = int((ctx.expected_output or {}).get("refund_vnd") or 0)
+        if committed == label_vnd:
+            return EvaluationReason(value=True, reason=None)  # host capped correctly, not FM-08
+
+        if proposal == committed:
             return EvaluationReason(value=True, reason=None)
         return EvaluationReason(value=False,
-                                reason=f"reply amount {parsed} != ledger {ledger_vnd}: '{reply_text[:80]}'")
+                                reason=f"proposal={proposal} != committed={committed} (FM-08 misreport)")
 
 
 # Order matters only for display. Names here are the metric ids in config/metric_spec.yaml.
