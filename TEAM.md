@@ -2,22 +2,19 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm: HVM
+- Lớp: L3B theo tên repo hiện tại, chờ coach xác nhận mã lớp dùng khi nộp.
+- Repo nhóm: [K5-L3B-DAY08-HVM-FromWorkflowsToAgents](https://github.com/NhMinh-2610/K5-L3B-DAY08-HVM-FromWorkflowsToAgents)
+- Nhánh nộp: `main`
+- Commit chốt: chờ tích hợp đủ ba shape.
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
-
-Gợi ý chia vai:
-
-- Nhóm 6 người: integration; workflow; single agent; orchestrator; ledger/policy/crash; eval/report.
-- Nhóm 4 người: workflow + integration; single; orchestrator + handoff; ledger + evaluation.
+|   1 | Phạm Thế Hùng | 2A202603778 |  26ai.hungpt5@vinuni.edu.vn | `thehung1406` | `workflow`, tích hợp và nộp bài |
+|   2 | Phạm Đức Vinh | 2A202603849 | 26ai.vinhpd@vinuni.edu.vn | `vindpd203` | `single`, báo cáo nhóm và research card |
+|   3 | Nguyễn Nhật Minh | 2A202603745 | nnhatminh2610@gmail.com | `NhMinh-2610` | `orchestrator`, handoff, trace, audit bảo mật và ADR |
 
 ## Bảng đóng góp
 
@@ -25,7 +22,9 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Hùng | `workflow`, tích hợp | `3b87b6e` | `test_workflow_rejects_approval_for_another_claim`, `test_workflow_retry_keeps_one_refund_and_audit` |
+| Vinh | `single`, research card R2, báo cáo nhóm | `8ba0422`, `9aa1dd9`, `85c0a35`, `2c2c7c2` | `src/tests/test_team_single.py` (`test_single_quotes_from_order_row_not_ticket`, `test_single_does_not_echo_stored_approval_status`, so sánh swarm seed 55, giới hạn 8 bước) |
+| Minh | `orchestrator`, bảo mật và ADR | `a06249f` | `src/tests/test_team_orchestrator.py` (secret/PII, approval, 3 điểm crash, retry, conflict và quote đầy đủ) |
 
 ## Cá nhân
 

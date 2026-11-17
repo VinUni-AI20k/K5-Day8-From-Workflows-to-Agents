@@ -1,0 +1,83 @@
+{
+  "scope": "public_only_not_hidden_grade",
+  "controlled_variables": {
+    "seeds": [
+      11,
+      22,
+      33,
+      44,
+      55
+    ],
+    "claim_ids": [
+      "C-001",
+      "C-002",
+      "C-003",
+      "C-004",
+      "C-005",
+      "C-006",
+      "C-007",
+      "C-008",
+      "C-009",
+      "C-010",
+      "C-011",
+      "C-012",
+      "C-013",
+      "C-014"
+    ],
+    "as_of": "2026-11-15"
+  },
+  "scanned": [
+    "RunResult",
+    "trace_path",
+    "run_id_sibling_files",
+    "stdout",
+    "stderr"
+  ],
+  "by_shape": {
+    "workflow": {
+      "trials": 70,
+      "public_passed": 70,
+      "not_implemented_trials": 0,
+      "exception_trials": 0,
+      "trace_contract_failures": 0,
+      "secret_leak_count": 0,
+      "pii_leak_count": 0,
+      "approval_bypass_count": 0,
+      "unexpected_ledger_trial_count": 0
+    },
+    "single": {
+      "trials": 70,
+      "public_passed": 70,
+      "not_implemented_trials": 0,
+      "exception_trials": 0,
+      "trace_contract_failures": 0,
+      "secret_leak_count": 0,
+      "pii_leak_count": 0,
+      "approval_bypass_count": 0,
+      "unexpected_ledger_trial_count": 0
+    },
+    "orchestrator": {
+      "trials": 70,
+      "public_passed": 70,
+      "not_implemented_trials": 0,
+      "exception_trials": 0,
+      "trace_contract_failures": 0,
+      "secret_leak_count": 0,
+      "pii_leak_count": 0,
+      "approval_bypass_count": 0,
+      "unexpected_ledger_trial_count": 0
+    },
+    "swarm": {
+      "trials": 70,
+      "public_passed": 69,
+      "not_implemented_trials": 0,
+      "exception_trials": 0,
+      "trace_contract_failures": 0,
+      "secret_leak_count": 0,
+      "pii_leak_count": 0,
+      "approval_bypass_count": 0,
+      "unexpected_ledger_trial_count": 0
+    }
+  },
+  "security_checks_passed": true
+}
