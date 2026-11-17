@@ -18,8 +18,14 @@ ones. `lab8.trace.Trace` does this; your own tracer is fine if it matches.
 
 from __future__ import annotations
 
-from lab8.schemas import RunResult
-from lab8.shapes.common import not_implemented
+from lab8.db import connect
+from lab8.durability import InjectedCrash, issue_refund
+from lab8.handoff import make_handoff
+from lab8.runtime import run_readonly_investigators
+from lab8.schemas import Budget, RunResult, make_run_id
+from lab8.shapes.common import finish
+from lab8.tools import get_claim_view, tool_cost
+from lab8.trace import Trace
 
 
 def run_claim(
@@ -31,5 +37,76 @@ def run_claim(
 ) -> RunResult:
     # TODO CP2 (student): thay stub này bằng shape orchestrator theo các bước ở docstring đầu file.
     # TODO CP3 (student): truyền crash_at vào durability.issue_refund, không bắt InjectedCrash.
-    del store_path, crash_at
-    return not_implemented("orchestrator", claim_id, seed)
+    conn = connect(store_path)
+    budget = Budget()
+    trace = Trace(make_run_id("orchestrator", claim_id, seed))
+
+    def result(status: str, proposal: int = 0, reason: str | None = None) -> RunResult:
+        trace.add("decision", {"status": status, "proposal_amount": proposal})
+        return finish(
+            conn,
+            shape="orchestrator",
+            claim_id=claim_id,
+            seed=seed,
+            status=status,
+            proposal_amount=proposal,
+            budget=budget,
+            trace=trace,
+            error_reason=reason,
+        )
+
+    try:
+        budget.add_tool(tool_cost())
+        claim = get_claim_view(conn, claim_id)
+        if not claim.get("found"):
+            return result("failed", reason="unknown_claim")
+        if not claim.get("order_id"):
+            return result("needs_info", reason="missing_order_id")
+
+        # The typed handoff drops unexpected fact keys and grants read-only tools.
+        # Do not pass the ticket, raw claim row, parent_secret or request headers.
+        handoff = make_handoff(
+            request_id=trace.run_id,
+            claim_id=claim_id,
+            task="investigate_refund_eligibility",
+            facts={},
+            allowed_tools=["lookup_order", "lookup_refund_history", "compute_compensation"],
+        )
+        trace.add("handoff", handoff)
+        investigation = run_readonly_investigators(
+            conn, budget, handoff, claim["principal_id"]
+        )
+        tools = investigation["tools"]
+        order_view = tools.get("lookup_order") or {}
+        if not order_view.get("visible"):
+            return result("escalated", reason=order_view.get("reason"))
+
+        # Quote is computed from the scoped order view, never ticket text.
+        quote = tools.get("compute_compensation")
+        if not quote:
+            return result("failed", reason="missing_compensation_quote")
+        proposal = int(quote["amount_vnd"])
+        trace.add("quote", {
+            "amount_vnd": proposal,
+            "clause_ids": quote.get("clause_ids", []),
+        })
+        if proposal <= 0:
+            return result("denied", reason=quote.get("reason"))
+
+        # Investigators cannot write; only the orchestrator host commits.
+        budget.add_tool(tool_cost())
+        try:
+            outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
+        except InjectedCrash:
+            trace.add("crash", {"at": crash_at})
+            trace.write()
+            raise
+        if not outcome["ok"]:
+            return result(
+                "failed" if outcome.get("conflict") else "denied",
+                proposal,
+                outcome.get("reason"),
+            )
+        return result("resolved", proposal)
+    finally:
+        conn.close()
