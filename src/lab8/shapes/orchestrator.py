@@ -21,13 +21,14 @@ from __future__ import annotations
 import sqlite3
 
 from lab8.db import connect
-from lab8.durability import issue_refund
+from lab8.durability import InjectedCrash, issue_refund
 from lab8.handoff import make_handoff
 from lab8.mock_llm import complete
 from lab8.runtime import run_readonly_investigators
 from lab8.schemas import Budget, RunResult, make_run_id
 from lab8.shapes.common import finish, safe_dump
-from lab8.tools import tool_cost
+from lab8.tools import get_claim_view, tool_cost
+from lab8.trace import Trace
 
 
 SHAPE = "orchestrator"
@@ -55,16 +56,40 @@ def _run(
     crash_at: str | None,
 ) -> RunResult:
     budget = Budget()
-    run_id = make_run_id(SHAPE, claim_id, seed)
-    trace = Trace(run_id)
+    trace = Trace(make_run_id(SHAPE, claim_id, seed))
+    try:
+        return _orchestrate(conn, claim_id, seed=seed, crash_at=crash_at, budget=budget, trace=trace)
+    except InjectedCrash:
+        raise
+    except Exception as exc:  # run_claim must not raise; record the type only, no payload.
+        trace.add("error", {"type": type(exc).__name__})
+        return finish(
+            conn,
+            shape=SHAPE,
+            claim_id=claim_id,
+            seed=seed,
+            status="failed",
+            proposal_amount=0,
+            budget=budget,
+            trace=trace,
+            error_reason=f"exception:{type(exc).__name__}",
+        )
+
+
+def _orchestrate(
+    conn: sqlite3.Connection,
+    claim_id: str,
+    *,
+    seed: int,
+    crash_at: str | None,
+    budget: Budget,
+    trace: Trace,
+) -> RunResult:
 
     # Read the parent context ourselves. None of it is forwarded raw to a worker.
     budget.add_tool(tool_cost())
-    claim_row = conn.execute(
-        "SELECT claim_id, principal_id, order_id, ticket FROM claims WHERE claim_id = ?",
-        (claim_id,),
-    ).fetchone()
-    if claim_row is None:
+    claim = get_claim_view(conn, claim_id)
+    if not claim["found"]:
         trace.add("error", {"reason": "unknown_claim"})
         return finish(
             conn,
@@ -78,9 +103,9 @@ def _run(
             error_reason="unknown_claim",
         )
 
-    principal_id = claim_row["principal_id"]
+    principal_id = claim["principal_id"]
 
-    if not claim_row["order_id"]:
+    if not claim["order_id"]:
         complete(budget, seed=seed, purpose="draft", prompt="needs_info")
         trace.add("decision", {"status": "needs_info", "reason": "missing_order_id"})
         return finish(
@@ -168,9 +193,14 @@ def _run(
 
     # The host is the only writer. Pass the full entitlement quote; issue_refund
     # subtracts earlier refunds on the same order and enforces approval,
-    # ownership, and idempotency. crash_at flows straight through (CP3): we do
-    # not catch InjectedCrash — let it propagate so a resume can replay safely.
-    outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
+    # ownership, and idempotency. crash_at flows straight through (CP3): on
+    # InjectedCrash we flush the trace and re-raise so a resume can replay safely.
+    try:
+        outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
+    except InjectedCrash:
+        trace.add("crash", {"at": crash_at})
+        trace.write()
+        raise
     trace.add("refund", {"ok": outcome["ok"], "reason": outcome["reason"], "conflict": outcome["conflict"]})
 
     if not outcome["ok"]:
@@ -199,24 +229,3 @@ def _run(
         error_reason=None,
     )
 
-
-class Trace:
-    """Local wrapper over lab8.trace.Trace so an uncaught crash can still flush.
-
-    Matches Trace contract v1: write() emits {"run_id", "events": [...]}.
-    """
-
-    def __init__(self, run_id: str) -> None:
-        from lab8.trace import Trace as _Trace
-
-        self._inner = _Trace(run_id)
-
-    def add(self, kind: str, payload: dict) -> None:
-        self._inner.add(kind, payload)
-
-    def write(self) -> str:
-        return self._inner.write()
-
-    @property
-    def run_id(self) -> str:
-        return self._inner.run_id
