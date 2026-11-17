@@ -13,6 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Nguyễn Hữu Thịnh | 2A202603726 | nht702812@gmail.com | huuthinh812 | Workflow (Core Developer), Shape A |
 |   2 |        |      |       |        |         |
+|   3 | Đoàn Đăng Khoa | 2A202603766 | 26ai.khoadd@vinuni.edu.vn | ddkhoa2605 | orchestrator + handoff (Shape C) |
 
 Gợi ý chia vai:
 
@@ -26,6 +27,7 @@ Gợi ý chia vai:
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 | Nguyễn Hữu Thịnh (2A202603726) | Workflow (Core Developer), Shape A | `1484656` feat(workflow): implement shape A deterministic workflow + crash report; `057ee06` test(workflow): add shape A boundary tests | Thêm `src/tests/test_workflow_boundary.py` (31 test: ticket là dữ liệu, chỉ gọi host khi quote > 0 với quote đầy đủ, trace không lộ ticket/secret/PII). Chạy pass 62 student test workflow |
+| Đoàn Đăng Khoa (2A202603766) | orchestrator + handoff (Shape C) | `fa395d8` | `src/tests/test_orchestrator_boundary.py` (37 test: trace không lộ secret/PII, handoff allowlist chỉ đọc, ticket không ghi đè delay/injection, approval mượn/thiếu bị chặn, 3 điểm crash resume ra 1 refund, retry, T14 quote đầy đủ) |
 
 ## Cá nhân
 
@@ -69,3 +71,29 @@ Sao chép mục dưới đây cho từng thành viên.
 
 - Student test workflow 62/62, test boundary 31/31, cổng host 85 passed, `crash_safety 20/20`, 0 trace lộ secret.
 - Benchmark public workflow: pass 1.000, pass^5 1.000, var 0, cost/success 27.86 VND mô phỏng (swarm: 0.986, 0.929, 49.57).
+
+## 2A202603766_DoanDangKhoa
+
+Báo cáo đầy đủ: [report/team/2A202603766_DoanDangKhoa.md](report/team/2A202603766_DoanDangKhoa.md).
+
+### Phần việc phụ trách
+
+- Shape C — `orchestrator` (orchestrator + investigator chỉ đọc) và ranh giới handoff: `src/lab8/shapes/orchestrator.py`.
+- Test: `src/tests/test_orchestrator_boundary.py`.
+- Checkpoint: CP2 (62 test student), CP3 (handoff, idempotency, crash), CP4 (approval, secret, trace).
+
+### Đóng góp cụ thể
+
+- Commit `fa395d8` — `feat(orchestrator): implement shape C with read-only investigators`.
+- Orchestrator đọc claim chỉ 4 cột (không `SELECT *`), dựng handoff bằng `make_handoff` với `facts={}` và 4 tool chỉ đọc, chạy `run_readonly_investigators`, quote từ `compute_compensation` trên order row, là bên duy nhất gọi `durability.issue_refund` với **quote đầy đủ** và `crash_at`.
+- Ranh giới code / model: tiền, approval, idempotency do code; MockLLM chỉ lập kế hoạch và soạn chữ; delay ghi trong ticket không bao giờ được dùng.
+- `InjectedCrash` được ghi trace rồi `raise` lại; exception khác trả `failed`, `run_claim` không ném lỗi.
+- Trace cố ý không ghi: claim row (`parent_secret`, `raw_headers`), nội dung ticket, order row thô (`phone`, `address`, `internal_note`, `item_name`), approval row.
+- Thêm 37 test ranh giới vào cổng host.
+
+### Bằng chứng
+
+- `python -m pytest -q -m student -o addopts= -k orchestrator` → `62 passed`.
+- `python -m pytest -q` → `91 passed, 248 deselected` (gồm 37 test mới).
+- Benchmark tự kiểm `--shapes orchestrator,swarm`, seed `11,22,33,44,55`: orchestrator pass 1.000, pass^5 1.000, cost/success 57.19, steps 5.36; swarm pass 0.986, pass^5 0.929.
+- Crash rồi resume C-012 (`after_effect_before_checkpoint`): lần 2 `resolved`, `idempotent_replay`, ledger 1 dòng, trace `R-orchestrator-C-012-s11`.
