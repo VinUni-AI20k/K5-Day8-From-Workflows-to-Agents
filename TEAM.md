@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Đỗ Triệu Đức Phương|Single Agent | feat: done single agent | test_single_agent.py |
 
 ## Cá nhân
 
