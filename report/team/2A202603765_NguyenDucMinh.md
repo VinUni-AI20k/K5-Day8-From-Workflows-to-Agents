@@ -32,8 +32,8 @@ Các thay đổi đã thực hiện :
 
 Ví dụ kỹ thuật: ở T14, entitlement là 150.000 VND và đơn đã được hoàn 30.000 VND. Workflow vẫn truyền proposal 150.000 VND; host tự trừ phần đã hoàn và chỉ ghi thêm 120.000 VND. Nếu workflow tự trừ trước thì host sẽ trừ lần thứ hai.
 
-- **Commit chính:** `5cbc99e0b10f90aeacb2a54e962b557e94184f6a` — `feat(workflow): implement claim processing and crash recovery`. Commit trên nhánh `Workflow_CP1`, gồm phần triển khai workflow CP2–CP3 và báo cáo cá nhân. Commit đã được tạo ở local, chưa push lên remote.
-- **Test đã thêm hoặc sửa:** chưa thêm hoặc sửa test. Đã chạy bộ test có sẵn để kiểm tra workflow. Yêu cầu mỗi thành viên có ít nhất một test đã thêm hoặc sửa trong `RULES.md` và `RUBRIC.md` vẫn cần được hoàn thành và ghi nhận bằng commit thực tế.
+- **Commit chính:** `5cbc99e0b10f90aeacb2a54e962b557e94184f6a` — `feat(workflow): implement claim processing and crash recovery`, gồm phần triển khai workflow CP2–CP3 và báo cáo cá nhân. Commit đã được push lên remote; nhánh hiện tại là `Workflow_CP2,3` (đổi tên từ `Workflow_CP1`).
+- **Test đã thêm:** bổ sung 3 test trong [`src/tests/test_workflow.py`](../../src/tests/test_workflow.py) với sự hỗ trợ của Codex: claim không tồn tại vẫn ghi trace hợp lệ và không thay đổi ledger; thiếu approval giữ quote đầy đủ nhưng không hoàn tiền, có audit từ chối; quote thay đổi khi retry báo xung đột và giữ nguyên refund cũ. File test được đưa vào commit `test(workflow): cover unknown claims, approval denial and retry conflicts` cùng bản cập nhật báo cáo này.
 
 ## 4. Bằng chứng
 
@@ -47,6 +47,8 @@ Các lệnh dưới đây chạy từ thư mục `src/`. Trong phiên làm việ
 | Smoke của starter | `python -m lab8.smoke` | **lab8.smoke pass** |
 | Bộ test host mặc định | `python -m pytest -q` | **54 passed, 248 deselected** |
 | Định dạng diff | `git diff --check` | Không báo lỗi whitespace |
+
+Sau khi bổ sung 3 test trong `tests/test_workflow.py`, Tôi chạy lại lệnh lọc workflow ở trên và nhận kết quả **65 passed, 240 deselected in 2.81s** (62 test có sẵn và 3 test mới). Các test mới được đánh dấu `student`, dùng database và thư mục trace tạm riêng cho từng test.
 
 Các test workflow đã chạy nằm trong [`test_public_matrix.py`](../../src/tests/test_public_matrix.py):
 
@@ -78,4 +80,4 @@ Theo bằng chứng hiện có, phần workflow đạt 62 test student công kha
 
 Các điểm kỹ thuật cần nắm để giải thích bài: tiền do code tính từ order và policy; ticket là dữ liệu người dùng; host là nơi duy nhất ghi refund; phải truyền quote đầy đủ; ledger và idempotency ngăn hoàn trùng; trace chỉ ghi dữ liệu được phép.
 
-Việc còn cần hoàn thiện cho phần đóng góp cá nhân: thêm hoặc sửa ít nhất một test có ý nghĩa và cập nhật bảng đóng góp trong `TEAM.md`. Commit kỹ thuật đã được tạo và ghi hash ở mục 3. Việc chạy crash suite, benchmark và kiểm tra hidden cần được nhóm thực hiện ở các checkpoint tiếp theo.
+Việc còn cần hoàn thiện cho phần đóng góp cá nhân: cập nhật bảng đóng góp trong `TEAM.md`. Commit triển khai workflow đã được tạo và ghi hash ở mục 3; ba test bổ sung được đưa vào commit cùng bản cập nhật báo cáo này. Việc chạy crash suite, benchmark và kiểm tra hidden cần được nhóm thực hiện ở các checkpoint tiếp theo.
