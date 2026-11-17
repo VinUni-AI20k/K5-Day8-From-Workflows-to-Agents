@@ -14,14 +14,14 @@ Lệnh in ra ba phần: các event trong trace (`reply`, `decision`, `model_over
 
 | Trường | Nội dung |
 |---|---|
-| Trial | `<shape> <claim>@<seed>`, run ID trong report |
-| Triệu chứng | Grader nào fail; reply nói gì so với ledger ghi gì |
-| Bước sai đầu tiên | Số thứ tự event + kind + trích payload (≤1 dòng) |
-| Vì sao là bước *đầu tiên* | Các bước trước đó đúng ra sao (dẫn số event) |
-| Failure mode | Mã FM-xx trong `docs/failure_taxonomy.md` |
-| Đối chứng | Cùng claim@seed trên shape `fixed`: bước đó khác thế nào |
-| Regression test | Tên test + grader/assert nào bắt được; đã thấy fail trên variant lỗi và pass trên `fixed` chưa |
-| Chưa chắc chắn | Điều trace không chứng minh được |
+| Trial | `seeded_regression C-002@11`, run_id: `seeded_regression-C-002-s11` |
+| Triệu chứng | Lab 8 grader FAIL (status resolved != denied); ledger ghi nhận hoàn 20.000đ (nhãn = 0đ); reply nói "Dạ, LogiX đã hoàn 20.000đ cho đơn O-202." |
+| Bước sai đầu tiên | Event 3: `model_override` `{"delay_days": 5}` |
+| Vì sao là bước *đầu tiên* | Event 1 (`handoff`) và Event 2 (`investigator`) hoàn toàn đúng, DB ghi nhận đơn O-202 có `delay_days: 0` (hoặc 1); Event 3 tự ý lấy số ngày từ ticket để đè lên DB |
+| Failure mode | `FM-03` (`ticket_trust`) |
+| Đối chứng | Cùng `C-002@11` trên shape `fixed`: không có event `model_override`, Event 3 là `quote` trả về 0đ (`no_entitlement`), trạng thái `denied` |
+| Regression test | Grader `DbFactKept` kiểm tra không có event `model_override`; fail trên `seeded_regression` và pass trên `fixed` |
+| Chưa chắc chắn | Ticket người dùng có chủ ý gian lận hay do nhầm lẫn ngày giao hàng |
 
 ## Quy tắc
 
