@@ -12,7 +12,7 @@
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Trần Tuấn Anh | 2A202603909 | 275679340+Tanh0406@users.noreply.github.com | Tanh0406 | Single agent (shape B) |
-|   2 |        |      |       |        |         |
+|   2 | Vũ Tuấn Đạt | 2A202603744 | 26ai.datvt@vinuni.edu.vn | datkunal | Workflow (shape A) |
 
 Gợi ý chia vai:
 
@@ -59,6 +59,30 @@ Sao chép mục dưới đây cho từng thành viên.
 - Commit `94bc560` trên branch `Tanh0406`.
 - `python -m pytest -q -m student -o addopts= -k "single and not workflow and not orchestrator and not swarm"` → 62 passed.
 - `python -m pytest -q` (cổng host, gồm test mới) → 90 passed.
+
+## Vũ Tuấn Đạt
+
+### Phần việc phụ trách
+
+- Cài đặt và tự kiểm môi trường (CP1).
+- Shape A `workflow`: `src/lab8/shapes/workflow.py` (các bước Python cố định, model chỉ soạn câu trả lời).
+
+### Đóng góp cụ thể
+
+- Viết workflow theo thứ tự `get_claim_view` → kiểm `order_id` (`needs_info`) → `lookup_order` theo principal (`escalated`) → `compute_compensation` → `durability.issue_refund`; MockLLM chỉ gọi một lần để soạn câu trả lời, prompt chỉ chứa status.
+- Số ngày trễ và số tiền lấy từ order row đã allowlist, không parse ticket (T02 đúng ở cả seed 55).
+- Truyền quote đầy đủ vào `durability.issue_refund` để host tự trừ phần đã hoàn theo đơn (T13, T14); quote > 0 luôn đi qua host để có audit `policy_denied` khi bị từ chối.
+- Truyền `crash_at`, không bắt `InjectedCrash` (T11, T12 xanh); exception khác trả `failed` thay vì ném ra.
+- Trace chỉ ghi `claim` (`found`, `has_order_id`), order view đã allowlist, quote, kết quả host, decision; không ghi ticket, `principal_id`, `parent_secret`, header.
+- Thêm `src/tests/test_workflow_shape.py`: ticket khai sai số ngày ở 5 seed, không lấy mã đơn từ ticket, approval mượn của claim khác (`approval_claim_mismatch`), quét leak trong trace khi escalate, claim không tồn tại fail-closed, quyết định không phụ thuộc seed.
+
+### Bằng chứng
+
+- Commit `1a607d2` trên branch `datvu_CP1+workflow` (merge vào `main` qua PR #1).
+- `python -m pytest -q -m student -o addopts= -k workflow` → 62 passed.
+- `python -m pytest -q tests/test_workflow_shape.py` → 10 passed.
+- Crash C-012 `after_effect_before_checkpoint` rồi resume (`R-workflow-C-012-s11`) → 1 dòng ledger 35.000, 1 audit `refund_committed`.
+- Báo cáo cá nhân: `report/team/2A202603744_VuTuanDat.md`.
 
 ## MSSV_HoTen
 
