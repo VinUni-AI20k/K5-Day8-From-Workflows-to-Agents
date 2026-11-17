@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Hữu Thịnh (2A202603726) | Workflow (Core Developer), Shape A | `1484656` feat(workflow): implement shape A deterministic workflow + crash report | Chưa thêm test mới. Chạy pass 62 student test workflow trong `tests/test_public_matrix.py` (T01–T14, T11, T12) |
+| Nguyễn Hữu Thịnh (2A202603726) | Workflow (Core Developer), Shape A | `1484656` feat(workflow): implement shape A deterministic workflow + crash report; `057ee06` test(workflow): add shape A boundary tests | Thêm `src/tests/test_workflow_boundary.py` (31 test: ticket là dữ liệu, chỉ gọi host khi quote > 0 với quote đầy đủ, trace không lộ ticket/secret/PII). Chạy pass 62 student test workflow |
 
 ## Cá nhân
 
@@ -62,9 +62,10 @@ Sao chép mục dưới đây cho từng thành viên.
 ### Đóng góp cụ thể
 
 - Commit `1484656`: implement workflow và `src/reports/crash.json`.
+- Commit `057ee06`: thêm `src/tests/test_workflow_boundary.py` (31 test boundary cho workflow).
 - Báo cáo kiến trúc Workflow (`report/team/workflow_architecture.md`) và báo cáo cá nhân (`report/team/2A202603726_NguyenHuuThinh.md`).
 
 ### Bằng chứng
 
-- Student test workflow 62/62, cổng host 54 passed, `crash_safety 20/20`, 0 trace lộ secret.
+- Student test workflow 62/62, test boundary 31/31, cổng host 85 passed, `crash_safety 20/20`, 0 trace lộ secret.
 - Benchmark public workflow: pass 1.000, pass^5 1.000, var 0, cost/success 27.86 VND mô phỏng (swarm: 0.986, 0.929, 49.57).
