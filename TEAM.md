@@ -71,7 +71,6 @@ API host dùng chung (không sửa): `lab8.tools` (`get_claim_view`, `lookup_ord
 - **Code:** Shape C `orchestrator.py`: `make_handoff` với tool read-only (`lookup_order`, `lookup_refund_history`, `lookup_policy`, `get_clause`); `run_readonly_investigators`; orchestrator tính quote và gọi `issue_refund`; trace chỉ ghi handoff đã sanitize, không ghi parent context/`parent_secret`.
 - **Test:** `src/tests/test_orchestrator_handoff_extra.py` (VD: handoff không chứa phone/address/secret; investigator không có tool ghi).
 - **Báo cáo:** `report/team/research_card.md` (R1–R4 + ablation), mục kiến trúc trong `group_report.md`.
-- **Bonus (nếu dư thời gian, đăng ký trước 15:30):** gợi ý B1 (investigator song song) hoặc B3 (verifier) — vì gần với shape C.
 
 #### P4 — `ngominhcuong` · Ledger/Crash/Evaluation + Số liệu slide
 
@@ -91,16 +90,16 @@ API host dùng chung (không sửa): `lab8.tools` (`get_claim_view`, `lookup_ord
 - Mỗi người tự nộp link repo trên LMS.
 - Làm trên nhánh riêng: `feat/workflow`, `feat/single`, `feat/orchestrator`, `feat/eval` → PR vào `main`, P1 merge.
 
-### Lịch theo checkpoint
+### Lịch theo checkpoint (9:00 → 13:00)
 
 | Mốc | P1 | P2 | P3 | P4 |
 | --- | --- | --- | --- | --- |
-| CP1 13:30 | Chạy smoke, điền TEAM.md | Smoke, đọc runtime.py | Smoke, đọc handoff.py | Smoke, đọc durability.py, metrics.md |
-| CP2 13:45 | workflow 62/62 | single 62/62 | orchestrator 62/62 | Chạy ma trận |
-| CP3 14:30 | crash_at + T11/T12 | crash_at + T11/T12 | handoff sanitize + T11/T12 | Test crash/resume |
-| CP4 15:30 | Merge, giữ pytest xanh | Khung slide | Research card | crash.json 20/20, rà trace |
-| CP5 16:15 | Benchmark, ADR, hash | Slide số liệu | group_report | Gửi số liệu + biểu đồ slide 7–9 cho P2 |
-| 17:00 | `check_submission` 0 FAIL, push | Tập demo | Tập demo | Tập demo |
+| CP1 9:15 | Chạy smoke, điền TEAM.md | Smoke, đọc runtime.py | Smoke, đọc handoff.py | Smoke, đọc durability.py, metrics.md |
+| CP2 10:00 | workflow 62/62 | single 62/62 | orchestrator 62/62 | Chạy ma trận |
+| CP3 10:45 | crash_at + T11/T12 | crash_at + T11/T12 | handoff sanitize + T11/T12 | Test crash/resume |
+| CP4 11:30 | Merge, giữ pytest xanh | Khung slide | Research card | crash.json 20/20, rà trace |
+| CP5 12:15 | Benchmark, ADR, hash | Slide số liệu | group_report | Gửi số liệu + biểu đồ slide 7–9 cho P2 |
+| 13:00 | `check_submission` 0 FAIL, push | Tập demo | Tập demo | Tập demo |
 
 ### Kịch bản demo (≈ 7 phút)
 
