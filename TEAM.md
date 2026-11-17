@@ -14,7 +14,7 @@
 |   1 |        |      |       | `minhphuong150505` | P1 · Trưởng nhóm: Workflow + Integration |
 |   2 |        |      |       | `tranha1764` | P2 · Single agent + Slide |
 |   3 |        |      |       | `hungdt31` | P3 · Orchestrator + Handoff + Research card |
-|   4 |        |      |       | `ngominhcuong` | P4 · Ledger/Crash/Evaluation + Trang HTML demo |
+|   4 |        |      |       | `ngominhcuong` | P4 · Ledger/Crash/Evaluation + Số liệu slide |
 
 ## Phân công
 
@@ -30,7 +30,7 @@
 | Shape D swarm | `src/lab8/shapes/swarm_reference.py` | có sẵn, chỉ đọc |
 | Bằng chứng | `src/reports/benchmark.json`, `src/reports/crash.json` | sinh bằng tool |
 | Báo cáo | `TEAM.md`, `report/team/{group_report,decision_adr,research_card}.md`, `report/team/MSSV_HoTen.md` ×4 | điền |
-| Demo | `demo/index.html` + slide | làm mới |
+| Demo | slide (`demo/slides.pdf` hoặc link Google Slides) | làm mới |
 
 API host dùng chung (không sửa): `lab8.tools` (`get_claim_view`, `lookup_order`, `lookup_refund_history`, `lookup_policy`, `get_clause`, `compute_compensation`), `lab8.durability.issue_refund`, `lab8.handoff.make_handoff`, `lab8.runtime.run_react` / `run_readonly_investigators`, `lab8.shapes.common.finish`, `lab8.trace.Trace`.
 
@@ -73,35 +73,33 @@ API host dùng chung (không sửa): `lab8.tools` (`get_claim_view`, `lookup_ord
 - **Báo cáo:** `report/team/research_card.md` (R1–R4 + ablation), mục kiến trúc trong `group_report.md`.
 - **Bonus (nếu dư thời gian, đăng ký trước 15:30):** gợi ý B1 (investigator song song) hoặc B3 (verifier) — vì gần với shape C.
 
-#### P4 — `ngominhcuong` · Ledger/Crash/Evaluation + Trang HTML demo
+#### P4 — `ngominhcuong` · Ledger/Crash/Evaluation + Số liệu slide
 
 - **Kiểm thử chéo:** chạy ma trận `python -m pytest -q -m student -o addopts=` sau mỗi PR, báo lỗi T11/T12/T13/T14 cho chủ shape; rà nhánh approval hỏng / approval claim khác / đơn đã hoàn đủ.
 - **CP4:** `python -m lab8.crash_test --count 20 --out reports/crash.json` → `20/20`; rà trace trong `traces/` để chắc không lộ secret/PII.
 - **Test:** `src/tests/test_crash_resume_extra.py` (VD: crash `after_effect_before_checkpoint` trên cả 3 shape → resume → 1 ledger row, 1 audit `refund_committed`).
-- **Trang HTML demo** `demo/index.html` (một file, mở trực tiếp bằng trình duyệt, không cần server):
-  - Header: tên nhóm, bài toán, shape đã chọn.
-  - Sơ đồ 4 shape (SVG/CSS) và bảng "ai tính tiền, ai ghi refund".
-  - Bảng + biểu đồ cột so sánh 4 shape: pass rate, pass^5, variance, cost/success — số **copy từ** `src/reports/benchmark.json` (ghi run_id).
-  - Thẻ must-pass: approval bypass 0, secret leak 0, crash 20/20 (từ `crash.json`).
-  - Trace viewer: 1–2 trace mẫu đã sanitize (VD: C-002 swarm seed 55 fail vs workflow pass) dạng timeline.
-  - Không nhúng dữ liệu thô của claim/order (phone, địa chỉ, ghi chú nội bộ).
+- **Nội dung slide 7–9** (gửi P2 trước CP5):
+  - Slide 7: idempotency `refund:{claim_id}`, kết quả crash 20/20 lấy từ `crash.json`.
+  - Slide 8: bảo mật trace, gồm approval bypass 0 và secret leak 0, kèm 1 trace mẫu đã sanitize (VD: C-002 swarm seed 55 fail so với workflow pass).
+  - Slide 9: bảng và biểu đồ cột so sánh 4 shape (pass rate, pass^5, variance, cost/success), số **copy từ** `src/reports/benchmark.json` và ghi run_id.
+  - Không đưa dữ liệu thô của claim/order lên slide (phone, địa chỉ, ghi chú nội bộ).
 - `decision_adr.md` phần số liệu (cùng P1), mục Đánh giá trong `group_report.md`.
 
 ### Việc chung (mọi người)
 
 - Mỗi người: ≥ 1 commit có nội dung + ≥ 1 test thêm/sửa, 1 dòng trong **Bảng đóng góp** `TEAM.md`, 1 file `report/team/MSSV_HoTen.md` (ghi cả công cụ AI đã dùng và cách tự kiểm).
 - Mỗi người tự nộp link repo trên LMS.
-- Làm trên nhánh riêng: `feat/workflow`, `feat/single`, `feat/orchestrator`, `feat/eval-demo` → PR vào `main`, P1 merge.
+- Làm trên nhánh riêng: `feat/workflow`, `feat/single`, `feat/orchestrator`, `feat/eval` → PR vào `main`, P1 merge.
 
 ### Lịch theo checkpoint
 
 | Mốc | P1 | P2 | P3 | P4 |
 | --- | --- | --- | --- | --- |
 | CP1 13:30 | Chạy smoke, điền TEAM.md | Smoke, đọc runtime.py | Smoke, đọc handoff.py | Smoke, đọc durability.py, metrics.md |
-| CP2 13:45 | workflow 62/62 | single 62/62 | orchestrator 62/62 | Chạy ma trận, dựng khung `demo/index.html` |
+| CP2 13:45 | workflow 62/62 | single 62/62 | orchestrator 62/62 | Chạy ma trận |
 | CP3 14:30 | crash_at + T11/T12 | crash_at + T11/T12 | handoff sanitize + T11/T12 | Test crash/resume |
 | CP4 15:30 | Merge, giữ pytest xanh | Khung slide | Research card | crash.json 20/20, rà trace |
-| CP5 16:15 | Benchmark, ADR, hash | Slide số liệu | group_report | Đổ số vào HTML |
+| CP5 16:15 | Benchmark, ADR, hash | Slide số liệu | group_report | Gửi số liệu + biểu đồ slide 7–9 cho P2 |
 | 17:00 | `check_submission` 0 FAIL, push | Tập demo | Tập demo | Tập demo |
 
 ### Kịch bản demo (≈ 7 phút)
@@ -109,7 +107,7 @@ API host dùng chung (không sửa): `lab8.tools` (`get_claim_view`, `lookup_ord
 1. (P2) Slide 1–3: bài toán và ranh giới code/model — 1 phút.
 2. (P1) Live: `python -m lab8.smoke`, `python -m lab8.run --shape workflow --claim-id C-002 --seed 55 ...` so với swarm cùng seed — 2 phút.
 3. (P1) Live crash: `--crash-at after_effect_before_checkpoint` rồi resume → vẫn 1 refund — 1 phút.
-4. (P4) Mở `demo/index.html`: bảng benchmark, must-pass, trace viewer — 2 phút.
+4. (P4) Slide 7–9: crash 20/20, bảo mật trace, benchmark 4 shape — 2 phút.
 5. (P3) Slide 10–11: ADR và giới hạn — 1 phút.
 
 ## Bảng đóng góp
