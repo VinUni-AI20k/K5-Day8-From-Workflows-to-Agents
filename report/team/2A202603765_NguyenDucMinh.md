@@ -32,7 +32,7 @@ Các thay đổi đã thực hiện :
 
 Ví dụ kỹ thuật: ở T14, entitlement là 150.000 VND và đơn đã được hoàn 30.000 VND. Workflow vẫn truyền proposal 150.000 VND; host tự trừ phần đã hoàn và chỉ ghi thêm 120.000 VND. Nếu workflow tự trừ trước thì host sẽ trừ lần thứ hai.
 
-- **Commit chính:** chưa tạo commit tại thời điểm viết báo cáo; cần bổ sung hash/link commit thực tế sau khi commit thay đổi.
+- **Commit chính:** `5cbc99e0b10f90aeacb2a54e962b557e94184f6a` — `feat(workflow): implement claim processing and crash recovery`. Commit trên nhánh `Workflow_CP1`, gồm phần triển khai workflow CP2–CP3 và báo cáo cá nhân. Commit đã được tạo ở local, chưa push lên remote.
 - **Test đã thêm hoặc sửa:** chưa thêm hoặc sửa test. Đã chạy bộ test có sẵn để kiểm tra workflow. Yêu cầu mỗi thành viên có ít nhất một test đã thêm hoặc sửa trong `RULES.md` và `RUBRIC.md` vẫn cần được hoàn thành và ghi nhận bằng commit thực tế.
 
 ## 4. Bằng chứng
@@ -78,4 +78,4 @@ Theo bằng chứng hiện có, phần workflow đạt 62 test student công kha
 
 Các điểm kỹ thuật cần nắm để giải thích bài: tiền do code tính từ order và policy; ticket là dữ liệu người dùng; host là nơi duy nhất ghi refund; phải truyền quote đầy đủ; ledger và idempotency ngăn hoàn trùng; trace chỉ ghi dữ liệu được phép.
 
-Việc còn cần hoàn thiện cho phần đóng góp cá nhân: thêm hoặc sửa ít nhất một test có ý nghĩa, tạo commit kỹ thuật, bổ sung hash/link commit và cập nhật bảng đóng góp trong `TEAM.md`. Việc chạy crash suite, benchmark và kiểm tra hidden cần được nhóm thực hiện ở các checkpoint tiếp theo.
+Việc còn cần hoàn thiện cho phần đóng góp cá nhân: thêm hoặc sửa ít nhất một test có ý nghĩa và cập nhật bảng đóng góp trong `TEAM.md`. Commit kỹ thuật đã được tạo và ghi hash ở mục 3. Việc chạy crash suite, benchmark và kiểm tra hidden cần được nhóm thực hiện ở các checkpoint tiếp theo.
