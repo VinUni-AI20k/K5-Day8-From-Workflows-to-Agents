@@ -4,14 +4,14 @@
 
 - Tên nhóm: BanGiua
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Repo nhóm: `K5-L3B-DAY08-BanGiua-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo, nhánh nộp, commit chốt: https://github.com/lit1numyt/K5-L3B-DAY08-BanGiua-FromWorkflowsToAgents, nhánh `main`, commit chốt ghi trong `report/team/decision_adr.md`
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 | Đồng Hữu Nguyên Khoa | 2A202604000 | 26ai.khoadhn@vinuni.edu.vn | [lit1numyt](https://github.com/lit1numyt) | Integration + shape B (single) + benchmark/crash |
 |   2 |        |      |       |        |         |
 
 Gợi ý chia vai:
@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Đồng Hữu Nguyên Khoa | Integration, shape B `single`, benchmark/crash | `62932fd` (starter cp1 + cp2: ba shape A/B/C), `caebbbe` (shape B cp3 + cp4) | `src/tests/test_single_shape.py` (34 test: approval, secret/PII, crash 3 điểm, ranh giới agent) |
 
 ## Cá nhân
 
