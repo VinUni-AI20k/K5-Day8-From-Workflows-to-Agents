@@ -294,6 +294,25 @@ def test_injected_ticket_cannot_raise_refund(tmp_path, shape, seed):
 
 
 @pytest.mark.parametrize("shape", STUDENT_SHAPES)
+def test_sensitive_text_pasted_in_ticket_never_reaches_trace(tmp_path, shape):
+    # Ticket is user data. A customer may paste a token, phone or address into it;
+    # the trace must not echo ticket text, or that text becomes a leak.
+    store = _store(tmp_path, f"{shape}-ticket-pii.sqlite")
+    pasted = ["CANARY_SECRET_PARENT_C-001", "Bearer CANARY_SECRET_PARENT_C-001", "0901000107", "12 Le Loi Q1"]
+    _mutate(
+        store,
+        "UPDATE claims SET ticket = ? WHERE claim_id = 'C-001'",
+        ("Token cua toi " + pasted[1] + ", SDT " + pasted[2] + ", dia chi " + pasted[3],),
+    )
+    result = SHAPES[shape]("C-001", seed=11, store_path=store)
+    assert result.status == "resolved"
+    body = Path(result.trace_path).read_text(encoding="utf-8")
+    blob = body + json.dumps(result.as_dict(), ensure_ascii=False)
+    for token in pasted:
+        assert token not in blob, f"{shape} trace echoed ticket text {token!r}"
+
+
+@pytest.mark.parametrize("shape", STUDENT_SHAPES)
 def test_unknown_claim_fails_cleanly_with_trace(tmp_path, shape):
     store = _store(tmp_path, f"{shape}-unknown.sqlite")
     result = SHAPES[shape]("C-404", seed=11, store_path=store)

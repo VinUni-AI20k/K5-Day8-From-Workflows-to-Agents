@@ -53,7 +53,10 @@ def run_claim(
 
         budget.add_tool(tool_cost())
         claim = get_claim_view(conn, claim_id)
-        trace.add("tool", {"name": "get_claim_view", "result": claim})
+        # Ticket text is user data and principal_id is an identifier: neither goes in the trace.
+        trace.add("tool", {"name": "get_claim_view",
+                           "result": {"found": claim["found"], "claim_id": claim_id,
+                                      "has_order_id": bool(claim.get("order_id"))}})
         if not claim["found"]:
             trace.add("decision", {"status": "failed", "reason": "unknown_claim"})
             return finish(conn, shape="workflow", claim_id=claim_id, seed=seed,
