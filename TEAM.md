@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Trần Thanh Tùng | Shape B (Single ReAct) & Policy/Approval | 734df62 | src/tests/test_SV02_tungtran306_single_policy.py |
+| Trần Thanh Tùng | Shape B (Single ReAct) & Policy/Approval | 734df62 | src/tests/test_2A202603418_tungtran306_single_policy.py |
 
 ## Cá nhân
 
@@ -50,9 +50,9 @@ Sao chép mục dưới đây cho từng thành viên.
 ### Đóng góp cụ thể
 
 - Commit `9cc25fe`: Hoàn thành 3 shapes, pass toàn bộ 248 test student.
-- Commit `734df62`: Thêm bộ unit test `src/tests/test_SV02_tungtran306_single_policy.py` (7 tests).
+- Commit `734df62`: Thêm bộ unit test `src/tests/test_2A202603418_tungtran306_single_policy.py` (7 tests).
 
 ### Bằng chứng
 
 - File báo cáo cá nhân: `report/team/2A202603418_TranThanhTung.md`
-- 7/7 unit tests passed trong `python -m pytest -q tests/test_SV02_tungtran306_single_policy.py`
+- 7/7 unit tests passed trong `python -m pytest -q tests/test_2A202603418_tungtran306_single_policy.py`
