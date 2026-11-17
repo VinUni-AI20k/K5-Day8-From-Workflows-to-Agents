@@ -13,7 +13,8 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Trần Tuấn Anh | 2A202603909 | 275679340+Tanh0406@users.noreply.github.com | Tanh0406 | Single agent (shape B) |
 |   2 | Vũ Tuấn Đạt | 2A202603744 | 26ai.datvt@vinuni.edu.vn | datkunal | Workflow (shape A) |
-|   3 | Đinh Hoài Nam | 2A202603762 | hoainam.dnu@gmai.com | hoainamdnu-arch | Orchestrator + handoff |
+|   3 | Vũ Văn Chu | 2A202603873 | 26ai.chuvv@vinuni.edu.vn | chur04 | Ledger + evaluation (CP3–CP5) |
+|   4 | Đinh Hoài Nam | 2A202603762 | hoainam.dnu@gmai.com | hoainamdnu-arch | Orchestrator + handoff |
 
 Gợi ý chia vai:
 
@@ -28,6 +29,7 @@ Gợi ý chia vai:
 | --- | --- | --- | --- |
 | Vũ Tuấn Đạt | Workflow (shape A) | `1a607d2` — Implement workflow shape (A) and add workflow tests | `src/tests/test_workflow_shape.py` (6 test, 10 case) |
 | Trần Tuấn Anh (Tanh0406) | Single agent (shape B) | `94bc560` feat(single): implement shape B ReAct agent with read-only tools | `src/tests/test_single_shape.py` (thêm mới, 36 test) |
+| Vũ Văn Chu (chuvv) | Ledger + evaluation | `132507f` — test(ledger-eval): verify refund durability and publish public evaluation evidence | `src/tests/test_ledger_evaluation.py` (35 trường hợp), `src/tests/test_evaluation.py` (11 trường hợp) |
 | Đinh Hoài Nam (hoainamdnu-arch) | Orchestrator + handoff (shape C) | `3d9f899` feat(lab8): implement Shape C orchestrator with read-only investigators | `src/tests/test_orchestrator_shape.py` (thêm mới, 6 test / 10 case) |
 
 ## Cá nhân
@@ -85,6 +87,32 @@ Sao chép mục dưới đây cho từng thành viên.
 - `python -m pytest -q tests/test_workflow_shape.py` → 10 passed.
 - Crash C-012 `after_effect_before_checkpoint` rồi resume (`R-workflow-C-012-s11`) → 1 dòng ledger 35.000, 1 audit `refund_committed`.
 - Báo cáo cá nhân: `report/team/2A202603744_VuTuanDat.md`.
+
+## Vũ Văn Chu (chuvv)
+
+### Phần việc phụ trách
+
+- Ledger + evaluation (CP3–CP5): kiểm chứng transaction, idempotency, crash/resume và approval trên ba shape đã merge; chạy benchmark bốn shape và tổng hợp bằng chứng.
+- Báo cáo cá nhân: `report/team/2A202603873-VuVanChu.md`; số liệu evaluation trong báo cáo nhóm, ADR và research card.
+
+### Đóng góp cụ thể
+
+- Tạo môi trường `src/.venv` bằng Python 3.12.9, cài dependencies, kiểm smoke và `pip check`.
+- Thêm 35 trường hợp ledger: ba điểm crash × ba shape × hai loại refund (cap theo approval, hoàn phần chênh); đóng/mở lại DB rồi retry hai lần; kiểm số tiền, một effect, một audit và checkpoint.
+- Kiểm rollback toàn bộ refund khi insert audit lỗi, checkpoint không có effect không được thay ledger, quote thay đổi khi retry phải conflict và giữ nguyên tiền cũ; retry với approval thiếu/hết hạn/thu hồi/mượn phải bị từ chối.
+- Thêm 11 trường hợp evaluation: metric năm seed với đáp án tính tay, cost của trial fail, p95, không có success; DB mới cho từng trial, nhãn ngoài ghi đè nhãn inline, kết quả tự khai phải khớp SQLite; kiểm ablation và scanner phát hiện secret/PII trên stdout.
+- Thêm hai runner `src/tests/evaluate_safety.py` và `src/tests/evaluation_ablation.py`. Sinh `benchmark.json`, `crash.json`, `safety.json`, `evaluation_ablation.json` bằng công cụ; không sửa tay JSON.
+- Giữ nguyên host/thước đo (`durability.py`, `metrics.py`, `policy.py`, config/data) và code ba shape của các thành viên trước.
+
+### Bằng chứng
+
+- Commit kỹ thuật `132507f` trên branch `2A202603873-VuVanChu`.
+- Trong `src/`, dùng Python của `.venv`: `python -m pytest -q` → **147 passed, 248 deselected**; `python -m pytest -q -m student -o addopts=` → **248 passed**; hai file test mới → **46 passed**.
+- `src/reports/benchmark.json`: workflow/single/orchestrator đều 70/70; swarm 69/70 (sai `R-swarm-C-002-s55`). Workflow có cost/success thấp nhất: 28,77 VND mô phỏng.
+- `src/reports/crash.json`: **20/20** (suite host + swarm); test bổ sung kiểm ba shape tại cả ba điểm crash.
+- `src/reports/safety.json`: 280 trial public, 0 secret leak, 0 PII leak, 0 approval bypass, 0 invalid trace, 0 unexpected ledger, 0 exception.
+- `src/reports/evaluation_ablation.json`: bỏ riêng draft call của workflow vẫn 70/70; cost/success từ 28,77 xuống 27,857143 VND mô phỏng.
+- Chưa có `student_drop/`; chưa báo pass rate hidden hay kết quả chấm chính thức.
 
 ## Đinh Hoài Nam 
 
