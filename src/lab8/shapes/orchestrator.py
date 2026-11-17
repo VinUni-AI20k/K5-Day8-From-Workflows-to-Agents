@@ -168,3 +168,4 @@ def _run(conn, claim_id: str, *, seed: int, crash_at: str | None) -> RunResult:
         trace=trace,
         error_reason=None,
     )
+    
