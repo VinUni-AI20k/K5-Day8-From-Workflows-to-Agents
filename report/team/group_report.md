@@ -1,49 +1,49 @@
 # Báo cáo nhóm — Lab 8 LogiX-VN
 
-Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/reports/`, không chép tay từ terminal.
-
 ## 1. Thông tin nhóm
 
-- Tên nhóm:
-- Thành viên: xem `TEAM.md`
-- Commit chốt (trùng `report/team/decision_adr.md`):
+- Tên nhóm: NHOMSH
+- Thành viên: Nguyễn Tiến Đạt (2A202603922, L3B), xem `TEAM.md`.
+- Commit triển khai và benchmark: `7b108e8`.
 
 ## 2. Mục tiêu và cách tiếp cận
 
-Nhóm hiểu bài toán thế nào, chia việc ra sao, thứ tự làm bốn shape.
-
-...
+Xử lý claim hoàn phí trên cùng fixture bằng bốn shape, giữ các quyết định về tiền, approval, giới hạn theo đơn và ghi ledger ở host. Hoàn thiện workflow, single, orchestrator; dùng swarm có sẵn làm đối chứng. Thêm kiểm tra claim không tồn tại.
 
 ## 3. Giải pháp
 
-Mô tả ba shape nhóm viết (workflow, single, orchestrator): mỗi shape đọc gì, quyết định gì, gọi host ra sao. Chỉ rõ ranh giới code / model (tham khảo [docs/architecture.md](../../docs/architecture.md)), cách handoff được sanitize và trace ghi những event nào.
+- **Workflow:** đọc claim/order qua read tools, gọi `compute_compensation`, rồi chuyển nguyên quote cho `issue_refund`. Không dùng model.
+- **Single:** chạy ReAct tối đa 8 bước với read tools; model không có quyền ghi hoặc quyết số tiền. Host kiểm approval và ghi refund sau vòng lặp.
+- **Orchestrator:** tạo handoff allowlist; investigator chỉ có `lookup_order`, `lookup_policy`, `lookup_refund_history`, `compute_compensation`. Trace chỉ ghi handoff đã lọc, kết quả tool an toàn và quyết định; không ghi ticket, secret, header, địa chỉ, số điện thoại, ghi chú nội bộ hoặc tên hàng.
 
-...
+Ba shape đều truyền quote đầy đủ để host tự áp dụng approval, idempotency và trần refund theo đơn.
 
 ## 4. Kết quả
 
-Bảng so sánh 4 shape trên bộ public (từ `src/reports/benchmark.json`): pass rate, pass^5, seed min–max, variance, cost/success, mean/p95 steps. Kèm crash safety (`src/reports/crash.json`) và, nếu có, kết quả tự kiểm trên `student_drop/`.
+Public benchmark: 14 claim × 5 seed × 4 shape = 280 trial. Số liệu lấy từ `src/reports/benchmark.json`.
 
-...
+| Shape | Pass rate | Pass^5 | Seed min–max | Variance | Cost/success (VND mô phỏng) | Mean/p95 steps |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| workflow | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 27.86 | 3.43 / 4 |
+| single | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 31.94 | 5.43 / 6 |
+| orchestrator | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 56.29 | 5.29 / 6 |
+| swarm | 0.986 | 0.929 | 0.929–1.000 | 0.000816 | 49.57 | 2.80 / 3 |
 
-Quyết định kiến trúc và lý do: xem `report/team/decision_adr.md`. Phiếu nghiên cứu và ablation: xem `report/team/research_card.md`.
+Swarm có một trial sai ở T02, seed 55: tin số ngày trên ticket thay vì `delay_days` trong order. Crash suite đạt `20/20`. Bộ hidden và grader chính thức không có trong workspace nên chưa chạy; ngưỡng hidden 0.75 chưa được xác nhận. Chọn `workflow` theo benchmark public vì ba shape nhóm viết đều pass 100%, còn workflow có cost/success thấp nhất.
 
 ## 5. Khó khăn và cách xử lý
 
-Lỗi gặp phải (kèm lệnh, output hoặc ảnh chụp) và cách nhóm xử lý.
-
-...
+Windows `python.exe` mặc định bị chặn và thư mục tạm mặc định không truy cập được trong sandbox. Dùng interpreter `src/.venv/Scripts/python.exe` và đặt `TEMP`/`TMP` vào thư mục tạm trong `src/`; smoke, pytest và các công cụ benchmark chạy thành công.
 
 ## 6. Tổng hợp đóng góp
 
-Chi tiết đóng góp của từng thành viên nằm trong `TEAM.md` (bảng đóng góp) và báo cáo cá nhân `report/team/MSSV_HoTen.md`.
+Chi tiết ở `TEAM.md` và báo cáo cá nhân `report/team/2A202603922_NguyenTienDat.md`. Codex được dùng hỗ trợ triển khai và soạn báo cáo; các lệnh kiểm tra và kết quả benchmark được ghi ở trên.
 
 ## 7. Hạn chế và hướng cải thiện
 
-MockLLM không phải model sản xuất; latency là `unavailable`. Nêu thêm giới hạn của nhóm và điều kiện làm kết luận thay đổi.
-
-...
+MockLLM và giá token là mô phỏng, không đại diện model/chi phí API thực; latency không đo được. Public corpus chỉ có 14 claim. Cần đánh giá trên bộ hidden có nhãn của giảng viên trước khi kết luận shape chọn đạt ngưỡng chính thức.
 
 ## 8. Tài liệu tham khảo
 
-...
+- `docs/business_rules.md`, `docs/contracts.md`, `docs/metrics.md`.
+- Zhang et al. (2026), *Rethinking the Evaluation of Efficiency Methods for Multi-Agent Systems*, EMNLP 2026: https://aclanthology.org/2026.emnlp-main.798/.
