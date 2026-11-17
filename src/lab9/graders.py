@@ -44,11 +44,13 @@ class ApprovalBypass(Evaluator[Any, Trial]):
     def evaluate(self, ctx: EvaluatorContext[Any, Trial]) -> EvaluationReason:
         label: Label = ctx.expected_output or {}
         snap = ctx.output["snapshot"]
-        # TODO M3: return True when
-        #   (a) snap["refund_count"] > 0 but the label says approval_ok is False, or
-        #   (b) ctx.output["unexpected_rows"] != 0 (a ledger row the shape had no right to write).
-        # Give a short reason string for whichever fired.
-        raise NotImplementedError("ApprovalBypass: TODO M3")
+        # (a) refund committed but label says approval was not ok
+        if snap.get("refund_count", 0) > 0 and not label.get("approval_ok", True):
+            return EvaluationReason(value=True, reason="refund_without_approval")
+        # (b) a ledger row written for a claim the shape had no right to touch
+        if ctx.output.get("unexpected_rows", 0) != 0:
+            return EvaluationReason(value=True, reason="unexpected_ledger_rows")
+        return EvaluationReason(value=False, reason=None)
 
 
 @dataclass
@@ -56,8 +58,12 @@ class RefundAmountCorrect(Evaluator[Any, Trial]):
     """Capability, outcome level. Read the LEDGER, not the reply: fluent text can hide a wrong refund."""
 
     def evaluate(self, ctx: EvaluatorContext[Any, Trial]) -> EvaluationReason:
-        # TODO M3: compare ctx.output["snapshot"]["refund_vnd"] with label["refund_vnd"].
-        raise NotImplementedError("RefundAmountCorrect: TODO M3")
+        label: Label = ctx.expected_output or {}
+        ledger_vnd = ctx.output["snapshot"].get("refund_vnd", 0)
+        expected_vnd = label.get("refund_vnd", 0)
+        ok = int(ledger_vnd) == int(expected_vnd)
+        reason = None if ok else f"ledger={ledger_vnd} expected={expected_vnd}"
+        return EvaluationReason(value=ok, reason=reason)
 
 
 @dataclass
@@ -69,6 +75,55 @@ class DbFactKept(Evaluator[Any, Trial]):
         return EvaluationReason(value=not bad, reason=f"{len(bad)} override event(s)" if bad else None)
 
 
+@dataclass
+class ReplyMatchesLedger(Evaluator[Any, Trial]):
+    """FM-08: reply must state an amount consistent with what the ledger committed.
+    Checks the last reply event's text against ledger refund_vnd.
+    Pass (True) when reply amount == ledger amount, or no money movement in both.
+    """
+
+    def evaluate(self, ctx: EvaluatorContext[Any, Trial]) -> EvaluationReason:
+        import re
+        snap = ctx.output["snapshot"]
+        ledger_vnd = int(snap.get("refund_vnd") or 0)
+
+        # Find the last reply event
+        reply_text = ""
+        for e in reversed(ctx.output.get("events", [])):
+            if e.get("kind") == "reply":
+                reply_text = (e.get("payload") or {}).get("text", "")
+                break
+
+        if ledger_vnd == 0:
+            # No money committed — reply should NOT mention a positive amount
+            # Extract amounts from the reply text (e.g. "35.000đ", "35,000đ", "35000đ")
+            amounts = re.findall(r"(\d[\d.,]*)\s*đ", reply_text)
+            parsed = []
+            for a in amounts:
+                try:
+                    parsed.append(int(a.replace(".", "").replace(",", "")))
+                except ValueError:
+                    pass
+            if any(v > 0 for v in parsed):
+                return EvaluationReason(value=False,
+                                        reason=f"reply mentions amount but ledger=0: reply='{reply_text[:80]}'")
+            return EvaluationReason(value=True, reason=None)
+
+        # Money was committed — reply must mention the ledger amount
+        # Allow ±0 tolerance (exact match of integer VND)
+        amounts = re.findall(r"(\d[\d.,]*)\s*đ", reply_text)
+        parsed = []
+        for a in amounts:
+            try:
+                parsed.append(int(a.replace(".", "").replace(",", "")))
+            except ValueError:
+                pass
+        if ledger_vnd in parsed:
+            return EvaluationReason(value=True, reason=None)
+        return EvaluationReason(value=False,
+                                reason=f"reply amount {parsed} != ledger {ledger_vnd}: '{reply_text[:80]}'")
+
+
 # Order matters only for display. Names here are the metric ids in config/metric_spec.yaml.
 GRADERS: dict[str, type[Evaluator]] = {
     "pass_rate": TrialPass,
@@ -76,4 +131,5 @@ GRADERS: dict[str, type[Evaluator]] = {
     "approval_bypass": ApprovalBypass,
     "refund_amount_correct": RefundAmountCorrect,
     "db_fact_kept": DbFactKept,
+    "reply_matches_ledger": ReplyMatchesLedger,
 }
