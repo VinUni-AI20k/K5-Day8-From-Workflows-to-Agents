@@ -13,7 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Trần Tuấn Anh | 2A202603909 | 275679340+Tanh0406@users.noreply.github.com | Tanh0406 | Single agent (shape B) |
 |   2 | Vũ Tuấn Đạt | 2A202603744 | 26ai.datvt@vinuni.edu.vn | datkunal | Workflow (shape A) |
-|   3 | Vũ Văn Chu | 2A202603873 | 26ai.chuvv@vinuni.edu.vn | chuvv | Ledger + evaluation (CP3–CP5) |
+|   3 | Vũ Văn Chu | 2A202603873 | 26ai.chuvv@vinuni.edu.vn | chur04 | Ledger + evaluation (CP3–CP5) |
 
 Gợi ý chia vai:
 
