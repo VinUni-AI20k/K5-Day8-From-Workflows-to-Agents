@@ -6,7 +6,7 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 
 - Tên nhóm: ClaudePro
 - Thành viên: xem `TEAM.md` (5 người: Nguyễn Đức Minh, Nguyễn Quang Huy, Nguyễn Nghiêm Khánh Tiệp, Tăng Nguyễn Hải Đăng, Nguyễn Trọng Nghĩa)
-- Commit chốt (trùng `report/team/decision_adr.md`): `5e1d8bf`
+- Commit chốt (trùng `report/team/decision_adr.md`): `f5adbd9`
 - Shape chọn cho cổng hidden: `workflow`
 
 ## 2. Mục tiêu và cách tiếp cận
@@ -158,7 +158,7 @@ Chi tiết đóng góp của từng thành viên nằm trong `TEAM.md` (bảng �
 - `2A202603768_NguyenQuangHuy.md`: single, commit `069a071`, `cabceb8`; `test_single.py`.
 - `2A202603863_NguyenNghiemKhanhTiep.md`: orchestrator, commit `906e466`; `test_orchestrator_own.py`.
 - `2A202603916_TangNguyenHaiDang.md`: safety & testing, commit `733745d`; `test_safety_approval_invariant.py`.
-- `2A202603835_NguyenTrongNghia.md`: benchmark, ADR, research card, bonus B3, commit `5e1d8bf`, `e492c52`; `test_bonus_swarm_verified.py`.
+- `2A202603835_NguyenTrongNghia.md`: benchmark, ADR, research card, bonus B3, commit `5e1d8bf`, `e492c52`, `f5adbd9`; `test_bonus_swarm_verified.py`.
 
 ## 7. Hạn chế và hướng cải thiện
 

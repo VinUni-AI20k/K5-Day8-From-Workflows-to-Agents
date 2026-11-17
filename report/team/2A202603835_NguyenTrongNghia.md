@@ -19,7 +19,7 @@ Vai trò: **Evaluation, quyết định kiến trúc (CP5) và bonus B3**.
 
 ### A. CP5 — Benchmark, hidden self-check, ADR, research card
 
-- **Commit `5e1d8bf`** — `Create benchmark.json`: `src/reports/benchmark.json` do `lab8.benchmark` sinh (4 shape × 14 claim × seed `11,22,33,44,55`, 280 trial). Đây là commit hash ghi trong ADR.
+- **Commit `5e1d8bf`** — `Create benchmark.json`: `src/reports/benchmark.json` do `lab8.benchmark` sinh (4 shape × 14 claim × seed `11,22,33,44,55`, 280 trial).
 - **Commit `e492c52`** — `feat: Add decision_adr & research_card`.
 - **Hidden self-check:** `src/reports/hidden_selfcheck.json` (workflow, single, orchestrator × 40 claim × 5 seed).
 - **Quyết định kỹ thuật:**
@@ -33,7 +33,7 @@ Vai trò: **Evaluation, quyết định kiến trúc (CP5) và bonus B3**.
 - **Case đối kháng:** `src/bonus/build_cases.py` sinh `src/bonus/cases.jsonl` và `src/bonus/world.json` gồm 12 claim: nói quá (C-B01, C-B09, C-B10), nói thiếu (C-B02), nói dối hỏng hàng (C-B03), nhiều con số (C-B04), injection + clause cũ (C-B05), đơn `in_transit` / `cancelled` (C-B06, C-B07), ship và damage cùng đủ (C-B08), sai chủ đơn (C-B11), thiếu mã đơn (C-B12). Nhãn viết tay theo `docs/business_rules.md`, không sinh bằng `compensation.quote`; mỗi claim có trường `why`.
 - **Đếm can thiệp:** `src/bonus/verifier_report.py` đọc hai report benchmark và trace, ghi `src/reports/bonus_b3.json`.
 - **Test đã thêm:** `src/tests/test_bonus_swarm_verified.py` (29 test): verifier sửa đúng C-002 seed 55 (20.000 → 0); không can thiệp khi dữ kiện khớp; 12 claim đối kháng × 5 seed pass cho workflow và swarm_verified; crash vẫn ném `InjectedCrash` và resume chỉ 1 refund; file case khớp với builder viết tay.
-- **Commit bonus:** (điền hash sau khi commit phần bonus)
+- **Commit bonus:** `f5adbd9` — `feat: Complete group report`, gồm toàn bộ `src/bonus/`, `src/tests/test_bonus_swarm_verified.py`, `src/reports/bonus_b3*.json`, `src/reports/hidden_selfcheck.json`, `report/team/bonus_report.md`, `report/team/group_report.md` và `TEAM.md`. Đây là commit chốt ghi trong ADR.
 
 ## 4. Bằng chứng
 

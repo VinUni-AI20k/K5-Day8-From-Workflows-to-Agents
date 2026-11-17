@@ -15,7 +15,7 @@ python -m bonus.verifier_report
 python -m pytest -q tests/test_bonus_swarm_verified.py
 ```
 
-- File report + run id: `src/reports/bonus_b3_public.json`, `src/reports/bonus_b3_adversarial.json`, tổng hợp `src/reports/bonus_b3.json` (do `bonus.verifier_report` sinh từ hai file trên và trace). Trace minh họa: `R-swarm_verified-C-002-s55` (so với `R-swarm-C-002-s55`). Code: `src/bonus/swarm_verified.py`; case đối kháng: `src/bonus/cases.jsonl`, `src/bonus/world.json` (sinh bởi `src/bonus/build_cases.py`, nhãn viết tay, mỗi claim có trường `why`); test: `src/tests/test_bonus_swarm_verified.py` (29 test).
+- File report + run id (commit `f5adbd9`): `src/reports/bonus_b3_public.json`, `src/reports/bonus_b3_adversarial.json`, tổng hợp `src/reports/bonus_b3.json` (do `bonus.verifier_report` sinh từ hai file trên và trace). Trace minh họa: `R-swarm_verified-C-002-s55` (so với `R-swarm-C-002-s55`). Code: `src/bonus/swarm_verified.py`; case đối kháng: `src/bonus/cases.jsonl`, `src/bonus/world.json` (sinh bởi `src/bonus/build_cases.py`, nhãn viết tay, mỗi claim có trường `why`); test: `src/tests/test_bonus_swarm_verified.py` (29 test).
 
 ## Kết quả
 

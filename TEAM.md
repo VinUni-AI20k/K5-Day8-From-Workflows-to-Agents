@@ -5,7 +5,7 @@
 - Tên nhóm: ClaudePro
 - Lớp: L3B
 - Repo nhóm: `K5-L3B-DAY08-ClaudePro-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: https://github.com/trongnghia2304/K5-L3B-DAY08-ClaudePro-FromWorkflowsToAgents, nhánh `main`, commit chốt (trùng `report/team/decision_adr.md`): `5e1d8bf`
+- URL repo, nhánh nộp, commit chốt: https://github.com/trongnghia2304/K5-L3B-DAY08-ClaudePro-FromWorkflowsToAgents, nhánh `main`, commit chốt (trùng `report/team/decision_adr.md`): `f5adbd9`
 
 ## Thành viên
 
@@ -32,4 +32,4 @@ Gợi ý chia vai:
 | Nguyễn Quang Huy | Single agent (`src/lab8/shapes/single.py`) | `069a071`, `cabceb8` | `src/tests/test_single.py` (8 test); 62 student test single xanh |
 | Nguyễn Nghiêm Khánh Tiệp | Orchestrator (`src/lab8/shapes/orchestrator.py`) | `906e466` | `src/tests/test_orchestrator_own.py` (16 test); 62 student test orchestrator xanh |
 | Tăng Nguyễn Hải Đăng | Safety & Testing | `733745d` | `src/tests/test_safety_approval_invariant.py` (1 test); invariant duyệt refund host, tích hợp test ma trận & crash suite |
-| Nguyễn Trọng Nghĩa | Evaluation CP5 + bonus B3 (`src/bonus/`) | `5e1d8bf`, `e492c52` | `src/tests/test_bonus_swarm_verified.py` (29 test); benchmark, hidden self-check, ADR, research card, bonus report |
+| Nguyễn Trọng Nghĩa | Evaluation CP5 + bonus B3 (`src/bonus/`) | `5e1d8bf`, `e492c52`, `f5adbd9` | `src/tests/test_bonus_swarm_verified.py` (29 test); benchmark, hidden self-check, ADR, research card, bonus report |

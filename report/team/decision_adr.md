@@ -4,7 +4,7 @@
 `Shape chọn` phải là đúng một trong: `workflow`, `single`, `orchestrator`, `swarm`. Đây là shape được chấm cổng hidden.
 
 - Shape chọn: workflow
-- Commit hash: 5e1d8bf
+- Commit hash: f5adbd9
 - Run id dẫn chứng: R-workflow-C-002-s55 (workflow denied đúng nơi swarm fail ở R-swarm-C-002-s55), R-workflow-C-014-s11 (T14 chỉ hoàn phần chênh lệch); nguồn src/reports/benchmark.json
 - Pass rate / pass^5 / seed min-max / variance: 1.000 / 1.000 / 1.000–1.000 / 0.000000 (70 trial = 14 claim × seed 11,22,33,44,55)
 - Cost per success (mô phỏng, VND): 34.29 (0 model call, 3.43 tool call/trial; gồm 10 VND đếm cho lần gọi issue_refund mà single/orchestrator/swarm không đếm, bỏ phần này còn ≈ 27.86)
@@ -27,4 +27,4 @@ Trace workflow (`src/traces/<run_id>.json`, đúng Trace contract v1, mọi nhá
 
 ## Giới hạn
 
-MockLLM không phải model sản xuất: cost là VND mô phỏng theo `config/pricing.yaml`, không phải hoá đơn API, và kết quả của single/orchestrator/swarm không cho biết model thật sẽ hành xử thế nào. Latency để `unavailable`. Corpus public chỉ 14 claim nên pass rate 1.000 chưa chứng minh kết quả hidden (40 claim × 5 seed); số hidden do giảng viên chạy. Cách đếm tool call cho lần gọi host chưa thống nhất giữa các shape (xem dòng Cost per success). Không sửa JSON cho đủ 0.75: mọi số ở trên lấy nguyên từ `src/reports/benchmark.json` và `src/reports/crash.json` do công cụ sinh ra.
+Commit chấm là `f5adbd9` (có đủ ba shape, `src/bonus/` và mọi report). `src/reports/benchmark.json` được sinh ở `5e1d8bf`; từ `5e1d8bf` đến `f5adbd9` không có thay đổi nào trong `src/lab8/`, `src/config/` hay `src/data/`, nên chạy lại benchmark ở `f5adbd9` ra cùng số liệu. MockLLM không phải model sản xuất: cost là VND mô phỏng theo `config/pricing.yaml`, không phải hoá đơn API, và kết quả của single/orchestrator/swarm không cho biết model thật sẽ hành xử thế nào. Latency để `unavailable`. Corpus public chỉ 14 claim nên pass rate 1.000 chưa chứng minh kết quả hidden (40 claim × 5 seed); số hidden do giảng viên chạy. Cách đếm tool call cho lần gọi host chưa thống nhất giữa các shape (xem dòng Cost per success). Không sửa JSON cho đủ 0.75: mọi số ở trên lấy nguyên từ `src/reports/benchmark.json` và `src/reports/crash.json` do công cụ sinh ra.
