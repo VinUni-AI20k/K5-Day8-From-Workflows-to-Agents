@@ -4,7 +4,7 @@
 `Shape chọn` phải là đúng một trong: `workflow`, `single`, `orchestrator`, `swarm`. Đây là shape được chấm cổng hidden.
 
 - Shape chọn: workflow 
-- Commit hash: 7e511c71e85062cd3d3ef3c02bffcdc704aee87c
+- Commit hash: abdd828
 - Run id dẫn chứng: R-workflow-C-001-s11
 - Pass rate / pass^5 / seed min-max / variance: 1.000    1.000   1.000-1.000  0.000000
 - Cost per success (mô phỏng, VND): 27.86
@@ -45,4 +45,4 @@ Nếu trace nằm ngoài phạm vi scanner quét được, đội security chứ
 
 ## Giới hạn
 
-MockLLM không phải model sản xuất. Latency để `unavailable`. Không sửa JSON cho đủ 0.75. 
+MockLLM không phải model sản xuất. Latency để `unavailable`. Không sửa JSON cho đủ 0.75.
