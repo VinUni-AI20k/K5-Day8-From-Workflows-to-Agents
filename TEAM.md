@@ -2,7 +2,7 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: BanGiua
 - Lớp: L3A
 - Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
 - URL repo, nhánh nộp, commit chốt:

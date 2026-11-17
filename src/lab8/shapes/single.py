@@ -82,6 +82,8 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
 
     # The ticket is user data. The agent may read it, but every number it acts on
     # comes from a read tool. The ticket itself is never written to the trace.
+    # What the agent is allowed to see. The ticket is user data: the agent may read it
+    # for tone, but every number it acts on comes from a read tool.
     observation = {
         "claim": {
             "claim_id": claim["claim_id"],
@@ -103,6 +105,7 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
     if loop["stopped"] == "step_cap":
         return done("failed", 0, "step_cap")
     if final.get("status") in ("needs_info", "escalated"):
+    if final["status"] in ("needs_info", "escalated"):
         return done(final["status"], 0, final.get("reason"))
 
     # The model only says "quote ready". The amount is the compute_compensation tool
@@ -145,6 +148,10 @@ def _make_decide(budget: Budget, trace: Trace, *, seed: int, memory: dict[str, A
         steps.append(last_tool)
 
         # Observe the last tool result.
+            prompt=json.dumps({"last_tool": last_tool, "step": len(memory.get("steps", []))}),
+        )
+        memory.setdefault("steps", []).append(last_tool)
+
         if last_tool == "lookup_order":
             trace.add("observe", {"tool": last_tool, "visible": last.get("visible"), "reason": last.get("reason")})
             if not last.get("visible"):
@@ -168,6 +175,15 @@ def _make_decide(budget: Budget, trace: Trace, *, seed: int, memory: dict[str, A
         if "history" not in memory:
             return _act(trace, "lookup_refund_history", scope)
         # Quote from the DB order row, not from delay numbers or clauses in the ticket.
+        if not claim.get("order_id"):
+            return {"final": {"status": "needs_info", "reason": "missing_order_id"}}
+        if "order" not in memory:
+            return _act(trace, "lookup_order", {"order_id": claim["order_id"], "principal_id": claim["principal_id"]})
+        if "history" not in memory:
+            return _act(
+                trace, "lookup_refund_history", {"order_id": claim["order_id"], "principal_id": claim["principal_id"]}
+            )
+        # Quote from the DB order row, not from delay numbers in the ticket.
         return _act(trace, "compute_compensation", {"order": memory["order"]})
 
     return decide
