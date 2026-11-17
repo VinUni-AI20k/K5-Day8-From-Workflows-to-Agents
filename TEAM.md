@@ -11,8 +11,10 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
+|   1 | Phùng Quang Trà |2A202604094|traquangphung@gmail.com|phungtr| Nhóm trưởng · workflow (A) + integration |
+|   2 | Vũ Nam Khánh |2A202604112|khanhvnm03@gmail.com|khanhvnm| single agent (B) |
+|   3 | Nguyễn Tuấn Anh|2A202604089|capntryisreal@gmail.com|TuanAnhNg131| orchestrator (C) + handoff |
+|   4 | Phạm Duy Thành |2A202604075|thanhteyv2@gmail.com|thanhtey1234| ledger/crash + evaluation (benchmark, ADR) |
 
 Gợi ý chia vai:
 
@@ -25,7 +27,10 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| | workflow (A) + integration | | |
+| | single agent (B) | | |
+| | orchestrator (C) + handoff | | |
+| | ledger/crash + evaluation | | |
 
 ## Cá nhân
 
@@ -37,13 +42,55 @@ report/team/MSSV_HoTen.md
 
 Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
-Sao chép mục dưới đây cho từng thành viên.
+Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` thành MSSV và họ tên không dấu).
 
-## MSSV_HoTen
+## Thành viên 1 — MSSV_HoTen
 
 ### Phần việc phụ trách
 
+- Shape A `workflow` (`src/lab8/shapes/workflow.py`) + integration
+
+### Đóng góp cụ thể
+
 -
+
+### Bằng chứng
+
+-
+
+## Thành viên 2 — MSSV_HoTen
+
+### Phần việc phụ trách
+
+- Shape B `single` (`src/lab8/shapes/single.py`)
+
+### Đóng góp cụ thể
+
+-
+
+### Bằng chứng
+
+-
+
+## Thành viên 3 — MSSV_HoTen
+
+### Phần việc phụ trách
+
+- Shape C `orchestrator` + handoff (`src/lab8/shapes/orchestrator.py`)
+
+### Đóng góp cụ thể
+
+-
+
+### Bằng chứng
+
+-
+
+## Thành viên 4 — MSSV_HoTen
+
+### Phần việc phụ trách
+
+- Ledger/crash + evaluation (`reports/crash.json`, `reports/benchmark.json`, ADR, research card)
 
 ### Đóng góp cụ thể
 
