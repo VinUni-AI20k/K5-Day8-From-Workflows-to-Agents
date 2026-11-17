@@ -9,6 +9,8 @@ import pytest
 
 import lab8.shapes.workflow as workflow
 from lab8.db import connect
+from lab8.durability import InjectedCrash
+from lab8.schemas import make_run_id
 from tests.conftest import BY_ID
 
 
@@ -97,3 +99,14 @@ def test_workflow_makes_no_model_calls(public_db):
     assert result.status == "resolved"
     assert result.model_calls == 0
     assert result.tool_calls == 3
+
+
+def test_crash_propagates_and_flushes_trace(public_db):
+    with pytest.raises(InjectedCrash):
+        workflow.run_claim(
+            "C-012", seed=11, store_path=str(public_db), crash_at="after_effect_before_checkpoint"
+        )
+
+    trace_path = Path("traces") / f"{make_run_id('workflow', 'C-012', 11)}.json"
+    events = json.loads(trace_path.read_text(encoding="utf-8"))["events"]
+    assert any(e.get("kind") == "crash" for e in events)

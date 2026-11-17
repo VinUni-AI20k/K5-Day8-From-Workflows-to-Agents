@@ -33,7 +33,7 @@ import sqlite3
 from functools import partial
 
 from lab8.db import connect
-from lab8.durability import issue_refund
+from lab8.durability import InjectedCrash, issue_refund
 from lab8.schemas import Budget, RunResult, make_run_id
 from lab8.shapes.common import finish, safe_dump
 from lab8.tools import compute_compensation, get_claim_view, lookup_order, tool_cost
@@ -55,22 +55,22 @@ def run_claim(
         claim_id: Claim to process.
         seed: Run seed, only used to build the run_id (no model call here).
         store_path: Path to the SQLite store.
-        crash_at: Crash injection point for durability tests (wired in CP3).
+        crash_at: Crash injection point forwarded to issue_refund (durability tests).
 
     Returns:
         RunResult with status needs_info / escalated / denied / resolved / failed
         and a trace_path written on every return path.
     """
-    # TODO CP3 (student): truyền crash_at vào durability.issue_refund, không bắt InjectedCrash.
-    del crash_at
     conn = connect(store_path)
     try:
-        return _run(conn, claim_id, seed=seed)
+        return _run(conn, claim_id, seed=seed, crash_at=crash_at)
     finally:
         conn.close()
 
 
-def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int) -> RunResult:
+def _run(
+    conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | None
+) -> RunResult:
     """Execute the workflow steps on an open connection."""
     budget = Budget()
     trace = Trace(make_run_id(SHAPE, claim_id, seed))
@@ -112,7 +112,13 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int) -> RunResult:
         return done(status="denied", proposal_amount=0, error_reason=quote["reason"])
 
     # 6. Pass the FULL quote. The host checks approval and subtracts earlier refunds.
-    outcome = issue_refund(conn, claim_id, proposal)
+    try:
+        outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
+    except InjectedCrash:
+        # Flush the trace for debugging, then re-raise: the crash must reach the caller.
+        trace.add("crash", {"at": crash_at})
+        trace.write()
+        raise
     trace.add("issue_refund", {"ok": outcome["ok"], "reason": outcome["reason"], "conflict": outcome["conflict"]})
     if not outcome["ok"]:
         status = "failed" if outcome["conflict"] else "denied"
