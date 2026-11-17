@@ -37,6 +37,7 @@
 
 ## 4. Bằng chứng
 
+- **Commit kỹ thuật chính:** `451c154` (`feat(single): implement Shape B Single ReAct agent and unit test suite`).
 - **Kết quả chạy test matrix student cho Shape Single:**
   - Lệnh: `python -m pytest -q -m student -o addopts= -k "single and not workflow and not orchestrator and not swarm"`
   - Kết quả: **62 passed**, 246 deselected in 1.64s.
