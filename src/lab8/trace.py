@@ -29,3 +29,4 @@ class Trace:
         }
         self.path.write_text(json.dumps(body, ensure_ascii=False, indent=2), encoding="utf-8")
         return str(self.path)
+
