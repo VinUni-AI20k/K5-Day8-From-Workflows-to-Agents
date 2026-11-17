@@ -26,8 +26,6 @@ Trace contract v1 (docs/contracts.md): return a trace_path to a JSON file writte
 {"run_id": <same run_id>, "events": [...]}, on every return path including early
 ones. `lab8.trace.Trace` does this; your own tracer is fine if it matches.
 """
-    
-
 
 from __future__ import annotations
 
@@ -105,4 +103,3 @@ def run_claim(
         return result("resolved", proposal)
     finally:
         conn.close()
-
