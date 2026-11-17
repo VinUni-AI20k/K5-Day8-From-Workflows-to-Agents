@@ -12,28 +12,13 @@
 
 ## Thành viên
 
-<<<<<<< Updated upstream
-| STT | Họ tên | MSSV | Email | GitHub | Vai trò |
-| --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
-=======
-| STT | Họ tên          | MSSV        | Email                     | GitHub | Vai trò |
-| --: | ----------------- | ----------- | ------------------------- | ------ | -------- |
-|   1 | Quyến            | 2A202603769 |                           |        |          |
-|   2 | Công             | 2A202603789 |                           |        |          |
-|   3 | Đinh Phúc Diên | 2A202603876 | 26ai.diendp@vinuni.edu.vn |        |          |
-|   4 |                   |             |                           |        |          |
-|   5 |                   |             |                           |        |          |
->>>>>>> Stashed changes
-
-| STT | Họ tên           | MSSV         | Email                                                            | GitHub       | Vai trò     |
-| --: | ------------------ | ------------ | ---------------------------------------------------------------- | ------------ | ------------ |
-|   1 | Quyến             | 2A202603769  | [26ai.quyendv2@vinuni.edu.vn](mailto:26ai.quyendv2@vinuni.edu.vn) | dvq2609      | workflow     |
-|   2 | Công              | 2A202603789  | [26ai.congnt3@vinuni.edu.vn](mailto:26ai.quyendv2@vinuni.edu.vn)  | congnt180263 | single agent |
-|   3 | Đinh Phúc Diên  | 2A202603876  | 26ai.diendp@vinuni.edu.vn                                        |              |              |
-|   4 |                    |              |                                                                  |              |              |
-|   5 |                    |              |                                                                  |              |              |
+| STT | Họ tên          | MSSV        | Email                                                            | GitHub       | Vai trò     |
+| --: | ----------------- | ----------- | ---------------------------------------------------------------- | ------------ | ------------ |
+|   1 | Quyến            | 2A202603769 | [26ai.quyendv2@vinuni.edu.vn](mailto:26ai.quyendv2@vinuni.edu.vn) | dvq2609      | workflow     |
+|   2 | Công             | 2A202603789 | [26ai.congnt3@vinuni.edu.vn](mailto:26ai.quyendv2@vinuni.edu.vn)  | congnt180263 | single agent |
+|   3 | Đinh Phúc Diên | 2A202603876 | 26ai.diendp@vinuni.edu.vn                                        |              |              |
+|   4 |                   |             |                                                                  |              |              |
+|   5 |                   |             |                                                                  |              |              |
 
 ## Bảng đóng góp
 
