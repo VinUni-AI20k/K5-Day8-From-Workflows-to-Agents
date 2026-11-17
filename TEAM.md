@@ -13,6 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Chưa cung cấp | Chưa cung cấp | Chưa cung cấp | Chưa cung cấp | Workflow, tích hợp và báo cáo nhóm |
 |   2 |        |      |       |        |         |
+|   4 | Trương Anh Đức | 2A202604096 | Chưa cung cấp | TADIZB | Kiểm thử tích hợp, benchmark và ADR |
 
 Gợi ý chia vai:
 
@@ -26,6 +27,7 @@ Gợi ý chia vai:
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 | Người 1 | Workflow, tích hợp và báo cáo nhóm | Chưa có commit | `src/tests/test_team_workflow.py` (đã thêm; chưa chạy được do thiếu pytest) |
+| Người 4 — Trương Anh Đức | Kiểm thử tích hợp, benchmark và ADR | `cb40979`, `d11143b` | `src/tests/test_team_integration.py` (đã thêm, 142 passed) |
 
 ## Cá nhân
 
