@@ -1,5 +1,20 @@
 # Lab 8 — From Workflows to Agents (LogiX-VN: một task, bốn kiến trúc)
 
+## Bài nộp — Nhóm demo - Problem Solver
+
+Đã triển khai workflow, single ReAct, orchestrator và bonus B3 verifier. Chọn **workflow** theo benchmark public: 70/70 trial pass, chi phí mô phỏng 27,86 VND/success. Hidden local: workflow 200/200, pass⁵ 100%, 29.00 VND/success.
+
+- [HTML thuyết trình offline](presentation/index.html): sáu đồ thị đọc từ trái sang phải, zoom, cuộn ngang và chế độ trình chiếu.
+- [Báo cáo nhóm](report/team/group_report.md), [ADR](report/team/decision_adr.md), [research card](report/team/research_card.md), [bonus B3](report/team/bonus_report.md).
+- [Thành viên và phân công](TEAM.md), [kịch bản thuyết trình](docs/presentation_guide.md), [sơ đồ chi tiết](docs/flow_details.md).
+- Kiểm chứng: 103 host test + 248 student test xanh; crash 20/20; safety recount 750 trial không phát hiện secret/PII leak hoặc approval bypass; `check_submission`: 0 FAIL.
+
+Tái lập trong `src/` sau khi cài `requirements.txt`: `python -m bonus.reproduce`, rồi `python -m lab8.check_submission`. Sinh lại báo cáo và HTML tại gốc repo: `python scripts/build_lab_report.py` và `python -m presentation.build`.
+
+[Rà soát rubric và việc còn phải hoàn tất](report/team/submission_audit.md).
+
+Phần dưới giữ hướng dẫn của đề bài.
+
 AI20K K5, ngày 8. Nhóm xử lý claim hoàn phí vận chuyển của công ty giả lập LogiX-VN bằng **bốn kiến trúc** (workflow, single agent, orchestrator, swarm), rồi dựa trên số đo để chọn kiến trúc **ít tự chủ nhất mà vẫn làm được việc**. Dữ liệu là dữ liệu giả. Không cần GPU, API key hay internet trong giờ lab; chạy được trên Windows, macOS và Linux.
 
 **Loại bài:** Nhóm · **Thời lượng:** 4 giờ tại lớp (13:30–17:30) · **Deadline:** lớp sáng 23h59 GMT+7 ngày lab; lớp chiều/tối 11h59 GMT+7 ngày hôm sau ([SUBMISSION.md](SUBMISSION.md#deadline-gmt7))
@@ -120,3 +135,7 @@ Khi cần:
 - `TEAM.md`: điền thông tin nhóm và bảng đóng góp.
 
 Chi tiết: [SUBMISSION.md](SUBMISSION.md).
+
+## Bằng chứng hidden của nhóm
+
+Hidden local: workflow 200/200 trial, pass rate 1.0000, pass⁵ 1.0000, variance 0.000000, 29.00 VND mô phỏng/success. Safety recount 1000 trial sạch; crash hidden 30/30. [Báo cáo kiểm chứng và lệnh tái lập](report/team/hidden_validation.md).

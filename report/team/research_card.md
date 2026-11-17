@@ -1,35 +1,34 @@
-# Research card
-
-File này nằm cố định ở `report/team/research_card.md`; `python -m lab8.check_submission` đọc cột "Nhóm điền" bằng máy.
-
-Phần này nối tiếp phần mini research ở buổi lý thuyết (slide 62–63). Chọn **một** câu R1–R4, điền 6 dòng, rồi biến nó thành **một ablation** chạy được trong lab: giữ nguyên model (MockLLM), tool, seed, corpus và giá, chỉ thay đổi một biến.
-
-| Câu | Nguồn (thư viện tham khảo, slide 68–69) | Câu hỏi gợi ý cho lab |
-| --- | --- | --- |
-| R1 · Scaling | Google Research 2026, *Towards a Science of Scaling Agent Systems* | Task claims chủ yếu tuần tự hay song song được? Dự đoán thêm investigator sẽ làm pass rate và cost/success thay đổi thế nào. |
-| R2 · Failure taxonomy | MAST, NeurIPS 2025, *Why Do Multi-Agent LLM Systems Fail?* | Các trial fail của swarm (seed 55) thuộc nhóm nào: lỗi giao việc, lệch mục tiêu, hay lỗi kiểm chứng? |
-| R3 · Architecture choices | AgentArch, AACL 2026 | Nếu đổi topology mà giữ nguyên mọi thứ khác, biến nào phải cố định để kết luận còn đúng? |
-| R4 · Evaluation confounders | EMNLP 2026, *Rethinking Evaluation of MAS Efficiency* | Làm sao chứng minh chênh lệch giữa A/B/C/D là do topology, không phải do prompt, tool hay seed? |
+# Research card — Problem Solver
 
 ## Phiếu của nhóm
 
-Điền vào cột cuối. Không xóa hai cột đầu.
-
 | Field | Hướng dẫn | Nhóm điền |
 | --- | --- | --- |
-| CÂU | R1 / R2 / R3 / R4 | |
-| SOURCE | Paper/blog, năm, URL, loại bằng chứng (benchmark, production report, blog kinh nghiệm) | |
-| CLAIM | Một kết luận gốc của nguồn. Không viết rộng hơn phạm vi paper | |
-| BOUNDARY | Model / dataset / setup giới hạn kết luận đó | |
-| HYPOTHESIS | Nếu đổi shape A→B (hoặc bật/tắt một thành phần), metric X sẽ đổi theo hướng nào, khoảng bao nhiêu | |
-| METHOD | Biến giữ cố định: model, tools, seed, corpus, giá, evaluator. Biến duy nhất được thay đổi: … | |
-| FAILURE / METRIC | Một lỗi dự kiến và cách đo nó: pass rate, pass^5, variance, cost/success, leak, bypass | |
+| CÂU | R1 / R2 / R3 / R4 | R1 — Scaling; mở rộng kiểm chứng vào luồng tuần tự |
+| SOURCE | Paper/blog, năm, URL, loại bằng chứng | Google Research, 28/01/2026, [Towards a science of scaling agent systems](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/); blog báo cáo nghiên cứu, 180 cấu hình |
+| CLAIM | Một kết luận gốc của nguồn | Lợi ích phối hợp phụ thuộc task; nguồn cũng ghi nhận bộ điều phối tập trung tạo điểm kiểm chứng giúp hạn chế lỗi lan truyền. Bài lab kiểm riêng việc thêm verifier bằng code. |
+| BOUNDARY | Model / dataset / setup | Nguồn dùng nhiều model và benchmark riêng; LogiX chỉ có MockLLM và luật có cấu trúc, không tái lập hệ số của paper. |
+| HYPOTHESIS | Một biến và dự đoán | Thêm verifier code trước ghi tiền sẽ sửa lỗi tin ticket của swarm, tăng pass rate và cost/success; không làm swarm rẻ hơn workflow. |
+| METHOD | Biến giữ cố định / thay đổi | Giữ MockLLM, seed 11/22/33/44/55, tools, corpus, giá và evaluator; bật/tắt verifier là biến ablation. Workflow là baseline tham chiếu. |
+| FAILURE / METRIC | Lỗi và cách đo | Sai delay/status/damage; đo pass, pass⁵, seed variance, cost/success, interventions, secret/PII leak và approval bypass. |
 
 ## Kết quả ablation
 
-- Lệnh đã chạy (copy nguyên văn):
-- Run id / file report:
-- Kết quả so với hypothesis (đúng / sai / không kết luận được), kèm số liệu:
-- Giới hạn: MockLLM không phải model sản xuất, latency là `unavailable`.
+Lệnh chạy trong `src/`:
 
-Muốn đi xa hơn một ablation để lấy điểm cộng thì xem [docs/bonus_topics.md](../../docs/bonus_topics.md).
+```text
+python -m lab8.benchmark --shapes workflow,swarm,swarm_verified --extra-shape swarm_verified=bonus.swarm_verified:run_claim --seeds 11,22,33,44,55 --out reports/bonus_public.json
+python -m lab8.benchmark --shapes workflow,swarm,swarm_verified --extra-shape swarm_verified=bonus.swarm_verified:run_claim --cases bonus/cases.jsonl --world bonus/world.json --seeds 11,22,33,44,55 --out reports/bonus_adversarial.json
+python -m bonus.evidence
+```
+
+- Run id minh họa: R-swarm_verified-C-002-s55; file `src/reports/bonus_trace_example.json`.
+- Public: 69/70 → 70/70; can thiệp 1 lần.
+- Đối kháng: 74/80 → 80/80; can thiệp 15 lần.
+- Kết quả ủng hộ hypothesis trong corpus này; chưa chứng minh lợi ích trên task mở hoặc model thật. MockLLM không phải model sản xuất; latency: unavailable.
+
+## Đối chiếu hypothesis trên hidden
+
+Hidden local: workflow 200/200 trial, pass rate 1.0000, pass⁵ 1.0000, variance 0.000000, 29.00 VND mô phỏng/success. Swarm đạt 194/200 (pass⁵ 0.85); swarm_verified 200/200 (pass⁵ 1.00), chi phí 60.46 VND/success. Verifier sửa 6 trial. Hypothesis được ủng hộ trên pack này: độ đúng tăng cùng chi phí, chưa tạo lợi thế so với workflow.
+
+Biến ablation vẫn chỉ là bật/tắt verifier. Lệnh: `python -m bonus.hidden_evidence --pack D:/AIThucChien/DAY08/instructor/instructor` trong src/. Nguồn: hidden_summary.json; [phương pháp và giới hạn](hidden_validation.md).

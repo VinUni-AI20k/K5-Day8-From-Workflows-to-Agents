@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Báo cáo Lab 08 LogiX-VN: bốn kiến trúc và B3 verifier, dữ liệu benchmark tái lập.">
+  <link rel="icon" href="data:,">
+  <title>LogiX-VN — Lab 08 · Problem Solver · B3 Verifier</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="flow-viewer.css">
+  <script src="data.js" defer></script><script src="flows-data.js" defer></script><script src="app.js" defer></script><script src="flow-viewer.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#overview">Đến nội dung</a>
+<aside class="sidebar">
+  <a class="brand" href="#overview"><span class="brand-mark">L<span>↗</span></span>LogiX<span class="brand-vn">VN</span></a>
+  <div class="rail-label">RESEARCH LAB / 08</div>
+  <nav aria-label="Nội dung báo cáo">
+    <a href="#overview" class="selected"><span>01</span>Tổng quan</a>
+    <a href="#architecture"><span>02</span>Bốn kiến trúc</a>
+    <a href="#flows"><span>03</span>Luồng chi tiết</a>
+    <a href="#benchmark"><span>04</span>Benchmark</a>
+    <a href="#verifier"><span>05</span>B3 · Verifier</a>
+    <a href="#evidence"><span>06</span>Tra cứu bằng chứng</a>
+    <a href="#decision"><span>07</span>Quyết định</a>
+    <a href="#team"><span>08</span>Nhóm thực hiện</a>
+  </nav>
+  <div class="rail-bottom"><span class="live-dot"></span>Offline · MockLLM<br><small>Ngày xét policy: 15.11.2026<br>Hidden: <span id="hidden-local-status">đang nạp dữ liệu</span></small></div>
+</aside>
+<main>
+<header class="topbar"><div><span class="crumb">AI THỰC CHIẾN</span><span class="slash">/</span>From Workflows to Agents</div><div class="toolbar"><button id="notes-toggle" type="button" aria-pressed="false">Gợi ý nói</button><button id="present" class="dark-button" type="button">Trình chiếu ↗</button></div></header>
+
+<section id="overview" class="page-section active">
+  <div class="eyebrow"><span class="dot-square"></span> LOGIX-VN / CLAIMS INTELLIGENCE</div>
+  <div class="hero-grid"><div><h1>Một bài toán.<br>Bốn kiến trúc.<br><em>Một quyết định.</em></h1><p class="hero-copy">Tự chủ bao nhiêu là đủ? Đo độ đúng, độ ổn định và chi phí của luồng hoàn tiền — rồi chọn kiến trúc đơn giản nhất đáp ứng yêu cầu.</p><div class="tags"><span>LAB 08</span><span>BONUS B3</span><span>5 SEED CỐ ĐỊNH</span></div><a class="text-link" href="#benchmark">Khám phá kết quả <span>↓</span></a></div>
+  <div class="hero-art" aria-label="Luồng refund được bảo vệ bằng verifier và host"><div class="art-top">CỔNG KIỂM SOÁT <span>01—04</span></div><div class="art-node">Yêu cầu khách hàng <small>Dữ liệu chưa tin cậy</small></div><div class="art-connector">→</div><div class="art-split"><div>Bộ xử lý<br><small>Đề xuất</small></div><span>→</span><div class="lime">Kiểm chứng<br><small>So với dữ liệu thật</small></div></div><div class="art-connector">→</div><div class="art-node art-host">Duyệt → Sổ tiền <small>Đúng quyền · Đúng trần · Không trùng</small></div><div class="art-foot"><span>CODE KIỂM SOÁT TIỀN</span><span>↗</span></div></div></div>
+  <div class="stat-grid"><article><span>WORKFLOW / PUBLIC</span><strong id="hero-pass">—</strong><small>Đúng trên 14 claim × 5 seed</small></article><article><span>DURABILITY / HOST</span><strong id="hero-crash">—</strong><small>Crash suite chính thức của lab</small></article><article><span>B3 / ĐỐI KHÁNG</span><strong id="hero-bonus">—</strong><small>16 claim tự viết × 5 seed</small></article><article><span>AN TOÀN / ĐÃ ĐO</span><strong id="hero-safety">—</strong><small>Leak / PII / approval bypass</small></article></div>
+  <div id="hidden-summary" class="boundary" hidden></div>
+  <p class="scope-note">Số liệu lấy từ JSON do script sinh. Các thẻ phía trên là public và bộ đối kháng tự viết. Kết quả hidden local có mục riêng, dùng nhãn của pack được cung cấp; điểm chính thức do giảng viên xác nhận.</p>
+  <aside class="speaker-note">Mở đầu: “Nhóm không cố chứng minh nhiều agent hơn là tốt hơn. Nhóm kiểm tra mức tự chủ nào đủ cho một nhiệm vụ tài chính có luật rõ ràng.”</aside>
+</section>
+
+<section id="architecture" class="page-section">
+  <div class="section-number">02 / ARCHITECTURE</div><h2>Thay cách điều phối.<br>Giữ nguyên luật chơi.</h2><p class="section-intro">Cùng claim, seed, model, tool và evaluator. Tiền luôn được tính bằng code, chỉ host được ghi ledger.</p>
+  <div class="shape-tabs" role="group" aria-label="Chọn kiến trúc"><button class="active" data-shape="workflow">A · Workflow</button><button data-shape="single">B · Single</button><button data-shape="orchestrator">C · Orchestrator</button><button data-shape="swarm">D · Swarm</button></div>
+  <div class="architecture-panel"><div class="architecture-diagram" id="architecture-diagram"></div><div><span class="mini-label" id="architecture-label"></span><h3 id="architecture-title"></h3><p id="architecture-copy"></p><div class="boundary">CHUNG MỘT CỔNG GHI<br><b>Duyệt đúng quyền → Giới hạn tiền → Ghi sổ</b></div></div></div>
+  <div class="rule-strip"><div><b>Lấy khoản lớn hơn</b><span>Không cộng dồn hoàn phí giao hàng và bồi thường</span></div><div><b>Tiền đề xuất ≠ tiền thực trả</b><span>Trừ khoản đã hoàn và giới hạn được duyệt</span></div><div><b>Gọi lại không trả trùng</b><span>Một yêu cầu chỉ tạo một khoản hoàn</span></div></div>
+  <aside class="speaker-note">Nhấn mạnh: single có adapter quyết định vì MockLLM không xuất tool JSON; đây là thí nghiệm runtime mô phỏng. Orchestrator dùng handoff allowlist, investigator không được ghi.</aside>
+</section>
+
+<section id="flows" class="page-section">
+  <div class="section-number">03 / CODE TO PROCESS</div>
+  <h2>Đọc đúng đường đi.<br>Nhìn rõ quyền quyết định.</h2>
+  <p class="section-intro">Theo dõi từng việc từ lúc nhận yêu cầu đến khi có kết quả. Mỗi sơ đồ thể hiện toàn bộ quy trình trên cùng một trang, bằng ngôn ngữ dễ hiểu.</p>
+  <div class="flow-selectors"><label>Bạn muốn xem quy trình nào?<select id="flow-select" aria-controls="flow-summary flow-canvas"></select></label><span class="flow-whole-badge">Một sơ đồ đầy đủ · Không chia phần</span></div>
+  <div id="flow-legend" class="flow-legend" aria-label="Chú giải loại bước"></div>
+  <div id="flow-summary" class="flow-summary" aria-live="polite"></div>
+  <div id="flow-workspace" class="flow-workspace">
+    <div class="flow-toolbar"><strong id="flow-panel-title"></strong><div class="flow-zoom-tools"><button id="flow-zoom-out" type="button" aria-label="Thu nhỏ sơ đồ">−</button><output id="flow-zoom" aria-live="polite">100%</output><button id="flow-zoom-in" type="button" aria-label="Phóng to sơ đồ">+</button><button id="flow-pan-back" type="button" aria-label="Cuộn về bên trái">← Trước</button><button id="flow-pan-next" type="button" aria-label="Cuộn sang bên phải">Tiếp →</button><button id="flow-fit" type="button">Vừa chiều cao</button><button id="flow-whole" type="button">Xem trọn luồng</button><button id="flow-actual" type="button">Đọc 100%</button><button id="flow-expand" type="button" aria-haspopup="dialog">Mở rộng ↗</button></div></div>
+    <div id="flow-canvas" class="flow-canvas" tabindex="0" aria-label="Sơ đồ xử lý. Cuộn ngang hoặc dùng phím trái/phải để xem tiếp; dùng nút cộng trừ để zoom."></div>
+    <p id="flow-panel-note" class="flow-panel-note"></p>
+  </div>
+  <div id="flow-placeholder" hidden></div>
+  <dialog id="flow-dialog" aria-label="Xem sơ đồ phóng to"><div class="flow-dialog-heading"><h3 id="flow-dialog-title">Sơ đồ chi tiết</h3><button id="flow-close" type="button" aria-label="Đóng sơ đồ phóng to">Đóng · Esc</button></div><div id="flow-dialog-content"></div></dialog>
+  <div class="flow-links"><a href="../docs/flow_details.md">Phụ lục Mermaid và đối chiếu code ↗</a><button id="flow-print" type="button">In đủ 6 sơ đồ</button></div>
+  <p class="scope-note">Đi theo mũi tên từ trái sang phải; hình thoi là câu hỏi Có/Không. Sơ đồ luôn liền mạch từ đầu đến cuối. Dùng “Xem trọn luồng” để nhìn tổng thể hoặc “Vừa chiều cao” để đọc lần lượt; phóng to và cuộn khi cần. Tên hàm và file được để riêng trong mục đối chiếu kỹ thuật bên dưới.</p>
+  <details class="flow-technical"><summary>Đối chiếu kỹ thuật: bước này tương ứng với code nào?</summary><div class="table-wrap"><table><thead><tr><th>Bước dễ hiểu trong hình</th><th>Hàm hoặc nhánh tương ứng</th><th>File nguồn</th></tr></thead><tbody id="flow-technical-body"></tbody></table></div></details>
+  <details class="flow-comparison" open><summary>So sánh bốn kiến trúc: điều phối, MockLLM và quyền ghi</summary><div class="table-wrap"><table><caption class="sr-only">Bảng so sánh kiến trúc từ code</caption><thead><tr><th>Kiến trúc</th><th>Điều phối</th><th>Vai trò MockLLM</th><th>Quyền ghi</th><th>Điều kiện dừng</th><th>Rủi ro</th></tr></thead><tbody id="flow-comparison-body"></tbody></table></div></details>
+  <aside class="speaker-note">Mỗi lựa chọn là một quy trình đầy đủ. Bắt đầu bằng “Xem trọn luồng”, sau đó “Vừa chiều cao” hoặc mở rộng để kể từng bước. Nhấn mạnh: AI chỉ mô phỏng, Python chọn việc và tính tiền; bước kiểm chứng so dữ kiện, còn cổng ghi tiền kiểm quyền duyệt và giới hạn.</aside>
+  <div id="flow-print-pages" class="flow-print-pages" aria-hidden="true"></div>
+</section>
+
+<section id="benchmark" class="page-section">
+  <div class="section-heading"><div><div class="section-number">04 / CONTROLLED EXPERIMENT</div><h2>Bằng chứng trước.<br>Kết luận sau.</h2></div><label class="select-label">Bộ dữ liệu<select id="corpus"><option value="main">Public · 4 kiến trúc</option><option value="public">Public · Ablation B3</option><option value="adversarial">Đối kháng · Ablation B3</option></select></label></div>
+  <div class="benchmark-layout"><div class="chart-card"><div class="card-top"><h3>Tỷ lệ trial đạt</h3><span class="pill">Cao hơn tốt hơn</span></div><div id="pass-chart" class="pass-chart"></div><div class="chart-axis"><span>0%</span><span>50%</span><span>100%</span></div><p class="muted" id="corpus-description"></p></div><div class="insight-card"><span class="mini-label">ĐỌC KẾT QUẢ ĐÚNG</span><h3>Một seed xấu<br>có thể bị che khuất.</h3><p>Pass rate đo từng trial. Pass⁵ yêu cầu một claim đúng ở cả năm seed.</p><div class="equation">pass⁵ <span>≠</span> (pass rate)⁵</div><small>Seed variance chia N. Chi phí gồm cả trial fail. Latency: unavailable.</small></div></div>
+  <div class="table-wrap"><table><caption class="sr-only">So sánh metric theo shape</caption><thead><tr><th>Kiến trúc</th><th>Pass rate</th><th>Pass⁵</th><th>Seed min–max</th><th>Variance</th><th>VND / success</th><th>Steps μ / p95</th></tr></thead><tbody id="metrics-body"></tbody></table></div>
+  <p class="scope-note">Giá token/tool là mô phỏng. Steps đếm event trace; cách instrument khác nhau có thể ảnh hưởng số bước. So sánh A–D còn khác prompt và adapter; ablation swarm → swarm_verified giữ nguyên luồng, chỉ thêm verifier.</p>
+  <aside class="speaker-note">Chuyển lần lượt Public 4 kiến trúc → Public B3 → Đối kháng B3. Đọc cả cost/success, không chỉ đọc pass rate. Chuyển sang Hidden để xem kết quả chấm local trên 40 claim; phân biệt kiểm chứng kỹ thuật với điểm chính thức.</aside>
+</section>
+
+<section id="verifier" class="page-section">
+  <div class="section-number">05 / BONUS B3</div><div class="section-heading"><h2>Chặn sai lệch<br>trước khi thành tiền.</h2><label class="select-label">Replay T02<select id="demo-seed"><option value="55">Seed 55 · Có lỗi</option><option value="11">Seed 11 · Không có lỗi</option></select></label></div>
+  <div class="compare-grid"><article class="ticket-panel"><span class="mini-label">KHÁCH HÀNG NÓI</span><blockquote>“Đơn giao trễ <mark>5 ngày</mark>, hoàn phí ship giúp.”</blockquote><div class="ticket-meta">C-002 / ticket không phải nguồn sự thật</div></article><article class="truth-panel"><span class="mini-label">ORDER CÓ CẤU TRÚC</span><div class="truth-row"><span>delay_days</span><b>2 ngày</b></div><div class="truth-row"><span>shipping_fee_vnd</span><b>20.000 đ</b></div><div class="truth-row"><span>Entitlement đúng</span><b>0 đ</b></div></article></div>
+  <div class="repair-flow"><div><span>SWARM THAM CHIẾU</span><strong id="demo-before">—</strong><small id="demo-before-status"></small></div><div class="verifier-gate"><span>↗</span><b>VERIFIER</b><small>Đọc lại order<br>Tối đa 1 lần sửa</small></div><div><span>SWARM + VERIFIER</span><strong id="demo-after">—</strong><small id="demo-after-status"></small></div></div>
+  <div class="verifier-summary"><p id="demo-explanation"></p><div><span>Đối chiếu đủ 3 field</span><code>delay_days · status · damage_verified</code></div></div>
+  <details><summary>Trace thật của T02 / seed 55</summary><pre id="trace-example"></pre></details>
+  <p class="scope-note">Đây là replay từ benchmark đã chạy, không gọi model trong trình duyệt. Verifier cũng chạy trước nhánh quote = 0, để sửa được cả trường hợp ticket nói thiếu số ngày.</p>
+  <aside class="speaker-note">Host không tính lại entitlement. Nếu agent dùng dữ kiện sai nhưng approval hợp lệ, host vẫn có thể ghi sai. Verifier kiểm dữ kiện; host kiểm quyền ghi. Hai lớp có trách nhiệm khác nhau.</aside>
+</section>
+
+<section id="evidence" class="page-section">
+  <div class="section-number">06 / EVIDENCE EXPLORER</div><h2>Mỗi kết luận<br>có một đường kiểm chứng.</h2>
+  <div class="filters"><label>Bộ claim<select id="evidence-corpus"><option value="public">Public · 14 claim</option><option value="adversarial">Đối kháng · 16 claim</option></select></label><label>Kiến trúc<select id="evidence-shape"><option value="workflow">Workflow</option><option value="swarm">Swarm</option><option value="swarm_verified">Swarm + Verifier</option></select></label><label>Seed<select id="evidence-seed"><option>55</option><option>11</option><option>22</option><option>33</option><option>44</option></select></label><label>Kết quả<select id="evidence-filter"><option value="all">Tất cả</option><option value="fail">Chỉ fail</option></select></label></div>
+  <div class="table-wrap"><table><thead><tr><th>Claim / tình huống</th><th>Status</th><th>Đánh giá</th><th>Lý do evaluator</th><th>Run ID</th></tr></thead><tbody id="evidence-body"></tbody></table></div><p id="evidence-count" class="muted" aria-live="polite"></p>
+  <div class="evidence-bottom"><div><h3>Safety được đếm lại từ artifact</h3><p id="safety-description"></p><small>Scanner bổ sung kiểm secret và mọi phone/address/note/item trong world, không dựa vào pass bit tự khai.</small></div><button id="download" type="button" class="dark-button">Tải gói số liệu JSON ↓</button></div>
+  <aside class="speaker-note">Chọn Swarm, seed 55, Chỉ fail để minh họa lỗi. Chuyển sang Swarm + Verifier để thấy các fail được sửa trên cùng bộ claim.</aside>
+</section>
+
+<section id="decision" class="page-section">
+  <div class="section-number">07 / ARCHITECTURE DECISION</div><div class="decision-layout"><div><span class="chosen-label">SHAPE ĐƯỢC CHỌN</span><h2 class="decision-title">Workflow<span>↗</span></h2><p class="section-intro">Luật rõ ràng, dữ liệu có cấu trúc, đường xử lý chủ yếu tuần tự. Workflow đạt độ đúng quan sát được với chi phí thấp nhất.</p><div class="decision-metric" id="decision-metric"></div></div><div class="decision-reasons"><article><span>01</span><div><h3>Tự chủ vừa đủ</h3><p>Không cần suy luận tự do để áp dụng chính sách và tính tiền.</p></div></article><article><span>02</span><div><h3>B3 sửa được lỗi, có thêm chi phí</h3><p id="decision-b3"></p></div></article><article><span>03</span><div><h3>Điều kiện đổi quyết định</h3><p>Khi phải đọc chứng từ mơ hồ, có điều tra độc lập hoặc API ngoài, đo lại bằng model thật với budget và safety tương đương.</p></div></article></div></div>
+  <div class="limit-banner"><b>PHẠM VI KẾT LUẬN</b><p id="decision-limit">MockLLM, dữ liệu synthetic và một lỗi swarm được cài cố ý. Không suy rộng thành “multi-agent luôn kém hơn”. Gate bonus hidden ≥ 0,80 vẫn chờ giảng viên xác nhận.</p></div>
+  <aside class="speaker-note">Kết luận: verifier giúp swarm trở về độ đúng của workflow trong thí nghiệm này. Nó không chứng minh phần swarm mang lại giá trị khi verifier và structured tools đã giải quyết phần quyết định.</aside>
+</section>
+
+<section id="team" class="page-section">
+  <div class="section-number">08 / TEAM & REPRODUCIBILITY</div><h2>Bốn vai trò.<br>Cùng một chuẩn nghiệm thu.</h2>
+  <div class="team-list"><article><span>01</span><div><h3>Hoàng Quốc Anh</h3><p>2A202603707 · Nhóm trưởng / Tech lead</p></div><small>Kiến trúc, workflow, tích hợp, B3, ADR</small></article><article><span>02</span><div><h3>Đỗ Thị Thanh Bình</h3><p>2A202603709 · Business Analyst</p></div><small>Luật nghiệp vụ, acceptance case, báo cáo</small></article><article><span>03</span><div><h3>Lê Gia Hưng</h3><p>2A202603713 · Single agent / Quality</p></div><small>ReAct, kiểm thử, crash/retry</small></article><article><span>04</span><div><h3>Hà Quang Vinh</h3><p>2A202603720 · Orchestrator / Evaluation</p></div><small>Handoff, benchmark, bằng chứng, giao diện</small></article></div>
+  <div class="reproduce-grid"><div><span class="mini-label">MỘT LỆNH TÁI LẬP</span><pre>python -m bonus.reproduce</pre><p>Chạy trong src/, sau khi cài requirements trong venv.</p><pre>cd ..
+python -m presentation.build
+cd src
+python -m lab8.check_submission</pre></div><div><h3>Tài liệu bàn giao</h3><a href="../report/team/group_report.md">Báo cáo tổng hợp ↗</a><a href="../report/team/decision_adr.md">Quyết định kiến trúc ↗</a><a href="../report/team/bonus_report.md">Báo cáo B3 ↗</a><a href="../report/team/hidden_validation.md">Kiểm chứng hidden ↗</a><a href="../docs/presentation_guide.md">Kịch bản thuyết trình ↗</a><a href="../TEAM.md">Phân công và bằng chứng commit ↗</a></div></div>
+  <p class="scope-note">Phân công và bằng chứng kỹ thuật được ghi trong TEAM.md; báo cáo cá nhân khai công cụ AI và phương pháp kiểm chứng.</p>
+  <footer>LogiX-VN <span>Lab 08 · From Workflows to Agents</span><b>Architecture is a hypothesis. Benchmark is the evidence.</b></footer>
+</section>
+<div id="slide-controls" class="slide-controls" hidden><button id="previous" aria-label="Trang trước">←</button><span id="slide-position">1 / 8</span><button id="next" aria-label="Trang sau">→</button><button id="exit">Thoát Esc</button></div>
+<noscript>Giao diện cần JavaScript để hiển thị số liệu. Mở report/team/group_report.md để đọc báo cáo dạng văn bản.</noscript>
+</main>
+</body></html>

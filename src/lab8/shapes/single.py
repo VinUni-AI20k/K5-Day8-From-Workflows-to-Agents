@@ -21,7 +21,13 @@ ones. `lab8.trace.Trace` does this; your own tracer is fine if it matches.
 from __future__ import annotations
 
 from lab8.schemas import RunResult
-from lab8.shapes.common import not_implemented
+import json
+
+from lab8.db import connect
+from lab8.mock_llm import complete
+from lab8.runtime import run_react
+from lab8.shapes.workflow import ClaimRun
+from lab8.tools import get_claim_view
 
 
 def run_claim(
@@ -31,7 +37,40 @@ def run_claim(
     store_path: str,
     crash_at: str | None = None,
 ) -> RunResult:
-    # TODO CP2 (student): thay stub này bằng shape single theo các bước ở docstring đầu file.
-    # TODO CP3 (student): truyền crash_at vào durability.issue_refund, không bắt InjectedCrash.
-    del store_path, crash_at
-    return not_implemented("single", claim_id, seed)
+    conn = connect(store_path)
+    try:
+        run = ClaimRun(conn, "single", claim_id, seed)
+        claim = run.read("get_claim_view", get_claim_view, claim_id)
+        state = {}
+
+        def decide(observation):
+            # MockLLM has no tool-JSON output: a bounded adapter maps observations
+            # to actions. Charge every think turn; never let text supply money.
+            last = observation.get("last_tool")
+            if last:
+                state[last] = observation["last_result"]
+                run.trace.add("observation", {"tool": last, "result": state[last]})
+            complete(run.budget, seed=seed, purpose="react",
+                     prompt=json.dumps({"claim_id": claim_id, "observed": sorted(state)}))
+            run.trace.add("react_think", {"turn": run.budget.model_calls})
+            if not claim["found"]:
+                return {"final": {"status": "failed", "error_reason": "unknown_claim"}}
+            if not claim.get("order_id"):
+                return {"final": {"status": "needs_info", "error_reason": "missing_order_id"}}
+            if "lookup_order" not in state:
+                return {"tool": "lookup_order", "args": {
+                    "order_id": claim["order_id"], "principal_id": claim["principal_id"]}}
+            view = state["lookup_order"]
+            if not view["visible"]:
+                return {"final": {"status": "escalated", "error_reason": view["reason"]}}
+            if "compute_compensation" not in state:
+                return {"tool": "compute_compensation", "args": {"order": view["order"]}}
+            return {"final": {"quote": state["compute_compensation"]}}
+
+        result = run_react(conn, run.budget, observation={"claim": claim}, decide=decide, max_steps=8)
+        final = result["final"]
+        if "quote" not in final:
+            return run.finish(final["status"], reason=final.get("error_reason"))
+        return run.settle(final["quote"], crash_at)
+    finally:
+        conn.close()

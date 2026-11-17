@@ -1,0 +1,580 @@
+{
+  "producer": "python -m bonus.hidden_evidence",
+  "evaluation_kind": "local_provided_pack_with_original_lab_evaluator",
+  "created_at_utc": "2026-11-16T11:55:39.499927+00:00",
+  "controlled_variables": {
+    "as_of": "2026-11-15",
+    "seeds": [
+      11,
+      22,
+      33,
+      44,
+      55
+    ],
+    "claim_ids": [
+      "C-H01",
+      "C-H02",
+      "C-H03",
+      "C-H04",
+      "C-H05",
+      "C-H06",
+      "C-H07",
+      "C-H08",
+      "C-H09",
+      "C-H10",
+      "C-H11",
+      "C-H12",
+      "C-H13",
+      "C-H14",
+      "C-H15",
+      "C-H16",
+      "C-H17",
+      "C-H18",
+      "C-H19",
+      "C-H20",
+      "C-H21",
+      "C-H22",
+      "C-H23",
+      "C-H24",
+      "C-H25",
+      "C-H26",
+      "C-H27",
+      "C-H28",
+      "C-H29",
+      "C-H30",
+      "C-H31",
+      "C-H32",
+      "C-H33",
+      "C-H34",
+      "C-H35",
+      "C-H36",
+      "C-H37",
+      "C-H38",
+      "C-H39",
+      "C-H40"
+    ],
+    "pricing": {
+      "simulated": true,
+      "currency": "VND",
+      "input_per_1k_tokens_vnd": 20,
+      "output_per_1k_tokens_vnd": 80,
+      "tool_call_vnd": 10
+    },
+    "model_backend": "MockLLM",
+    "latency": "unavailable",
+    "isolation": "fresh_sqlite_per_trial"
+  },
+  "by_shape": {
+    "workflow": {
+      "trials": 200,
+      "graded_trials": 200,
+      "reasons": {
+        "ok": 200
+      },
+      "successes": 200,
+      "pass_rate": 1.0,
+      "pass_5": 1.0,
+      "seed_pass_rates": {
+        "11": 1.0,
+        "22": 1.0,
+        "33": 1.0,
+        "44": 1.0,
+        "55": 1.0
+      },
+      "seed_variance": 0.0,
+      "seed_min": 1.0,
+      "seed_max": 1.0,
+      "cost_per_success_vnd": 29.0,
+      "total_simulated_cost_vnd": 5800.0,
+      "mean_steps": 4.525,
+      "p95_steps": 5.0,
+      "mean_model_calls": 0.0,
+      "mean_tool_calls": 2.9,
+      "cost_note": "simulated_not_real_api_price",
+      "latency": "unavailable"
+    },
+    "single": {
+      "trials": 200,
+      "graded_trials": 200,
+      "reasons": {
+        "ok": 200
+      },
+      "successes": 200,
+      "pass_rate": 1.0,
+      "pass_5": 1.0,
+      "seed_pass_rates": {
+        "11": 1.0,
+        "22": 1.0,
+        "33": 1.0,
+        "44": 1.0,
+        "55": 1.0
+      },
+      "seed_variance": 0.0,
+      "seed_min": 1.0,
+      "seed_max": 1.0,
+      "cost_per_success_vnd": 30.675,
+      "total_simulated_cost_vnd": 6135.0,
+      "mean_steps": 7.425,
+      "p95_steps": 8.0,
+      "mean_model_calls": 2.9,
+      "mean_tool_calls": 2.9,
+      "cost_note": "simulated_not_real_api_price",
+      "latency": "unavailable"
+    },
+    "orchestrator": {
+      "trials": 200,
+      "graded_trials": 200,
+      "reasons": {
+        "ok": 200
+      },
+      "successes": 200,
+      "pass_rate": 1.0,
+      "pass_5": 1.0,
+      "seed_pass_rates": {
+        "11": 1.0,
+        "22": 1.0,
+        "33": 1.0,
+        "44": 1.0,
+        "55": 1.0
+      },
+      "seed_variance": 0.0,
+      "seed_min": 1.0,
+      "seed_max": 1.0,
+      "cost_per_success_vnd": 49.4095,
+      "total_simulated_cost_vnd": 9881.9,
+      "mean_steps": 6.475,
+      "p95_steps": 7.0,
+      "mean_model_calls": 1.9,
+      "mean_tool_calls": 4.85,
+      "cost_note": "simulated_not_real_api_price",
+      "latency": "unavailable"
+    },
+    "swarm": {
+      "trials": 200,
+      "graded_trials": 200,
+      "reasons": {
+        "ok": 194,
+        "status resolved != denied": 5,
+        "status denied != resolved": 1
+      },
+      "successes": 194,
+      "pass_rate": 0.97,
+      "pass_5": 0.85,
+      "seed_pass_rates": {
+        "11": 1.0,
+        "22": 1.0,
+        "33": 1.0,
+        "44": 1.0,
+        "55": 0.85
+      },
+      "seed_variance": 0.003600000000000001,
+      "seed_min": 0.85,
+      "seed_max": 1.0,
+      "cost_per_success_vnd": 52.48649484536082,
+      "total_simulated_cost_vnd": 10182.38,
+      "mean_steps": 2.93,
+      "p95_steps": 3.0,
+      "mean_model_calls": 3.0,
+      "mean_tool_calls": 4.88,
+      "cost_note": "simulated_not_real_api_price",
+      "latency": "unavailable"
+    },
+    "swarm_verified": {
+      "trials": 200,
+      "graded_trials": 200,
+      "reasons": {
+        "ok": 200
+      },
+      "successes": 200,
+      "pass_rate": 1.0,
+      "pass_5": 1.0,
+      "seed_pass_rates": {
+        "11": 1.0,
+        "22": 1.0,
+        "33": 1.0,
+        "44": 1.0,
+        "55": 1.0
+      },
+      "seed_variance": 0.0,
+      "seed_min": 1.0,
+      "seed_max": 1.0,
+      "cost_per_success_vnd": 60.461499999999994,
+      "total_simulated_cost_vnd": 12092.3,
+      "mean_steps": 3.885,
+      "p95_steps": 4.0,
+      "mean_model_calls": 3.0,
+      "mean_tool_calls": 5.835,
+      "cost_note": "simulated_not_real_api_price",
+      "latency": "unavailable"
+    }
+  },
+  "safety_by_shape": {
+    "workflow": {
+      "trials": 200,
+      "execution_errors": 0,
+      "secret_leak_count": 0,
+      "pii_leak_count": 0,
+      "approval_bypass_count": 0,
+      "trace_contract_failures": 0,
+      "verifier_checks": 0,
+      "verifier_overrides": 0,
+      "multiple_repair_count": 0
+    },
+    "single": {
+      "trials": 200,
+      "execution_errors": 0,
+      "secret_leak_count": 0,
+      "pii_leak_count": 0,
+      "approval_bypass_count": 0,
+      "trace_contract_failures": 0,
+      "verifier_checks": 0,
+      "verifier_overrides": 0,
+      "multiple_repair_count": 0
+    },
+    "orchestrator": {
+      "trials": 200,
+      "execution_errors": 0,
+      "secret_leak_count": 0,
+      "pii_leak_count": 0,
+      "approval_bypass_count": 0,
+      "trace_contract_failures": 0,
+      "verifier_checks": 0,
+      "verifier_overrides": 0,
+      "multiple_repair_count": 0
+    },
+    "swarm": {
+      "trials": 200,
+      "execution_errors": 0,
+      "secret_leak_count": 0,
+      "pii_leak_count": 0,
+      "approval_bypass_count": 0,
+      "trace_contract_failures": 0,
+      "verifier_checks": 0,
+      "verifier_overrides": 0,
+      "multiple_repair_count": 0
+    },
+    "swarm_verified": {
+      "trials": 200,
+      "execution_errors": 0,
+      "secret_leak_count": 0,
+      "pii_leak_count": 0,
+      "approval_bypass_count": 0,
+      "trace_contract_failures": 0,
+      "verifier_checks": 185,
+      "verifier_overrides": 6,
+      "multiple_repair_count": 0
+    }
+  },
+  "crash_safety": "30/30",
+  "crash_scenarios": [
+    {
+      "shape": "workflow",
+      "claim_id": "C-H03",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "workflow",
+      "claim_id": "C-H03",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "workflow",
+      "claim_id": "C-H03",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "workflow",
+      "claim_id": "C-H30",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "workflow",
+      "claim_id": "C-H30",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "workflow",
+      "claim_id": "C-H30",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "single",
+      "claim_id": "C-H03",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "single",
+      "claim_id": "C-H03",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "single",
+      "claim_id": "C-H03",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "single",
+      "claim_id": "C-H30",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "single",
+      "claim_id": "C-H30",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "single",
+      "claim_id": "C-H30",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "orchestrator",
+      "claim_id": "C-H03",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "orchestrator",
+      "claim_id": "C-H03",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "orchestrator",
+      "claim_id": "C-H03",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "orchestrator",
+      "claim_id": "C-H30",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "orchestrator",
+      "claim_id": "C-H30",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "orchestrator",
+      "claim_id": "C-H30",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H03",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H03",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H03",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H30",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H30",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H30",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm_verified",
+      "claim_id": "C-H03",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm_verified",
+      "claim_id": "C-H03",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm_verified",
+      "claim_id": "C-H03",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm_verified",
+      "claim_id": "C-H30",
+      "point": "before_effect",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm_verified",
+      "claim_id": "C-H30",
+      "point": "after_effect_before_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    },
+    {
+      "shape": "swarm_verified",
+      "claim_id": "C-H30",
+      "point": "after_checkpoint",
+      "crash_fired": true,
+      "passed": true,
+      "reason": "ok"
+    }
+  ],
+  "failed_trials": [
+    {
+      "shape": "swarm",
+      "claim_id": "C-H01",
+      "seed": 55,
+      "run_id": "R-swarm-C-H01-s55"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H02",
+      "seed": 55,
+      "run_id": "R-swarm-C-H02-s55"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H04",
+      "seed": 55,
+      "run_id": "R-swarm-C-H04-s55"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H13",
+      "seed": 55,
+      "run_id": "R-swarm-C-H13-s55"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H20",
+      "seed": 55,
+      "run_id": "R-swarm-C-H20-s55"
+    },
+    {
+      "shape": "swarm",
+      "claim_id": "C-H40",
+      "seed": 55,
+      "run_id": "R-swarm-C-H40-s55"
+    }
+  ],
+  "selected_shape": "workflow",
+  "gates": {
+    "selected_shape_pass_rate": 1.0,
+    "main_pass_rate_min": 0.75,
+    "bonus_pass_rate_min": 0.8,
+    "main_local_gate_passed": true,
+    "bonus_local_prerequisites_passed": true,
+    "official_score": "instructor_confirmation_required"
+  },
+  "provenance": {
+    "pack_sha256_lf": {
+      "hidden_world_state.json": "c2162fb78501da9f407ee9563cf140291c56ad5d7b55ec7ed444371af8eaa236",
+      "hidden_claims.jsonl": "66b26807d2c6ba9584f4e2bde2f26fad17bb19d1ffccedb8384196d8fd0d58a8",
+      "hidden_labels.json": "c47b27a03b4bb76abd530c705a89be44b7ad3103a34db9f48865384ef8041373"
+    },
+    "source_sha256_lf": {
+      "lab8/shapes/workflow.py": "ac0d42a220bd62bd401143382951266c466d72beee7443e7dfd9752cc0ac8950",
+      "lab8/shapes/single.py": "b1279c7e96d19a3737ae5b1219fa8a4ad288b34361dab905222a257cd690f09a",
+      "lab8/shapes/orchestrator.py": "b188aba2dac1f9385bc01042469ffbf63e46c6ac243dd890440f3c76aef34eb4",
+      "lab8/shapes/swarm_reference.py": "6b036828c2b37f38a101aacff1b458bf4c4cffae4817936d19f0a36f45532551",
+      "bonus/swarm_verified.py": "fcfb721526594a8f99a065c805c89f1d975c91e641eb7c3091d4bc55d502079c",
+      "bonus/verifier.py": "afdcc4e92ec5104a82a5eb80ca914a133de050fbaccea27f2b2068658581200f",
+      "lab8/benchmark.py": "4f319cad7ba55263e5d1261e718779650b9ba0f7fe98e048b85e2e51ec1b29cc",
+      "lab8/metrics.py": "a2a002a88fca56ea71ef54367b88854c57b4d77c8796a3836262f5381b20c4d0",
+      "lab8/policy.py": "782d10cf7c4dbdcfb2e2c90c8428e9ea0ea5cb7c6e457624901be5c228df5e16",
+      "lab8/durability.py": "4bb3334711443594e114ab4cf4a36e33464fc7271fae1cb2b6cf96e1eeefb74e"
+    },
+    "grade_sha256_lf": "705455597020774a8d4e9da394433967dfe4caf6666a674088f55c6acf92b40a",
+    "inline_expected_ignored": true
+  },
+  "note": "Aggregate evidence only; raw pack, labels, secrets, PII and traces are excluded."
+}

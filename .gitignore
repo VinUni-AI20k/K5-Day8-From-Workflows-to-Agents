@@ -20,3 +20,10 @@ src/reports/bonus_hidden.json
 
 # Instructor-only hidden pack. Never push it to this repo.
 src/eval/instructor/
+
+# Local browser verification artifacts
+.playwright-cli/
+output/playwright/
+
+# Intermediate review files, not submission evidence.
+/tmp/

@@ -19,7 +19,12 @@ ones. `lab8.trace.Trace` does this; your own tracer is fine if it matches.
 from __future__ import annotations
 
 from lab8.schemas import RunResult
-from lab8.shapes.common import not_implemented
+from lab8.db import connect
+from lab8.handoff import make_handoff
+from lab8.mock_llm import complete
+from lab8.runtime import run_readonly_investigators
+from lab8.shapes.workflow import ClaimRun
+from lab8.tools import get_claim_view
 
 
 def run_claim(
@@ -29,7 +34,28 @@ def run_claim(
     store_path: str,
     crash_at: str | None = None,
 ) -> RunResult:
-    # TODO CP2 (student): thay stub này bằng shape orchestrator theo các bước ở docstring đầu file.
-    # TODO CP3 (student): truyền crash_at vào durability.issue_refund, không bắt InjectedCrash.
-    del store_path, crash_at
-    return not_implemented("orchestrator", claim_id, seed)
+    conn = connect(store_path)
+    try:
+        run = ClaimRun(conn, "orchestrator", claim_id, seed)
+        claim = run.read("get_claim_view", get_claim_view, claim_id)
+        if not claim["found"]:
+            return run.finish("failed", reason="unknown_claim")
+        if not claim.get("order_id"):
+            return run.finish("needs_info", reason="missing_order_id")
+        complete(run.budget, seed=seed, purpose="plan", prompt="investigate owner order and current policy")
+        run.trace.add("plan", {"mode": "readonly_investigation"})
+        handoff = make_handoff(request_id=f"REQ-{claim_id}", claim_id=claim_id,
+                               task="check_applicable_policy", facts={},
+                               allowed_tools=["lookup_order", "lookup_policy", "compute_compensation"])
+        run.trace.add("handoff", handoff)
+        result = run_readonly_investigators(conn, run.budget, handoff, claim["principal_id"])
+        run.trace.add("investigator", result)
+        view = result["tools"]["lookup_order"]
+        if not view["visible"]:
+            return run.finish("escalated", reason=view["reason"])
+        quote = result["tools"]["compute_compensation"]
+        complete(run.budget, seed=seed, purpose="aggregate", prompt=f"quote={quote['amount_vnd']}")
+        run.trace.add("aggregate", {"proposal_amount": quote["amount_vnd"]})
+        return run.settle(quote, crash_at)
+    finally:
+        conn.close()

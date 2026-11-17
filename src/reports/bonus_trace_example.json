@@ -1,0 +1,115 @@
+{
+  "result": {
+    "run_id": "R-swarm_verified-C-002-s55",
+    "claim_id": "C-002",
+    "shape": "swarm_verified",
+    "seed": 55,
+    "status": "denied",
+    "proposal_amount": 0,
+    "refund_effects": [],
+    "committed_audit_count": 0,
+    "model_calls": 3,
+    "tool_calls": 8,
+    "input_tokens": 22,
+    "output_tokens": 22,
+    "cost_estimate": 82.2,
+    "trace_path": "traces\\R-swarm_verified-C-002-s55.json",
+    "error_reason": "no_entitlement"
+  },
+  "trace": {
+    "run_id": "R-swarm_verified-C-002-s55",
+    "steps": 6,
+    "events": [
+      {
+        "kind": "handoff",
+        "payload": {
+          "request_id": "REQ-C-002",
+          "task": "check_applicable_policy",
+          "max_output_tokens": 400,
+          "facts": {},
+          "allowed_tools": [
+            "lookup_order",
+            "lookup_policy",
+            "compute_compensation"
+          ],
+          "claim_id": "C-002",
+          "principal_scope": "owner_order_only",
+          "contract_version": "handoff.v1"
+        }
+      },
+      {
+        "kind": "investigator",
+        "payload": {
+          "lookup_order": {
+            "visible": true,
+            "reason": "ok",
+            "order": {
+              "order_id": "O-202",
+              "status": "delivered",
+              "delay_days": 2,
+              "shipping_fee_vnd": 20000,
+              "paid_vnd": 100000,
+              "damage_verified": false,
+              "carrier": "LOGIX_LOCAL"
+            }
+          },
+          "policy_count": 1
+        }
+      },
+      {
+        "kind": "model_override",
+        "payload": {
+          "delay_days": 5
+        }
+      },
+      {
+        "kind": "verifier_check",
+        "payload": {
+          "fields": [
+            "delay_days",
+            "status",
+            "damage_verified"
+          ],
+          "matched": false
+        }
+      },
+      {
+        "kind": "verifier_override",
+        "payload": {
+          "fields": [
+            "delay_days"
+          ],
+          "before": {
+            "delay_days": 5,
+            "status": "delivered",
+            "damage_verified": false
+          },
+          "after": {
+            "delay_days": 2,
+            "status": "delivered",
+            "damage_verified": false
+          },
+          "proposal_before": 20000,
+          "proposal_after": 0,
+          "repair_round": 1
+        }
+      },
+      {
+        "kind": "quote",
+        "payload": {
+          "amount_vnd": 0,
+          "reason": "no_entitlement",
+          "clause_ids": [],
+          "parts": {}
+        }
+      }
+    ]
+  },
+  "ledger": {
+    "effect": null,
+    "refund_count": 0,
+    "refund_vnd": 0,
+    "committed_audit_count": 0,
+    "policy_denied": false
+  }
+}
