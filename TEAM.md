@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Vũ Tuấn Đạt (2A202603744, @datkunal) | Workflow (shape A) | `1a607d2` — Implement workflow shape (A) and add workflow tests | `src/tests/test_workflow_shape.py` (6 test, 10 case) |
+| Vũ Tuấn Đạt | Workflow (shape A) | `1a607d2` — Implement workflow shape (A) and add workflow tests | `src/tests/test_workflow_shape.py` (6 test, 10 case) |
 
 ## Cá nhân
 
