@@ -29,8 +29,8 @@ Gợi ý chia vai:
 | --- | --- | --- | --- |
 | Phùng Quang Trà | workflow (A) + integration | `f0fb63f` | `src/tests/test_workflow_shape.py` (22 test) |
 | Vũ Nam Khánh | single agent (B) | `13f5978` | Ma trận student Single Agent (62 test: T01–T14, retry, crash) |
-| | orchestrator (C) + handoff | | |
-| Phạm Duy Thành | ledger/crash + evaluation | `175d770` (giai đoạn 1–2); cập nhật sau merge `1f7d89d` chưa commit | `src/tests/test_team_crash_recovery.py` (16 test workflow/single), `src/tests/test_research_draft_ablation.py` (72 test) |
+| Nguyễn Tuấn Anh | orchestrator (C) + handoff | `2346e37` | `src/tests/test_orchestrator_shape.py` (23 test) |
+| Phạm Duy Thành | ledger/crash + evaluation | `175d770` (giai đoạn 1–2); `db22c3b` (mở rộng single và evaluation) | `src/tests/test_team_crash_recovery.py` (16 test workflow/single), `src/tests/test_research_draft_ablation.py` (72 test) |
 
 ## Cá nhân
 
@@ -109,7 +109,7 @@ Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` 
   — `feat(single): implement run_claim and _run functions with decision logic`.
 - Báo cáo cá nhân: [report/team/2A202604112_VuNamKhanh.md](report/team/2A202604112_VuNamKhanh.md).
 
-## Thành viên 3 — MSSV_HoTen
+## Thành viên 3 — 2A202604089_NguyenTuanAnh
 
 ### Phần việc phụ trách
 
@@ -117,11 +117,20 @@ Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` 
 
 ### Đóng góp cụ thể
 
--
+- Triển khai Shape C `orchestrator` (`src/lab8/shapes/orchestrator.py`): đọc claim qua `get_claim_view` → kiểm tra sự tồn tại của claim và `order_id` → dựng gói bàn giao có kiểu (typed handoff) bằng `lab8.handoff.make_handoff` với các công cụ chỉ đọc (`lookup_order`, `lookup_policy`, `lookup_refund_history`, `compute_compensation`) và `facts` rỗng → ghi nhận `handoff` đã làm sạch (sanitized) vào `trace`.
+- Chạy `run_readonly_investigators` để tác tử điều tra chỉ đọc thu thập thông tin đơn hàng, chính sách, lịch sử hoàn tiền và tính báo giá đền bù (`quote`).
+- Giữ chặt ranh giới quyền hạn (least privilege): tác tử điều tra không có quyền ghi; chỉ `orchestrator` mới gọi `durability.issue_refund` với **quote đầy đủ** để host tự trừ phần đã hoàn ở các claim trước (T13, T14) và kiểm tra phê duyệt.
+- Truyền `crash_at` vào `durability.issue_refund`; khi gặp `InjectedCrash` thì ghi sự kiện `crash` và flush file trace trước khi `raise` tiếp.
+- Thêm 23 test trong `src/tests/test_orchestrator_shape.py`: kiểm tra chống prompt injection từ ticket trên 5 seed, kiểm tra `make_handoff` từ chối công cụ ghi và lọc bỏ các trường ngoài allowlist (`parent_secret`, `raw_headers`, `ticket`), kiểm tra `sanitize` chặn `CANARY_SECRET_`, kiểm tra hoàn tiền một phần trên C-014 (T14), xung đột số tiền khi retry (`amount_conflict`), và quét trace của 14 claim public đảm bảo không lộ secret/header/ticket.
 
 ### Bằng chứng
 
--
+- Thay đổi chính: [src/lab8/shapes/orchestrator.py](src/lab8/shapes/orchestrator.py), [src/tests/test_orchestrator_shape.py](src/tests/test_orchestrator_shape.py).
+- `python -m pytest -q -m student -o addopts= -k orchestrator` → `62 passed`.
+- `python -m pytest -q -m student -o addopts=` → `248 passed` (cả 4 shape đều xanh 100%).
+- `python -m pytest -q` → `99 passed` (cổng host xanh, gồm 23 test mới).
+- `python -m lab8.check_submission` → `[ OK ] shape orchestrator: format đúng, 12/12 claim public pass ở seed 11`.
+- Báo cáo cá nhân: [report/team/2A202604089_NguyenTuanAnh.md](report/team/2A202604089_NguyenTuanAnh.md).
 
 ## Thành viên 4 — 2A202604075_PhamDuyThanh
 
