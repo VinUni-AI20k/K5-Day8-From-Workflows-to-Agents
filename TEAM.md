@@ -13,6 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |        |      |       |        |         |
 |   2 |        |      |       |        |         |
+|   3 | Nguyễn Nghiêm Khánh Tiệp | 2A202603863 | tiepnnk04@gmail.com | tiepnnk01-10 | Orchestrator |
 
 Gợi ý chia vai:
 
@@ -25,7 +26,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Người 3 | Orchestrator (`src/lab8/shapes/orchestrator.py`) | `906e466` | `src/tests/test_orchestrator_own.py` (16 test); 62 student test orchestrator xanh |
 
 ## Cá nhân
 
