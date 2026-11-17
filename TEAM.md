@@ -88,9 +88,3 @@ Sao chép mục dưới đây cho từng thành viên.
 - Cài đặt `src/lab8/shapes/orchestrator.py`: tạo gói `handoff.v1` qua allowlist, chạy investigator chỉ đọc, tính quote từ dữ liệu có cấu trúc và gọi `durability.issue_refund` tại orchestrator.
 - Cài đặt `src/bonus/swarm_verified.py` bổ sung tầng code verifier chặn lỗi khuếch đại từ `model_override` ở seed chia hết cho 5; xây dựng 8 ca đối kháng trong `src/bonus/cases.jsonl`.
 - Viết `src/tests/test_2A202603367_trongnguyen104_orchestrator_handoff.py` (`test_2A202603367_orchestrator_handoff_allowlist_and_secret_redaction`, `test_2A202603367_orchestrator_stacking_and_partial_approval_cap`, `test_2A202603367_orchestrator_crash_propagation_and_resume`) và `src/tests/test_bonus_swarm_verified.py`.
-
-### Bằng chứng
-
-- Code: `src/lab8/shapes/orchestrator.py`, `src/bonus/swarm_verified.py`, `src/bonus/cases.jsonl`, `src/bonus/world.json`
-- Test: `src/tests/test_2A202603367_trongnguyen104_orchestrator_handoff.py`, `src/tests/test_bonus_swarm_verified.py`
-- Report: `report/team/group_report.md`, `report/team/bonus_report.md`, `src/reports/bonus_benchmark.json`, `src/reports/bonus_adversarial.json`, `src/reports/hidden_selfcheck.json`
