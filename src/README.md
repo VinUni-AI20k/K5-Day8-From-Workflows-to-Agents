@@ -40,7 +40,7 @@ Kiểm tra phiên bản Python trước:
 ```bash
 git clone <url-repo-nhom> <ten-repo-nhom>
 cd <ten-repo-nhom>/src
-python3 -m venv .venv
+
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 python -m lab8.smoke
