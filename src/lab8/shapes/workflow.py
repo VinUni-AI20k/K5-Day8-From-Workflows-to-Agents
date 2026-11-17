@@ -26,11 +26,17 @@ Trace contract v1 (docs/contracts.md): return a trace_path to a JSON file writte
 {"run_id": <same run_id>, "events": [...]}, on every return path including early
 ones. `lab8.trace.Trace` does this; your own tracer is fine if it matches.
 """
+    
+
 
 from __future__ import annotations
 
-from lab8.schemas import RunResult
-from lab8.shapes.common import not_implemented
+from lab8.db import connect
+from lab8.durability import InjectedCrash, issue_refund
+from lab8.schemas import Budget, RunResult, make_run_id
+from lab8.shapes.common import finish
+from lab8.tools import compute_compensation, get_claim_view, lookup_order, tool_cost
+from lab8.trace import Trace
 
 
 def run_claim(
@@ -42,5 +48,61 @@ def run_claim(
 ) -> RunResult:
     # TODO CP2 (student): thay stub này bằng shape workflow theo các bước ở docstring đầu file.
     # TODO CP3 (student): truyền crash_at vào durability.issue_refund, không bắt InjectedCrash.
-    del store_path, crash_at
-    return not_implemented("workflow", claim_id, seed)
+    conn = connect(store_path)
+    budget = Budget()
+    trace = Trace(make_run_id("workflow", claim_id, seed))
+
+    def read_tool(func, *args):
+        budget.add_tool(tool_cost())
+        return func(conn, *args)
+
+    def result(status: str, proposal: int = 0, reason: str | None = None) -> RunResult:
+        trace.add("decision", {"status": status, "proposal_amount": proposal})
+        return finish(
+            conn,
+            shape="workflow",
+            claim_id=claim_id,
+            seed=seed,
+            status=status,
+            proposal_amount=proposal,
+            budget=budget,
+            trace=trace,
+            error_reason=reason,
+        )
+
+    try:
+        claim = read_tool(get_claim_view, claim_id)
+        if not claim.get("found"):
+            return result("failed", reason="unknown_claim")
+        if not claim.get("order_id"):
+            return result("needs_info", reason="missing_order_id")
+
+        order_view = read_tool(lookup_order, claim["order_id"], claim["principal_id"])
+        if not order_view.get("visible"):
+            return result("escalated", reason=order_view.get("reason"))
+
+        # Do not use delay numbers from the ticket. The scoped order view is authoritative.
+        quote = read_tool(compute_compensation, order_view["order"])
+        proposal = int(quote["amount_vnd"])
+        trace.add("quote", {"amount_vnd": proposal, "clause_ids": quote.get("clause_ids", [])})
+        if proposal <= 0:
+            return result("denied", reason=quote.get("reason"))
+
+        budget.add_tool(tool_cost())
+        try:
+            outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
+        except InjectedCrash:
+            trace.add("crash", {"at": crash_at})
+            trace.write()
+            raise
+
+        if not outcome["ok"]:
+            return result(
+                "failed" if outcome.get("conflict") else "denied",
+                proposal,
+                outcome.get("reason"),
+            )
+        return result("resolved", proposal)
+    finally:
+        conn.close()
+
