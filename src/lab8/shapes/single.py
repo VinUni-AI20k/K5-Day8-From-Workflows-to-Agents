@@ -251,5 +251,4 @@ def _run(
         trace=trace,
         error_reason=None,
     )
-    )
 
