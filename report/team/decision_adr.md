@@ -45,4 +45,4 @@ Nếu trace nằm ngoài phạm vi scanner quét được, đội security chứ
 
 ## Giới hạn
 
-MockLLM không phải model sản xuất. Latency để `unavailable`. Không sửa JSON cho đủ 0.75.
+MockLLM không phải model sản xuất. Latency để `unavailable`. Không sửa JSON cho đủ 0.75. 
