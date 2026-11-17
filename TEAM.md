@@ -2,9 +2,9 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- Tên nhóm: ClaudePro
+- Lớp: L3B
+- Repo nhóm: `K5-L3B-DAY08-ClaudePro-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
 - URL repo, nhánh nộp, commit chốt:
 
 ## Thành viên
@@ -14,6 +14,7 @@
 |   1 |        |      |       |        |         |
 |   2 |        |      |       |        |         |
 |   3 | Nguyễn Nghiêm Khánh Tiệp | 2A202603863 | tiepnnk04@gmail.com | tiepnnk01-10 | Orchestrator |
+|   4 | Tăng Nguyễn Hải Đăng | 2A202603916 | haidangg.work@gmail.com | haidangwork1411 | Safety & Testing |
 
 Gợi ý chia vai:
 
@@ -27,6 +28,7 @@ Gợi ý chia vai:
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 | Người 3 | Orchestrator (`src/lab8/shapes/orchestrator.py`) | `906e466` | `src/tests/test_orchestrator_own.py` (16 test); 62 student test orchestrator xanh |
+| Tăng Nguyễn Hải Đăng | Safety & Testing | `733745d` | `src/tests/test_safety_approval_invariant.py` (1 test); invariant duyệt refund host, tích hợp test ma trận & crash suite |
 
 ## Cá nhân
 
