@@ -4,9 +4,9 @@ Bản hiện tại tổng hợp phần Single agent đã triển khai. Các ph�
 
 ## 1. Thông tin nhóm
 
-- Tên nhóm — ABC
-- Thành viên — Xem `TEAM.md`
-- Commit chốt — Chờ tích hợp và cập nhật cùng `decision_adr.md`.
+- Tên nhóm: ABC
+- Thành viên: xem `TEAM.md`
+- Commit chốt (trùng `report/team/decision_adr.md`): _(điền khi nộp)_
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -32,6 +32,17 @@ Mỗi lần gọi `decide` sử dụng `mock_llm.complete`, tự ghi nhận mode
 
 Trace ghi các sự kiện `tool`, `model`, `action`, `order_scope`, `quote`, `host`, `decision` và `crash`. Mỗi sự kiện sử dụng payload chọn lọc. Ticket, nguyên claim row, secret, header và thông tin cá nhân của order được loại khỏi nội dung ghi log.
 
+### Shape A — workflow
+
+Pipeline cố định trong code, không ReAct/handoff. Đọc claim bằng `get_claim_view`; thiếu `order_id` → `needs_info`; `lookup_order` không visible → `escalated` (không đưa PII vào trace). Quote lấy từ order qua `compute_compensation` — bỏ qua số ngày trong ticket. Quote 0 → `denied` (không gọi host). Quote > 0 → `issue_refund` với **full quote** và `crash_at`; host tự kiểm approval và trần theo đơn. Model không chọn số tiền và không commit refund. Trace (`lab8.trace.Trace`) ghi mọi nhánh return.
+
+### Shape B — single
+
+...
+
+### Shape C — orchestrator
+
+...
 
 ## 4. Kết quả
 

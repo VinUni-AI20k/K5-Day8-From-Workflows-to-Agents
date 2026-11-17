@@ -3,23 +3,26 @@
 ## Thông tin nhóm
 
 - Tên nhóm: ABC
-- Lớp: L3A
+- Lớp: L3B
 - Repo nhóm: `K5-L3B-DAY08-ABC-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
 - URL repo, nhánh nộp, commit chốt:
+  - https://github.com/tundut/K5-L3B-DAY08-ABC-FromWorkflowsToAgents
+  - nhánh: `main`
+  - commit chốt: _(điền khi nộp)_
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        | Workflow |
+|   1 | Huỳnh Văn Cường | 2A202603866 |  | cuong-huynh | Workflow |
 |   2 | Đào Văn Hiệp | 2A202603813 | 26ai.hiepdv3@vinuni.edu.vn | [daohiep2903](https://github.com/daohiep2903) | Single agent |
-|   3 |        |      |       |        | Orchestrator và handoff |
+|   3 | Nguyễn Như Duy An | 2A202603783 |       |        | Orchestrator và handoff |
 |   4 |        |      |       |        | Kiểm thử và an toàn |
 |   5 |        |      |       |        | Nhóm trưởng, tích hợp và đánh giá |
 
 ## Phân công cho 5 thành viên
 
-Số thành viên bên dưới tương ứng với STT trong bảng trên. Thành viên bổ sung thông tin cá nhân vào dòng tương ứng.
+Số thành viên bên dưới tương ứng với STT trong bảng trên. Họ tên và thông tin cá nhân để trống để nhóm bổ sung.
 
 | Thành viên | Công việc phụ trách | Sản phẩm bàn giao | Test cần tự viết |
 | --- | --- | --- | --- |
@@ -67,9 +70,9 @@ Các mốc trên là lịch lab mẫu, không phải deadline nộp bài. Deadli
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | Workflow | | |
+| Huỳnh Văn Cường | Workflow | ce1d813 | `test_workflow_owner.py` (C-002 ticket sai ngày; C-004 thiếu order_id; C-005 ngoài principal) |
 | Đào Văn Hiệp — 2A202603813 | Single agent, ReAct tối đa 8 bước, tool đọc, budget, trace và tích hợp host hoàn tiền | [1b1469c](https://github.com/tundut/K5-L3B-DAY08-ABC-FromWorkflowsToAgents/commit/1b1469ce65b345666314cee04f4528b497e8ebc8) | `src/tests/test_single.py` — 13 test pass, gồm giới hạn bước, chặn tool ghi, ticket “ignore policy”, quote đầy đủ, crash/resume và conflict. Ma trận student riêng Single đạt 62/62. |
-| | Orchestrator và handoff | | |
+| Nguyễn Như Duy An | Orchestrator và handoff | `src/lab8/shapes/orchestrator.py` | `src/tests/test_shape_orchestrator.py` |
 | | Kiểm thử và an toàn | | |
 | | Tích hợp và đánh giá | | |
 
@@ -127,3 +130,21 @@ Khi tổng hợp bài nộp, thành viên phụ trách kiểm thử sinh lại f
 ```powershell
 python -m lab8.crash_test --count 20 --out reports/crash.json
 ```
+
+## 2A202603866_HuynhVanCuong
+
+### Phần việc phụ trách
+
+- Shape A `workflow` (`src/lab8/shapes/workflow.py`): pipeline cố định đọc claim → order → quote → `issue_refund`.
+
+### Đóng góp cụ thể
+
+- Implement `run_claim` (CP2+CP3): tool trực tiếp, full quote, truyền `crash_at`, không bắt `InjectedCrash`.
+- Thêm `src/tests/test_workflow_owner.py`.
+
+### Bằng chứng
+
+- Student matrix: `pytest -q -m student -o addopts= -k workflow` → 62 passed.
+- Owner tests: `pytest -q -m student -o addopts= -k workflow_owner`.
+- Báo cáo cá nhân: `report/team/2A202603866_HuynhVanCuong.md`.
+
