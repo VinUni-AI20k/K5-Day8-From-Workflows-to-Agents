@@ -35,36 +35,5 @@ Gợi ý chia vai:
 | Đặng Đức Minh | Shape B Single ReAct | `<chờ commit>` | `chờ` |
 | Nguyễn Thành Tâm | Shape C & Security Lead | `<chờ commit>` | `chờ` |
 
-## Cá nhân
 
-Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
 
-```text
-report/team/MSSV_HoTen.md
-```
-
-Ví dụ: `report/team/20241234_NguyenVanAn.md`.
-
-Sao chép mục dưới đây cho từng thành viên.
-
-## 2A202603886_DangDucMinh
-
-### Phần việc phụ trách
-
-- Chịu trách nhiệm toàn quyền Shape B — Single Agent ReAct (`src/lab8/shapes/single.py`).
-- Xây dựng vòng lặp ReAct (`run_react`) với giới hạn 8 bước (`max_steps=8`), chạy dưới quyền worker chỉ đọc (`worker=True`).
-- Thiết kế hàm `decide(observation)` tuần tự, miễn nhiễm với prompt injection và phớt lờ số ngày trễ sai lệch trong ticket.
-- Quản lý ranh giới Code/Host: chuyển quote đầy đủ vào `durability.issue_refund`, truyền `crash_at` và flush trace đúng chuẩn Trace contract v1.
-- Viết 5 unit tests độc lập tại `src/tests/test_student_single.py`.
-
-### Đóng góp cụ thể
-
-- Triển khai hoàn chỉnh `src/lab8/shapes/single.py`, vượt qua 62/62 student matrix tests.
-- Viết bộ test `src/tests/test_student_single.py` kiểm tra prompt injection, step cap, write-tool blocking và budget tracking.
-- Tuân thủ nghiêm ngặt 3 điều kiện Must-Pass (không bypass approval, không rò rỉ secret/PII, an toàn crash).
-
-### Bằng chứng
-
-- File mã nguồn: `src/lab8/shapes/single.py`, `src/tests/test_student_single.py`.
-- Báo cáo cá nhân: `report/team/2A202603886_DangDucMinh.md`.
-- Kết quả test: 62/62 student test matrix Shape B pass, 59/59 host test pass, `check_submission` xác nhận `shape single: format đúng, 12/12 claim public pass ở seed 11`.
