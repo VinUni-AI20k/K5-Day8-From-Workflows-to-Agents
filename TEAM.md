@@ -8,7 +8,7 @@
 - URL repo: https://github.com/hoanganhchimxanh/K5-L3A-DAY08-4ThangSinhVien-FromWorkflowsToAgents
 - Nhánh nộp: `main`.
 - Commit mã nguồn đã kiểm thử và đo CP5: `96ab7201c69c66c532e779e0ef05f9a7ecf2362a`.
-- Commit chốt mã nguồn: `96ab720`, khớp `report/team/decision_adr.md` do B cập nhật trong `c21031b`. Tài liệu và bằng chứng CP5 được bổ sung bằng các commit tiếp theo.
+- Commit chốt mã nguồn: `c21031b`, khớp `report/team/decision_adr.md`. Các file mã nguồn được đo không thay đổi so với `96ab720`; tài liệu và bằng chứng CP5 được bổ sung bằng các commit tiếp theo.
 
 ## Thành viên
 
@@ -38,7 +38,7 @@ Email ghi `(Git)` lấy từ author commit; trường chưa có bằng chứng �
 | --- | --- | --- | --- |
 | Nguyễn Hoàng Anh | B — Single, safety, budget/token và ADR | `c47102a`, `4b462c5`, `c21031b` | `src/tests/test_single_safety.py`: unknown claim, budget/token, injection và ba cửa sổ crash (7 ca) |
 | Võ Huy Hoàng | D — Test/Host, durability, approval và bằng chứng CP4 | `d70fc4a`, `96ab720`, `791521c` | `src/tests/test_durability_shapes.py::test_resume_other_crash_windows_keeps_one_refund` (6 ca, không có marker student) |
-| Nguyễn Tuấn Hiếu | A — Workflow, idempotency, checkpoint và tổng hợp | `28717d8`, `33d04f3` | `src/tests/test_workflow_safety.py`: approval sai claim, injection, ba cửa sổ crash, mất checkpoint và amount conflict (9 ca) |
+| Nguyễn Tuấn Hiếu | A — Workflow, idempotency, checkpoint và tổng hợp | `28717d8`, `33d04f3` | `src/tests/test_workflow_safety.py::test_workflow_rejects_approval_borrowed_from_another_claim`; `src/tests/test_workflow_safety.py::test_workflow_missing_checkpoint_replays_partial_refund_without_double_pay` (file có 9 ca, không gắn marker student) |
 | Phạm Hữu Đức | C — Orchestrator và tool đọc qua handoff | `8966ddd` | `src/tests/test_orchestrator.py`: `test_orchestrator_c001_resolves`, `test_orchestrator_missing_order_needs_info`, `test_orchestrator_unknown_claim_fails` (3 ca) |
 
 Các commit có thật trong lịch sử `main`. Phân công ở trên không được dùng thay bằng chứng hoàn thành; bảng đóng góp chỉ ghi code và test đã có.
@@ -47,10 +47,12 @@ Các commit có thật trong lịch sử `main`. Phân công ở trên không đ
 
 - Lần chạy tích hợp trên commit `96ab720` đạt **327 passed**.
 - `src/reports/crash.json` đã được D đưa vào `96ab720`, đạt **20/20**.
-- A đã tổng hợp benchmark trong [báo cáo nhóm](report/team/group_report.md). D đã chạy và xác nhận benchmark bốn shape × 14 claim × 5 seed, phân tích trial fail duy nhất của swarm và stage `src/reports/benchmark.json` để đưa vào Git trong lần tích hợp này.
-- B đã hoàn thiện `report/team/decision_adr.md` trong `c21031b`: chọn workflow, commit mã nguồn `96ab720`, run id `R-workflow-C-001-s11`.
+- A đã tổng hợp benchmark trong [báo cáo nhóm](report/team/group_report.md). D đã chạy và xác nhận benchmark bốn shape × 14 claim × 5 seed, phân tích trial fail duy nhất của swarm. `src/reports/benchmark.json` đã nằm trong Git từ `bfd4ee7`.
+- B đã hoàn thiện `report/team/decision_adr.md`: chọn workflow, commit chốt hiện ghi `c21031b`, run id `R-workflow-C-001-s11`.
 - C đã cập nhật `report/team/research_card.md`; phần kiểm tra định dạng tài liệu đã qua checker trong lần kiểm tra mới nhất.
 - D đã tự kiểm `student_drop/`: [hidden_selfcheck.json](src/reports/hidden_selfcheck.json) có 600 trial (3 shape × 40 claim × 5 seed), tất cả `reason = unlabeled`, không có lỗi runtime hoặc cảnh báo trace/leak từ bộ tự kiểm. Không có nhãn nên chưa có pass rate hidden chính thức; không commit `student_drop/`.
+- A chạy lại lệnh self-check ngày 17/11/2026 trên bản sao giữ nguyên SHA256 của hai file gốc: kết quả khớp JSON đã commit, mỗi shape 200 trial, không có lỗi runtime hoặc cảnh báo trace/leak. Cổng host mặc định đạt **79 passed, 248 deselected**; 9 ca trong `test_workflow_safety.py` không có marker `student` nên chạy trong cổng này.
+- Checker chạy lại ngày 17/11/2026 đạt **0 FAIL, 1 WARN**; cảnh báo tại thời điểm kiểm tra do file chưa commit. Đây là kiểm tra định dạng bài nộp, không phải điểm hidden.
 - Mỗi thành viên xác nhận thông tin cá nhân, bổ sung báo cáo riêng và tự nộp cùng link repo trên LMS. Trạng thái này chưa xác nhận bài nhóm đã sẵn sàng nộp.
 
 ## Cá nhân

@@ -63,6 +63,12 @@ File [test_workflow_safety.py](../../src/tests/test_workflow_safety.py) có 9 ca
 | `test_workflow_missing_checkpoint_replays_partial_refund_without_double_pay` | Xóa checkpoint sau refund T14, retry seed 22/33/44/55: khôi phục checkpoint, giữ một refund và tổng hoàn đúng trần (1). |
 | `test_workflow_changed_quote_on_retry_preserves_committed_amount` | Quote đổi khi retry: failed với `amount_conflict`, không sửa số tiền đã commit (1). |
 
+File không gắn marker `student`; cả 9 ca được chọn khi chạy cổng host mặc định
+`python -m pytest -q`. Tên file và tên hàm đại diện đã được ghi cụ thể trong
+cột "Test đã thêm hoặc sửa" của `TEAM.md`. Commit test có author
+`Nguyen Tuan Hieu <tuanhieu1162004@gmail.com>`, tài khoản GitHub cá nhân do
+thành viên cung cấp là `tuanhieu1162004`.
+
 ### Commit chính
 
 | Commit | Đóng góp |
@@ -83,6 +89,8 @@ File [test_workflow_safety.py](../../src/tests/test_workflow_safety.py) có 9 ca
 | CP3, host và test bổ sung tại mốc thực hiện | 66 passed, 248 deselected. |
 | CP3, ma trận student tại mốc thực hiện | 248 passed, 66 deselected. |
 | CP5, toàn bộ host/student/test bổ sung trên mã nguồn `96ab720` | 327 passed in 12.70s. |
+| Ngày 17/11/2026, cổng host mặc định sau khi tích hợp thay đổi marker của D | 79 passed, 248 deselected in 5.27s; có đủ 9 ca test workflow safety. |
+| Ngày 17/11/2026, `lab8.check_submission` | 0 FAIL, 1 WARN; cảnh báo có file chưa commit tại thời điểm kiểm tra. Đây là kiểm tra định dạng, không chấm điểm hidden. |
 | Benchmark public phần workflow | 70/70 trial pass; pass rate 1.000000; pass^5 1.000000; seed min–max 1.000000–1.000000; variance 0; cost/success 27.86 VND mô phỏng; mean/p95 steps 1.64/2. |
 
 Số test khác nhau giữa các mốc vì nhóm tiếp tục bổ sung test. Các kết quả
@@ -96,6 +104,7 @@ python -m pytest -q -m student -o addopts= -k workflow --basetemp=.pytest-person
 python -m pytest -q tests/test_workflow_safety.py --basetemp=.pytest-personal-safety
 python -m pytest -q -o addopts= -p no:cacheprovider --basetemp=.pytest-personal-all
 python -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json
+python -m lab8.benchmark --shapes workflow,single,orchestrator --cases student_drop/hidden_claims.jsonl --world student_drop/hidden_world_state.json --out reports/hidden_selfcheck.json
 ```
 
 Benchmark đã thực chạy với 14 claim × 5 seed × 4 shape, mỗi trial một SQLite
@@ -110,10 +119,27 @@ Bằng chứng checkpoint/crash riêng của A ở [cp3_workflow.md](cp3_workflo
 Demo CP3 cho `unsafe refund rows: 2`, minh họa vì sao checkpoint đơn lẻ không
 thay được ledger.
 
-Sau tích hợp ADR `c21031b`, lần chạy `lab8.check_submission` tại máy A còn
-1 FAIL do research card trống và 1 WARN vì còn file chưa commit. Chưa có
-`student_drop/`, chưa chạy hidden self-check. C/D cần hoàn thiện phần được
-giao trước khi xác nhận cả nhóm đủ điều kiện nộp.
+Tại mốc sau tích hợp ADR `c21031b`, checker ở máy A còn 1 FAIL vì research card
+chưa điền, khi đó chưa có `student_drop/`. Sau đó C đã cập nhật research card,
+D đã chạy và commit bằng chứng self-check.
+
+Ngày 17/11/2026, A chạy lại self-check từ bộ dữ liệu gốc trong
+`Downloads/student_drop/student_drop/`, sao chép vào `src/student_drop/`.
+Đối chiếu SHA256 của hai file trước/sau sao chép khớp nhau; có 40 claim và
+không có trường nhãn `expected`. Không sửa claim hoặc world state.
+
+| Shape | Trial | Lỗi runtime | Cảnh báo trace/leak | Pass rate |
+| --- | ---: | ---: | ---: | --- |
+| Workflow | 200 | 0 | 0 | Không có nhãn, `null` |
+| Single | 200 | 0 | 0 | Không có nhãn, `null` |
+| Orchestrator | 200 | 0 | 0 | Không có nhãn, `null` |
+
+Cả 600 trial có `reason = unlabeled`, nghĩa là trace qua kiểm tra contract
+và không có marker leak được bộ tự kiểm phát hiện. JSON sinh lại không khác
+bản [hidden_selfcheck.json](../../src/reports/hidden_selfcheck.json) đã commit.
+Đây là kiểm tra khả năng chạy và artifact; không chấm đúng/sai quyết định
+nghiệp vụ, không chứng minh đạt pass rate hidden 0.75 hoặc bonus 0.80.
+`student_drop/` được `.gitignore` loại trừ và không đưa vào commit.
 
 Lỗi môi trường đã gặp: `py` không được nhận diện nhưng `python` chạy được;
 pytest từng báo `PermissionError: [WinError 5]` ở Temp. Dùng Python có sẵn và
