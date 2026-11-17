@@ -1,7 +1,6 @@
 # Decision record
 
 - Shape chọn: workflow
-- Commit hash: 3404695 (commit code hiện tại; cập nhật sau khi commit code, test và bằng chứng cuối cùng)
 - Run id dẫn chứng: R-workflow-C-001-s11
 - Pass rate / pass^5 / seed min-max / variance: 1.000 / 1.000 / 1.000–1.000 / 0.000000
 - Cost per success (mô phỏng, VND): 27.86
