@@ -68,3 +68,9 @@ Mỗi người làm trên branch riêng, tạo Pull Request và được ít nh�
 Về báo cáo, mỗi người viết phần kiến trúc hoặc kết quả mình phụ trách. TV4 tổng hợp, nhưng quyết định cuối cùng trong ADR cần được cả nhóm thống nhất.
 
 **Kết luận:** Mình đánh giá đây là phương án chia hợp lý nhất cho 4 người vì có 3 đầu việc code độc lập, một đầu việc kiểm chứng chất lượng, và cả nhóm đều có đóng góp kỹ thuật rõ ràng. Đặc biệt, đừng để TV4 chỉ làm báo cáo: người này cần thực sự viết test và thực hiện evaluation để khối lượng công việc tương xứng.
+
+## Flow trước khi code
+```
+git fetch origin
+git rebase origin/main
+```
