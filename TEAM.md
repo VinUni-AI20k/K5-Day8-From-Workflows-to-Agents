@@ -11,7 +11,7 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 | Nguyễn Hữu Thịnh | 2A202603726 | nht702812@gmail.com | huuthinh812 | Workflow (Core Developer), Shape A |
 |   2 |        |      |       |        |         |
 
 Gợi ý chia vai:
@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Nguyễn Hữu Thịnh (2A202603726) | Workflow (Core Developer), Shape A | `1484656` feat(workflow): implement shape A deterministic workflow + crash report | Chưa thêm test mới. Chạy pass 62 student test workflow trong `tests/test_public_matrix.py` (T01–T14, T11, T12) |
 
 ## Cá nhân
 
@@ -52,3 +52,19 @@ Sao chép mục dưới đây cho từng thành viên.
 ### Bằng chứng
 
 -
+
+## 2A202603726_NguyenHuuThinh
+
+### Phần việc phụ trách
+
+- Người 1, Workflow (Core Developer): Shape A `src/lab8/shapes/workflow.py`. Quy trình xử lý claim tuần tự, nối policy, tracking, compensation và approval qua cổng host `durability.issue_refund`.
+
+### Đóng góp cụ thể
+
+- Commit `1484656`: implement workflow và `src/reports/crash.json`.
+- Báo cáo kiến trúc Workflow (`report/team/workflow_architecture.md`) và báo cáo cá nhân (`report/team/2A202603726_NguyenHuuThinh.md`).
+
+### Bằng chứng
+
+- Student test workflow 62/62, cổng host 54 passed, `crash_safety 20/20`, 0 trace lộ secret.
+- Benchmark public workflow: pass 1.000, pass^5 1.000, var 0, cost/success 27.86 VND mô phỏng (swarm: 0.986, 0.929, 49.57).
