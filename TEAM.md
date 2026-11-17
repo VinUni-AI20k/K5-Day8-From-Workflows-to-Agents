@@ -8,7 +8,7 @@
 - URL repo, nhánh nộp, commit chốt:feat(workflow): 
 Repo:https://github.com/nguyenduong43/K5-L3B-DAY08-Nhom456-FromWorkflowsToAgents.git
 Nhánh nộp:feat(workflow):NguyenTungDuong
-Commit chốt:feat(workflow):feat(workflow):feat(workflow): implement Shape A deterministic workflow and unit tests
+Commit chốt:feat(workflow): implement Shape A deterministic workflow and unit tests
 
 ## Thành viên
 
