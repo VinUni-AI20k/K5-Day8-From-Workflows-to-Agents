@@ -2,15 +2,15 @@
 
 import pytest
 
-from lab9 import graders, trace_case
-
 pytestmark = pytest.mark.student
 
 
 def _eval_db_fact(shape: str) -> bool:
-    case = trace_case.investigate(shape, "C-002", 11)
+    # Lazy import so Lab 8 CI (without requirements-lab9.txt) can still collect tests.
     from pydantic_evals.evaluators import EvaluatorContext
+    from lab9 import graders, trace_case
 
+    case = trace_case.investigate(shape, "C-002", 11)
     ctx = EvaluatorContext(
         name="C-002@11",
         inputs={"claim_id": "C-002", "seed": 11},
