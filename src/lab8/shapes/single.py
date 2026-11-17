@@ -35,6 +35,8 @@ from lab8.trace import Trace
 
 SHAPE = "single"
 MAX_STEPS = 8
+# Order-scoped read tools the agent may pick. issue_refund is never in this set.
+AGENT_TOOLS = ("lookup_order", "lookup_refund_history", "compute_compensation")
 
 
 def run_claim(
@@ -56,6 +58,7 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
     trace = Trace(make_run_id(SHAPE, claim_id, seed))
 
     def done(status: str, proposal: int, reason: str | None) -> RunResult:
+        # The model only drafts the reply text; status and amount are already fixed by code.
         complete(budget, seed=seed, purpose="draft", prompt=f"status={status} proposal={proposal}")
         trace.add("decision", {"status": status, "proposal_amount": proposal, "reason": reason})
         return finish(
@@ -70,12 +73,15 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
             error_reason=reason,
         )
 
+    # Allowlisted claim view: no parent_secret, no raw headers.
     budget.add_tool(tool_cost())
     claim = get_claim_view(conn, claim_id)
     if not claim["found"]:
         trace.add("error", {"reason": "unknown_claim"})
         return done("failed", 0, "unknown_claim")
 
+    # The ticket is user data. The agent may read it, but every number it acts on
+    # comes from a read tool. The ticket itself is never written to the trace.
     # What the agent is allowed to see. The ticket is user data: the agent may read it
     # for tone, but every number it acts on comes from a read tool.
     observation = {
@@ -98,6 +104,7 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
 
     if loop["stopped"] == "step_cap":
         return done("failed", 0, "step_cap")
+    if final.get("status") in ("needs_info", "escalated"):
     if final["status"] in ("needs_info", "escalated"):
         return done(final["status"], 0, final.get("reason"))
 
@@ -110,6 +117,8 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
     if proposal <= 0:
         return done("denied", 0, quote["reason"])
 
+    # Host gate is the only writer. Full quote (host subtracts earlier refunds on the order).
+    # crash_at is forwarded; InjectedCrash is re-raised after flushing the trace.
     try:
         outcome = durability.issue_refund(conn, claim_id, proposal, crash_at=crash_at)
     except durability.InjectedCrash:
@@ -129,10 +138,16 @@ def _make_decide(budget: Budget, trace: Trace, *, seed: int, memory: dict[str, A
         claim = seen.get("claim") or {}
         last_tool = seen.get("last_tool")
         last = seen.get("last_result") or {}
+        steps = memory.setdefault("steps", [])
         complete(
             budget,
             seed=seed,
             purpose="react",
+            prompt=json.dumps({"last_tool": last_tool, "step": len(steps)}),
+        )
+        steps.append(last_tool)
+
+        # Observe the last tool result.
             prompt=json.dumps({"last_tool": last_tool, "step": len(memory.get("steps", []))}),
         )
         memory.setdefault("steps", []).append(last_tool)
@@ -151,6 +166,15 @@ def _make_decide(budget: Budget, trace: Trace, *, seed: int, memory: dict[str, A
             trace.add("observe", {"tool": last_tool, "quote": safe_dump(last)})
             return {"final": {"status": "quote_ready"}}
 
+        # Pick the next action. Never take an order id from the ticket text.
+        if not claim.get("order_id"):
+            return {"final": {"status": "needs_info", "reason": "missing_order_id"}}
+        scope = {"order_id": claim["order_id"], "principal_id": claim["principal_id"]}
+        if "order" not in memory:
+            return _act(trace, "lookup_order", scope)
+        if "history" not in memory:
+            return _act(trace, "lookup_refund_history", scope)
+        # Quote from the DB order row, not from delay numbers or clauses in the ticket.
         if not claim.get("order_id"):
             return {"final": {"status": "needs_info", "reason": "missing_order_id"}}
         if "order" not in memory:
@@ -166,5 +190,6 @@ def _make_decide(budget: Budget, trace: Trace, *, seed: int, memory: dict[str, A
 
 
 def _act(trace: Trace, tool: str, args: dict[str, Any]) -> dict[str, Any]:
+    assert tool in AGENT_TOOLS, tool
     trace.add("act", {"tool": tool})
     return {"tool": tool, "args": args}
