@@ -11,7 +11,7 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 | Lê Hải Lân | 2A202603915 | lehailan110@gmail.com | laaaaanleeeee | workflow |
 |   2 |        |      |       |        |         |
 
 Gợi ý chia vai:
@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Lê Hải Lân | workflow | #update workflow | test_public_matrix.py::test_public_single_run_cases[workflow-*], test_t11, test_t12 |
 
 ## Cá nhân
 
