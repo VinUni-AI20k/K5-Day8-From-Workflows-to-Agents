@@ -5,7 +5,7 @@
 - Tên nhóm: Apollo
 - Lớp: L3A
 - Repo nhóm: `K5-L3A-DAY08-Apollo-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: https://github.com/dungpham108/K5-L3A-DAY08-Apollo-FromWorkflowsToAgents / nhánh: thanhtung
+- URL repo, nhánh nộp, commit chốt: https://github.com/dungpham108/K5-L3A-DAY08-Apollo-FromWorkflowsToAgents / nhánh: tranthanhtung
 
 ## Thành viên
 
