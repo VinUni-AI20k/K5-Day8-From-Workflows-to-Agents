@@ -40,7 +40,7 @@ Gợi ý chia vai:
 | --- | --- | --- | --- |
 | Trường Giang (`vtgiang213`) | Workflow + Orchestrator + Tích hợp | `694672e`, `d64c2c3` | `src/tests/test_team_shapes.py` |
 | Đinh Quốc Việt (`KemmVSAI`) | Single agent | `abff74b`, `dff1807` | `src/tests/test_team_shapes.py` |
-| Vũ Quang Hải (`HaiVuQ`) | An toàn ledger + đánh giá | `pending` | `src/tests/test_team_shapes.py` |
+| Vũ Quang Hải (`HaiVuQ`) | An toàn ledger + đánh giá | `2f313e1` | `src/tests/test_team_shapes.py` |
 
 ## Cá nhân
 
