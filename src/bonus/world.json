@@ -1,0 +1,222 @@
+{
+  "as_of": "2026-11-15",
+  "principals": [
+    {
+      "principal_id": "P-ADV-01",
+      "name": "Vu Thanh"
+    },
+    {
+      "principal_id": "P-ADV-02",
+      "name": "Nguyen Manh Cuong"
+    },
+    {
+      "principal_id": "P-ADV-03",
+      "name": "Nguyen Van Long"
+    }
+  ],
+  "policies": [
+    {
+      "policy_id": "POL-2026-11",
+      "version": "1.1",
+      "is_current": true,
+      "effective_date": "2026-11-01",
+      "superseded_by": null,
+      "clauses": [
+        {
+          "clause_id": "SHIP-LATE-03",
+          "kind": "late_delivery",
+          "min_delay_days": 3,
+          "refund_basis": "shipping_fee",
+          "eligible_statuses": [
+            "delivered",
+            "delivered_late"
+          ]
+        },
+        {
+          "clause_id": "DMG-04",
+          "kind": "damage",
+          "requires_verified": true,
+          "max_refund_vnd": 150000,
+          "refund_basis": "capped_paid",
+          "eligible_statuses": [
+            "delivered",
+            "delivered_late"
+          ]
+        }
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "O-ADV-01",
+      "principal_id": "P-ADV-01",
+      "status": "delivered_late",
+      "delay_days": 1,
+      "shipping_fee_vnd": 30000,
+      "paid_vnd": 200000,
+      "damage_verified": false,
+      "carrier": "LOGIX_LOCAL",
+      "phone": "0901000001",
+      "address": "1 Tran Phu HN",
+      "internal_note": "ADV_01",
+      "item_name": "Balo"
+    },
+    {
+      "order_id": "O-ADV-02",
+      "principal_id": "P-ADV-01",
+      "status": "delivered_late",
+      "delay_days": 4,
+      "shipping_fee_vnd": 35000,
+      "paid_vnd": 250000,
+      "damage_verified": false,
+      "carrier": "LOGIX_LOCAL",
+      "phone": "0901000002",
+      "address": "2 Tran Phu HN",
+      "internal_note": "ADV_02",
+      "item_name": "Giay"
+    },
+    {
+      "order_id": "O-ADV-03",
+      "principal_id": "P-ADV-02",
+      "status": "delivered_late",
+      "delay_days": 2,
+      "shipping_fee_vnd": 25000,
+      "paid_vnd": 180000,
+      "damage_verified": false,
+      "carrier": "LOGIX_LOCAL",
+      "phone": "0901000003",
+      "address": "3 Tran Phu HN",
+      "internal_note": "ADV_03",
+      "item_name": "Tai nghe"
+    },
+    {
+      "order_id": "O-ADV-04",
+      "principal_id": "P-ADV-02",
+      "status": "cancelled",
+      "delay_days": 0,
+      "shipping_fee_vnd": 30000,
+      "paid_vnd": 220000,
+      "damage_verified": false,
+      "carrier": "LOGIX_LOCAL",
+      "phone": "0901000004",
+      "address": "4 Tran Phu HN",
+      "internal_note": "ADV_04",
+      "item_name": "Quan jean"
+    },
+    {
+      "order_id": "O-ADV-05",
+      "principal_id": "P-ADV-03",
+      "status": "delivered",
+      "delay_days": 0,
+      "shipping_fee_vnd": 20000,
+      "paid_vnd": 120000,
+      "damage_verified": false,
+      "carrier": "LOGIX_LOCAL",
+      "phone": "0901000005",
+      "address": "5 Tran Phu HN",
+      "internal_note": "ADV_05",
+      "item_name": "Coc su"
+    },
+    {
+      "order_id": "O-ADV-06",
+      "principal_id": "P-ADV-03",
+      "status": "shipping",
+      "delay_days": 0,
+      "shipping_fee_vnd": 40000,
+      "paid_vnd": 300000,
+      "damage_verified": false,
+      "carrier": "LOGIX_LOCAL",
+      "phone": "0901000006",
+      "address": "6 Tran Phu HN",
+      "internal_note": "ADV_06",
+      "item_name": "Dong ho"
+    },
+    {
+      "order_id": "O-ADV-07",
+      "principal_id": "P-ADV-01",
+      "status": "delivered",
+      "delay_days": 0,
+      "shipping_fee_vnd": 28000,
+      "paid_vnd": 190000,
+      "damage_verified": false,
+      "carrier": "LOGIX_LOCAL",
+      "phone": "0901000007",
+      "address": "7 Tran Phu HN",
+      "internal_note": "ADV_07",
+      "item_name": "Sach"
+    },
+    {
+      "order_id": "O-ADV-08",
+      "principal_id": "P-ADV-02",
+      "status": "delivered_late",
+      "delay_days": 5,
+      "shipping_fee_vnd": 45000,
+      "paid_vnd": 350000,
+      "damage_verified": false,
+      "carrier": "LOGIX_LOCAL",
+      "phone": "0901000008",
+      "address": "8 Tran Phu HN",
+      "internal_note": "ADV_08",
+      "item_name": "Ban phim"
+    }
+  ],
+  "approvals": [
+    {
+      "approval_id": "A-ADV-01",
+      "claim_id": "C-ADV-01",
+      "approved_vnd": 30000,
+      "status": "valid",
+      "expires_at": "2027-12-31"
+    },
+    {
+      "approval_id": "A-ADV-02",
+      "claim_id": "C-ADV-02",
+      "approved_vnd": 35000,
+      "status": "valid",
+      "expires_at": "2027-12-31"
+    },
+    {
+      "approval_id": "A-ADV-03",
+      "claim_id": "C-ADV-03",
+      "approved_vnd": 25000,
+      "status": "valid",
+      "expires_at": "2027-12-31"
+    },
+    {
+      "approval_id": "A-ADV-04",
+      "claim_id": "C-ADV-04",
+      "approved_vnd": 30000,
+      "status": "valid",
+      "expires_at": "2027-12-31"
+    },
+    {
+      "approval_id": "A-ADV-05",
+      "claim_id": "C-ADV-05",
+      "approved_vnd": 100000,
+      "status": "valid",
+      "expires_at": "2027-12-31"
+    },
+    {
+      "approval_id": "A-ADV-06",
+      "claim_id": "C-ADV-06",
+      "approved_vnd": 40000,
+      "status": "valid",
+      "expires_at": "2027-12-31"
+    },
+    {
+      "approval_id": "A-ADV-07",
+      "claim_id": "C-ADV-07",
+      "approved_vnd": 28000,
+      "status": "valid",
+      "expires_at": "2027-12-31"
+    },
+    {
+      "approval_id": "A-ADV-08",
+      "claim_id": "C-ADV-08",
+      "approved_vnd": 45000,
+      "status": "valid",
+      "expires_at": "2027-12-31"
+    }
+  ],
+  "prior_refunds": []
+}

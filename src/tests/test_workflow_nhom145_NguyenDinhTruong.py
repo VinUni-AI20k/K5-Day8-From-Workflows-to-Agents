@@ -27,7 +27,7 @@ class WorkflowTest(unittest.TestCase):
             conn.close()
 
             with (
-                patch("lab8.shapes.workflow.tools.tool_cost", return_value=0),
+                patch("lab8.shapes.workflow.tool_cost", return_value=0),
                 patch("lab8.trace.Trace.write", autospec=True) as write_trace,
             ):
                 def save_trace(trace):
