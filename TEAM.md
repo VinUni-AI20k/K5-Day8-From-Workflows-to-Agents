@@ -26,7 +26,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Người 3 | Orchestrator (`src/lab8/shapes/orchestrator.py`) | (điền hash sau khi commit) | `src/tests/test_orchestrator_own.py` (16 test); 62 student test orchestrator xanh |
+| Người 3 | Orchestrator (`src/lab8/shapes/orchestrator.py`) | `906e466` | `src/tests/test_orchestrator_own.py` (16 test); 62 student test orchestrator xanh |
 
 ## Cá nhân
 

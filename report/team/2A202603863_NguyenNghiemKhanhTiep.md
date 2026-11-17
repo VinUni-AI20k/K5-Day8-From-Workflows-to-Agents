@@ -13,7 +13,7 @@ Người 3 — Shape C `orchestrator`: `src/lab8/shapes/orchestrator.py`, test r
 
 ## 3. Đóng góp cụ thể
 
-- Commit chính: (điền hash sau khi commit)
+- Commit chính: `906e466` — feat: implement orchestrator shape with read-only investigators and add tests
 - Viết shape orchestrator: dựng handoff có allowlist và chỉ tool đọc, chạy investigator chỉ đọc, orchestrator tự gọi `durability.issue_refund` với quote đầy đủ và `crash_at`.
 - Quyết định kỹ thuật:
   - Tiền lấy từ `compute_compensation` trên dòng order, không dùng ngày trễ trong ticket (tránh điểm yếu của swarm tham chiếu ở seed 55).
@@ -27,7 +27,7 @@ Người 3 — Shape C `orchestrator`: `src/lab8/shapes/orchestrator.py`, test r
 - `python -m pytest -q -m student -o addopts= -k orchestrator`: 62 passed.
 - `python -m pytest -q`: xanh (70 passed).
 - `python -m lab8.crash_test --count 20 --out reports/crash.json`: `crash_safety 20/20`.
-- Link commit: (điền sau khi push)
+- Link commit: https://github.com/trongnghia2304/K5-L3B-DAY08-ClaudePro-FromWorkflowsToAgents/commit/906e466682931116317388320985e489fe06d3e5
 
 ## 5. Công cụ AI đã dùng
 
