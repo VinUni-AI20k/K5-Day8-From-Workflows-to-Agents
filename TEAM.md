@@ -11,7 +11,7 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |    Mai Lê Bá Vương    |   2A202603872   |   26ai.vuongmlb@vinuni.edu.vn    |    bavuong2005    |         |
+|   1 |    Mai Lê Bá Vương    |   2A202603872   |   26ai.vuongmlb@vinuni.edu.vn    |    bavuong2005    | Swarm reference, đối chứng và phân tích benchmark |
 | 2 | Cung Đức Anh | 2A202603814 | 26ai.anhcd2@vinuni.edu.vn | cungducanh2712 |  |
 | 3 | Phạm Thanh An | 2A202603913 | 26ai.anpt3@vinuni.edu.vn | thanhanbk02 |  |
 | 4 | Đỗ Quốc Khánh | 2A202603823 | 26ai.khanhdq2@vinuni.edu.vn | dqk2210 |  |
@@ -27,7 +27,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Mai Lê Bá Vương | Swarm reference, đối chứng và phân tích benchmark | 9f7faa6 | `src/tests/test_swarm_approval_seed55.py` |
 
 ## Cá nhân
 
