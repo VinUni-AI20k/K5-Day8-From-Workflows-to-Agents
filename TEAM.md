@@ -15,7 +15,7 @@
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Huỳnh Văn Cường | 2A202603866 |  | cuong-huynh | Workflow |
-|   2 |        |      |       |        | Single agent |
+|   2 | Đào Văn Hiệp | 2A202603813 | 26ai.hiepdv3@vinuni.edu.vn | [daohiep2903](https://github.com/daohiep2903) | Single agent |
 |   3 | Nguyễn Như Duy An | 2A202603783 |       |        | Orchestrator và handoff |
 |   4 |        |      |       |        | Kiểm thử và an toàn |
 |   5 |        |      |       |        | Nhóm trưởng, tích hợp và đánh giá |
@@ -71,7 +71,7 @@ Các mốc trên là lịch lab mẫu, không phải deadline nộp bài. Deadli
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 | Huỳnh Văn Cường | Workflow | ce1d813 | `test_workflow_owner.py` (C-002 ticket sai ngày; C-004 thiếu order_id; C-005 ngoài principal) |
-| | Single agent | | |
+| Đào Văn Hiệp — 2A202603813 | Single agent, ReAct tối đa 8 bước, tool đọc, budget, trace và tích hợp host hoàn tiền | [1b1469c](https://github.com/tundut/K5-L3B-DAY08-ABC-FromWorkflowsToAgents/commit/1b1469ce65b345666314cee04f4528b497e8ebc8) | `src/tests/test_single.py` — 13 test pass, gồm giới hạn bước, chặn tool ghi, ticket “ignore policy”, quote đầy đủ, crash/resume và conflict. Ma trận student riêng Single đạt 62/62. |
 | Nguyễn Như Duy An | Orchestrator và handoff | `src/lab8/shapes/orchestrator.py` | `src/tests/test_shape_orchestrator.py` |
 | | Kiểm thử và an toàn | | |
 | | Tích hợp và đánh giá | | |
@@ -86,7 +86,50 @@ report/team/MSSV_HoTen.md
 
 Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
-Sao chép mục dưới đây cho từng thành viên.
+## 2A202603813_DaoVanHiep
+
+### Phần việc phụ trách
+
+- Triển khai shape B trong `src/lab8/shapes/single.py`.
+- Viết test trong `src/tests/test_single.py`.
+- Bổ sung mô tả ReAct, budget, chi phí và kết quả kiểm thử Single vào báo cáo nhóm.
+
+### Đóng góp cụ thể
+
+- Đọc claim qua `get_claim_view`, xử lý claim không tồn tại và thiếu mã đơn.
+- Dùng `run_react(max_steps=8, worker=True)`, đọc order và tính quote bằng `compute_compensation`.
+- Ghi model call, token và chi phí mô phỏng vào `Budget`, ghi trace chọn lọc và trả kết quả bằng `finish`.
+- Gọi `durability.issue_refund` sau vòng đọc, truyền quote đầy đủ và `crash_at`. Xử lý thành công, approval bị từ chối và conflict số tiền.
+- Kiểm tra ticket đối kháng, giới hạn bước, chặn tool ghi, trần hoàn theo đơn, retry và cả ba điểm crash/resume.
+- Dùng Codex hỗ trợ triển khai và chạy test. Chi tiết công cụ AI được ghi trong báo cáo cá nhân.
+
+### Bằng chứng
+
+- Báo cáo cá nhân tại [2A202603813_DaoVanHiep.md](report/team/2A202603813_DaoVanHiep.md).
+- Nhánh bàn giao là `hiep-sigle-agent`, commit code và test `1b1469ce65b345666314cee04f4528b497e8ebc8`.
+- Kết quả đã chạy gồm 13 test bổ sung pass, 62 test student riêng Single pass và bộ host đạt 67 passed.
+- Run id minh họa `R-single-C-014-s11`, quote 150.000 VND, refund thực tế 120.000 VND và một audit committed.
+- Logic chọn tool hiện do callback Python quyết định theo observation. Output MockLLM chưa được dùng để phân tích action.
+
+### Kết quả crash suite đã chạy
+
+Kết quả crash suite được chuyển từ `src/reports/crash.json` sang bảng dưới đây, đạt tổng cộng **20/20**. Suite có sẵn kiểm host và swarm tham chiếu. Test riêng của Single kiểm cả ba điểm crash và retry trong `src/tests/test_single.py`, cùng T12 trong ma trận student.
+
+| Kịch bản | Mã kiểm tra | Kết quả |
+| --- | --- | --- |
+| Crash trước khi ghi effect | CR-01 đến CR-05 | 5/5 |
+| Crash sau effect, trước checkpoint | CR-06 đến CR-12 | 7/7 |
+| Crash sau checkpoint | CR-13 đến CR-17 | 5/5 |
+| Retry với số tiền xung đột | CR-18 | 1/1 |
+| Retry khi thiếu approval | CR-19 | 1/1 |
+| Swarm crash sau effect, trước checkpoint | CR-20 | 1/1 |
+| Tổng | CR-01 đến CR-20 | 20/20 |
+
+Khi tổng hợp bài nộp, thành viên phụ trách kiểm thử sinh lại file JSON bằng lệnh dưới đây trong thư mục `src` để đáp ứng bộ kiểm tra bài nộp.
+
+```powershell
+python -m lab8.crash_test --count 20 --out reports/crash.json
+```
 
 ## 2A202603866_HuynhVanCuong
 
@@ -104,3 +147,4 @@ Sao chép mục dưới đây cho từng thành viên.
 - Student matrix: `pytest -q -m student -o addopts= -k workflow` → 62 passed.
 - Owner tests: `pytest -q -m student -o addopts= -k workflow_owner`.
 - Báo cáo cá nhân: `report/team/2A202603866_HuynhVanCuong.md`.
+
