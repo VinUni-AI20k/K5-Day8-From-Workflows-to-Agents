@@ -7,7 +7,7 @@
 - Repo nhóm: `K5-L3B-DAY08-NHOMSH-FromWorkflowsToAgents`
 - URL repo: https://github.com/duhocsinh4to10/K5-L3B-DAY08-NHOMSH-FromWorkflowsToAgents
 - Nhánh nộp: `main`
-- Commit chốt (implementation và benchmark): `7b108e8`
+- Commit triển khai mới nhất: `03f0731`
 
 ## Thành viên
 
@@ -21,7 +21,7 @@
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Tiến Đạt | Ba shape và tích hợp | `7b108e8` | `src/tests/test_shape_unknown_claim.py` — kiểm tra claim không tồn tại và trace trên bốn shape |
+| Nguyễn Tiến Đạt | Ba shape và tích hợp | `03f0731` | `src/tests/test_shape_unknown_claim.py` — kiểm tra claim lạ, lỗi nội bộ, lỗi mở DB và trace |
 
 ## Cá nhân
 

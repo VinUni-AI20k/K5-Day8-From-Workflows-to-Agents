@@ -3,7 +3,7 @@
 Điền sau dấu `:` trên cùng dòng, không xóa nhãn. Các số benchmark lấy từ `src/reports/benchmark.json`.
 
 - Shape chọn: workflow
-- Commit hash: 7b108e8
+- Commit hash: 03f0731
 - Run id dẫn chứng: R-workflow-C-001-s11
 - Pass rate / pass^5 / seed min-max / variance: 1.000 / 1.000 / 1.000–1.000 / 0.000000 (70/70 public trial)
 - Cost per success (mô phỏng, VND): 27.86

@@ -14,14 +14,14 @@ Triển khai và tích hợp ba shape `workflow`, `single`, `orchestrator`; thê
 
 ## 3. Đóng góp cụ thể
 
-- Commit triển khai và bằng chứng benchmark: `7b108e8`.
+- Commit triển khai: `03f0731`; benchmark public được sinh bằng code ở commit này.
 - Dùng `finish()` để tạo `RunResult`/trace; giữ toàn bộ quyết định tiền và ghi ledger ở host.
 - Thêm `src/tests/test_shape_unknown_claim.py` cho bốn shape.
 
 ## 4. Bằng chứng
 
 - `python -m pytest -q`: 54 passed.
-- `python -m pytest -q -m student -o addopts=`: 252 passed.
+- `python -m pytest -q -m student -o addopts=`: 258 passed.
 - Smoke pass; crash suite `20/20`.
 - Benchmark run id `R-workflow-C-001-s11`; số liệu trong `src/reports/benchmark.json`.
 

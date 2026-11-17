@@ -4,7 +4,7 @@
 
 - Tên nhóm: NHOMSH
 - Thành viên: Nguyễn Tiến Đạt (2A202603922, L3B), xem `TEAM.md`.
-- Commit triển khai và benchmark: `7b108e8`.
+- Commit triển khai: `03f0731`; benchmark public được sinh bằng code ở commit này.
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -29,7 +29,7 @@ Public benchmark: 14 claim × 5 seed × 4 shape = 280 trial. Số liệu lấy t
 | orchestrator | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 56.29 | 5.29 / 6 |
 | swarm | 0.986 | 0.929 | 0.929–1.000 | 0.000816 | 49.57 | 2.80 / 3 |
 
-Swarm có một trial sai ở T02, seed 55: tin số ngày trên ticket thay vì `delay_days` trong order. Crash suite đạt `20/20`. Bộ hidden và grader chính thức không có trong workspace nên chưa chạy; ngưỡng hidden 0.75 chưa được xác nhận. Chọn `workflow` theo benchmark public vì ba shape nhóm viết đều pass 100%, còn workflow có cost/success thấp nhất.
+Swarm có một trial sai ở T02, seed 55: tin số ngày trên ticket thay vì `delay_days` trong order. Host suite đạt 54 passed; student suite đạt 258 passed; crash suite đạt `20/20`. Bộ hidden và grader chính thức không có trong workspace nên chưa chạy; ngưỡng hidden 0.75 chưa được xác nhận. Chọn `workflow` theo benchmark public vì ba shape nhóm viết đều pass 100%, còn workflow có cost/success thấp nhất.
 
 ## 5. Khó khăn và cách xử lý
 
