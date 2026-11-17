@@ -23,6 +23,8 @@ Workflow dùng `finish()` để trả kết quả và ghi trace. Trace ghi quy�
 
 Commit triển khai workflow: [`dda1beb`](https://github.com/dvq2609/K5-L3B-DAY08-C5-FromWorkflowsToAgents/commit/dda1beb). File test bổ sung hiện cần được commit cùng các thay đổi liên quan.
 
+Tổng hợp và hoàn thiện group report
+
 ## 4. Bằng chứng
 
 Các lệnh chạy trong `src/`:
