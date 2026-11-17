@@ -21,7 +21,7 @@ Shape A — `workflow` (`src/lab8/shapes/workflow.py`): quy trình Python cố �
 
 - `python -m pytest -q -m student -o addopts= -k workflow` → 62 passed.
 - `python -m pytest -q -m student -o addopts= -k workflow_owner` → 3 passed.
-- Commit hash: _(điền sau khi push)_.
+- Commit hash: ce1d813.
 
 ## 5. Công cụ AI đã dùng
 

@@ -70,7 +70,7 @@ Các mốc trên là lịch lab mẫu, không phải deadline nộp bài. Deadli
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Huỳnh Văn Cường | Workflow | _(cập nhật sau khi push)_ | `test_workflow_owner.py` (C-002 ticket sai ngày; C-004 thiếu order_id; C-005 ngoài principal) |
+| Huỳnh Văn Cường | Workflow | ce1d813 | `test_workflow_owner.py` (C-002 ticket sai ngày; C-004 thiếu order_id; C-005 ngoài principal) |
 | | Single agent | | |
 | | Orchestrator và handoff | | |
 | | Kiểm thử và an toàn | | |
