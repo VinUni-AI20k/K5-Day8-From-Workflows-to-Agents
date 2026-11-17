@@ -13,7 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |        |      |       |        | Workflow |
 |   2 |        |      |       |        | Single agent |
-|   3 |        |      |       |        | Orchestrator và handoff |
+|   3 | Nguyễn Như Duy An | 2A202603783 |       |        | Orchestrator và handoff |
 |   4 |        |      |       |        | Kiểm thử và an toàn |
 |   5 |        |      |       |        | Nhóm trưởng, tích hợp và đánh giá |
 
@@ -69,7 +69,7 @@ Các mốc trên là lịch lab mẫu, không phải deadline nộp bài. Deadli
 | --- | --- | --- | --- |
 | | Workflow | | |
 | | Single agent | | |
-| | Orchestrator và handoff | | |
+| Nguyễn Như Duy An | Orchestrator và handoff | `src/lab8/shapes/orchestrator.py` | `src/tests/test_shape_orchestrator.py` |
 | | Kiểm thử và an toàn | | |
 | | Tích hợp và đánh giá | | |
 
