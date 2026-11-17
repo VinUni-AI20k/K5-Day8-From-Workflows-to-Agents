@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Xuân Đạt (2A202603958) | Workflow + Integration | `pending_commit` (`src/lab8/shapes/workflow.py`) | `src/tests/test_compensation.py::test_workflow_ignores_ticket_delay_override_across_seeds` |
+| Nguyễn Xuân Đạt (2A202603958) | Workflow + Integration | `4f18f2a` (`src/lab8/shapes/workflow.py`) | `src/tests/test_compensation.py::test_workflow_ignores_ticket_delay_override_across_seeds` |
 
 ## Cá nhân
 
@@ -52,6 +52,7 @@ Sao chép mục dưới đây cho từng thành viên.
 
 ### Bằng chứng
 
+- Commit chính: `4f18f2a`
 - Code: `src/lab8/shapes/workflow.py` (pass 62/62 test student `-k workflow`).
 - Test: `src/tests/test_compensation.py::test_workflow_ignores_ticket_delay_override_across_seeds`.
 - Báo cáo cá nhân: `report/team/2A202603958_NguyenXuanDat.md`.

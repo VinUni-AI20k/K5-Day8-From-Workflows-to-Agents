@@ -26,6 +26,7 @@
 
 ## 4. Bằng chứng
 
+- **Commit chính:** `4f18f2a` (`feat(workflow): implement shape A workflow and add delay override test`)
 - **File code:** `src/lab8/shapes/workflow.py`
 - **Test đã thêm:** `src/tests/test_compensation.py::test_workflow_ignores_ticket_delay_override_across_seeds`
 - **Kết quả kiểm thử trên máy cá nhân:**
