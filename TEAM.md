@@ -16,7 +16,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Huỳnh Văn Cường | 2A202603866 |  | cuong-huynh | Workflow |
 |   2 |        |      |       |        | Single agent |
-|   3 |        |      |       |        | Orchestrator và handoff |
+|   3 | Nguyễn Như Duy An | 2A202603783 |       |        | Orchestrator và handoff |
 |   4 |        |      |       |        | Kiểm thử và an toàn |
 |   5 |        |      |       |        | Nhóm trưởng, tích hợp và đánh giá |
 
@@ -72,7 +72,7 @@ Các mốc trên là lịch lab mẫu, không phải deadline nộp bài. Deadli
 | --- | --- | --- | --- |
 | Huỳnh Văn Cường | Workflow | ce1d813 | `test_workflow_owner.py` (C-002 ticket sai ngày; C-004 thiếu order_id; C-005 ngoài principal) |
 | | Single agent | | |
-| | Orchestrator và handoff | | |
+| Nguyễn Như Duy An | Orchestrator và handoff | `src/lab8/shapes/orchestrator.py` | `src/tests/test_shape_orchestrator.py` |
 | | Kiểm thử và an toàn | | |
 | | Tích hợp và đánh giá | | |
 
