@@ -2,17 +2,18 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm: OXYZ
+- Lớp: L3B
+- Repo nhóm: `K5-L3B-DAY08-OXYZ-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo, nhánh nộp, commit chốt: `https://github.com/vtgiang213/K5-L3B-DAY08-OXYZ-FromWorkflowsToAgents`, nhánh `main`
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 | Trường Giang | - | - | vtgiang213 | Workflow + Orchestrator + Tích hợp |
 |   2 | Đinh Quốc Việt | 2A202603885 | 26ai.vietdq3@vinuni.edu.vn | KemmVSAI | Single agent |
+|   3 | Vũ Quang Hải | 2A202603935 | haivq25@gmail.com | HaiVuQ | An toàn ledger + đánh giá |
 
 | Người | Phần việc chính | Đầu ra và kiểm tra |
 |---|---|---|
@@ -37,7 +38,9 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Trường Giang (`vtgiang213`) | Workflow + Orchestrator + Tích hợp | `694672e`, `d64c2c3` | `src/tests/test_team_shapes.py` |
+| Đinh Quốc Việt (`KemmVSAI`) | Single agent | `abff74b`, `dff1807` | `src/tests/test_team_shapes.py` |
+| Vũ Quang Hải (`HaiVuQ`) | An toàn ledger + đánh giá | `pending` | `src/tests/test_team_shapes.py` |
 
 ## Cá nhân
 
