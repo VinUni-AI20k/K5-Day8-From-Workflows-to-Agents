@@ -3,15 +3,15 @@
 ## Thông tin nhóm
 
 - Tên nhóm:
-- Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- Lớp: L3B
+- Repo nhóm: `K5-L3B-DAY08-NhomChokeVy-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
 - URL repo, nhánh nộp, commit chốt:
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 | Phạm Lê Chuẩn | 2A202603784 | lechuanpham@gmail.com | 22520160 | workflow + integration |
 |   2 |        |      |       |        |         |
 
 Gợi ý chia vai:
@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Phạm Lê Chuẩn | workflow + integration | Chưa commit (working tree) | `src/tests/test_workflow_integration.py` (3 passed); student workflow matrix (62 passed) |
 
 ## Cá nhân
 
@@ -39,16 +39,16 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Sao chép mục dưới đây cho từng thành viên.
 
-## MSSV_HoTen
+## 2A202603784_PhamLeChuan
 
 ### Phần việc phụ trách
 
--
+- Phụ trách shape `workflow` và tích hợp với host: đọc claim/order qua tool, tính quote theo order, gọi `durability.issue_refund` bằng quote đầy đủ, và trả kết quả/trace theo contract chung.
 
 ### Đóng góp cụ thể
 
--
+- Triển khai workflow xác định: đọc claim và order qua tool, lấy quote từ dữ liệu order, chuyển nguyên quote cho host ghi refund, và hoàn tất các nhánh status bằng helper dùng chung.
 
 ### Bằng chứng
 
--
+- Mã: `src/lab8/shapes/workflow.py`; test riêng `src/tests/test_workflow_integration.py`: 3 passed; `python -m pytest -q -m student -o addopts= -k workflow`: 62 passed; `python -m lab8.smoke`: pass.
