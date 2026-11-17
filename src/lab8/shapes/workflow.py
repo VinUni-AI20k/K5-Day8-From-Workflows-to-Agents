@@ -19,11 +19,42 @@ def run_claim(
     store_path: str,
     crash_at: str | None = None,
 ) -> RunResult:
-    conn = connect(store_path)
+    shape = "workflow"
     try:
-        return _run(conn, claim_id, seed=seed, crash_at=crash_at)
+        conn = connect(store_path)
+    except Exception:
+        return _failed_result(shape, claim_id, seed)
+    try:
+        try:
+            return _run(conn, claim_id, seed=seed, crash_at=crash_at)
+        except InjectedCrash:
+            raise
+        except Exception:
+            return _failed_result(shape, claim_id, seed, conn)
     finally:
         conn.close()
+
+
+def _failed_result(
+    shape: str, claim_id: str, seed: int, conn: sqlite3.Connection | None = None
+) -> RunResult:
+    budget = Budget()
+    trace = Trace(make_run_id(shape, claim_id, seed))
+    trace.add("error", {"reason": "internal_error"})
+    if conn is not None:
+        try:
+            return finish(conn, shape=shape, claim_id=claim_id, seed=seed, status="failed",
+                          proposal_amount=0, budget=budget, trace=trace,
+                          error_reason="internal_error")
+        except Exception:
+            pass
+    path = trace.write()
+    return RunResult(
+        run_id=trace.run_id, claim_id=claim_id, shape=shape, seed=seed, status="failed",
+        proposal_amount=0, refund_effects=[], committed_audit_count=0,
+        model_calls=0, tool_calls=0, input_tokens=0, output_tokens=0,
+        cost_estimate=0.0, trace_path=path, error_reason="internal_error",
+    )
 
 
 def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | None) -> RunResult:
