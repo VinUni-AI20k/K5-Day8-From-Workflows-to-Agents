@@ -2,17 +2,17 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm: Delta
+- Lớp: L3B
+- Repo nhóm: `K5-L3B-DAY08-Delta-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo, nhánh nộp, commit chốt: https://github.com/liliustwocout/K5-L3B-DAY08-Delta-FromWorkflowsToAgents | nhánh phát triển TV1: `feat/tv1-workflow-orchestrator` (merge vào `main`) | commit chốt: `<cập nhật sau khi commit>`
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
+|   1 | `<Điền Họ tên TV1>` | `<Điền MSSV>` | `<Điền Email>` | `<Điền GitHub>` | TV1: Shape A (`workflow.py`), Shape C (`orchestrator.py`), test workflow/orchestrator/handoff, `crash_test` + `benchmark` + `check_submission`, `TEAM.md` & `decision_adr.md` |
+|   2 | `<Điền Họ tên TV2>` | `<Điền MSSV>` | `<Điền Email>` | `<Điền GitHub>` | TV2: Shape B (`single.py`) & test liên quan |
 
 Gợi ý chia vai:
 
@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| TV1 (`<Họ tên - MSSV>`) | Shape A (`workflow.py`), Shape C (`orchestrator.py`), benchmark/crash/check_submission, `TEAM.md` & `decision_adr.md` | `<cập nhật hash sau khi commit trên feat/tv1-workflow-orchestrator>` | `src/tests/test_workflow_orchestrator.py` |
 
 ## Cá nhân
 
