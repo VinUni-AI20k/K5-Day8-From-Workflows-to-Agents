@@ -46,8 +46,9 @@ Phần này nối tiếp phần mini research ở buổi lý thuyết (slide 62�
 
 Giảm tổng cộng 70.40 VND mô phỏng (khoảng 3.48%). `steps` là số event trong trace, không phải `Budget.steps`; vì workflow không trace lời gọi draft riêng nên steps không giảm. Thí nghiệm không đổi topology: nó cho thấy một thành phần phụ có thể đổi cost mà không đổi kết quả nghiệp vụ.
 
-- Giới hạn: workflow hiện gọi nhưng không đưa nội dung draft vào `RunResult`; thí nghiệm không đo chất lượng câu trả lời khách hàng. MockLLM không phải model sản xuất, latency là `unavailable`. Không kết luận multi-agent luôn đắt hơn hoặc workflow luôn tốt hơn. Chưa có kết quả hidden hay quyết định kiến trúc cuối.
+- Giới hạn: workflow hiện gọi nhưng không đưa nội dung draft vào `RunResult`; thí nghiệm không đo chất lượng câu trả lời khách hàng. MockLLM không phải model sản xuất, latency là `unavailable`. Không kết luận multi-agent luôn đắt hơn hoặc workflow luôn tốt hơn. Chưa có kết quả hidden; ADR sau khi tích hợp đủ ba shape chọn workflow dựa trên benchmark public bốn shape, không chỉ dựa vào ablation này.
 - Nguồn: đã đọc bản gốc liên kết ở trên ngày 2026-11-17. Chưa xác minh được paper có đúng tên *Rethinking Evaluation of MAS Efficiency* trong mẫu; không gán kết luận cho nguồn đó. Cần nhóm/coach xác nhận nếu bắt buộc dùng đúng paper trong slide.
 - Helper nằm trong `src/bonus/` vì đây là vùng mở rộng của lab; thí nghiệm phục vụ research card bắt buộc, không đăng ký topic bonus hoặc tạo `bonus_report.md`.
+- Provenance: report ablation tại commit `175d770`, giữ nguyên sau merge đủ shape tại `4f2060d` vì workflow/helper không đổi. Phiên hoàn thiện chỉ chạy lại benchmark chính và crash suite, không khai đã chạy lại ablation.
 
 Muốn đi xa hơn một ablation để lấy điểm cộng thì xem [docs/bonus_topics.md](../../docs/bonus_topics.md).

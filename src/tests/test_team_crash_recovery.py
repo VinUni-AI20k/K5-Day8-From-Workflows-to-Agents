@@ -15,7 +15,7 @@ from lab8.shapes import SHAPES
 from tests.conftest import BY_ID
 
 
-@pytest.mark.parametrize("shape", ["workflow", "single"])
+@pytest.mark.parametrize("shape", ["workflow", "single", "orchestrator"])
 @pytest.mark.parametrize("point", ["before_effect", "after_effect_before_checkpoint", "after_checkpoint"])
 @pytest.mark.parametrize("claim_id,quote,paid", [("C-001", 35000, 35000), ("C-014", 150000, 120000)])
 def test_shape_reopens_and_retries_after_each_crash(public_db, shape, point, claim_id, quote, paid):
@@ -63,7 +63,7 @@ def test_shape_reopens_and_retries_after_each_crash(public_db, shape, point, cla
             conn.close()
 
 
-@pytest.mark.parametrize("shape", ["workflow", "single"])
+@pytest.mark.parametrize("shape", ["workflow", "single", "orchestrator"])
 @pytest.mark.parametrize("approval,reason", [(None, "missing_approval"), ("A-014", "approval_claim_mismatch")])
 def test_shape_repeated_denial_never_writes_money(public_db, shape, approval, reason):
     run_claim = SHAPES[shape]

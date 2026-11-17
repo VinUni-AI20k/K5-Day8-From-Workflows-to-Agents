@@ -1,59 +1,57 @@
 # src/reports/
 
-Mọi lệnh dưới đây chạy trong thư mục `src/`, nên file JSON được ghi vào `src/reports/`.
+## Kết quả hiện tại — đủ bốn shape
 
-Nhóm **commit** các file do công cụ của lab sinh ra. Đây là bằng chứng nộp bài:
+Ngày đánh giá: 2026-11-17. Nhánh `thanh-ledger-evaluation`, mốc nguồn shape `4f2060dc4729fa13d235ef41d4ed88480331b4f8` sau merge orchestrator. Test recovery mới và tài liệu cuối đang chưa commit; chưa tuyên bố đã push bản nộp.
 
-| File | Lệnh tạo | Bắt buộc |
+| Artifact | Nội dung | Kết quả |
 | --- | --- | --- |
-| `benchmark.json` | `python -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json` | Có |
-| `crash.json` | `python -m lab8.crash_test --count 20 --out reports/crash.json` | Có |
-| `hidden_selfcheck.json` | benchmark trên `student_drop/` (xem `src/README.md`, mục Tự kiểm trên bộ hidden) | Không |
-| `bonus_*.json` | script bonus của nhóm | Chỉ khi làm bonus |
+| benchmark.json | 4 shape × 14 claim × 5 seed = 280 trial | Workflow/single/orchestrator 70/70 mỗi shape; swarm 69/70 |
+| crash.json | Suite chính của lab, chủ yếu host và một scenario swarm | 20/20 |
+| research_ablation.json | Workflow bật/tắt draft, 140 trial; giữ report tại 175d770 vì workflow/helper không đổi | Mỗi variant 70/70; tổng tiết kiệm 70.40 VND mô phỏng |
+| hidden_selfcheck.json | Tùy chọn nếu có student_drop | Chưa có dữ liệu hidden local, không tạo/bịa kết quả |
 
-Không sửa tay file JSON. Giảng viên chạy lại đúng các lệnh trên trên máy chấm. Số không khớp thì mục Reproducibility mất điểm. `hidden_grade.json` chỉ giảng viên tạo và bị gitignore.
+Bộ mặc định 195 passed; student 248 passed. Trong đó `tests/test_team_crash_recovery.py` có 24 test cho workflow/single/orchestrator (hai claim × ba crash point và hai scenario approval/shape); `tests/test_research_draft_ablation.py` có 72 test. Student xanh chấp nhận lỗi tham chiếu swarm C-002 seed 55; benchmark vẫn ghi trial đó fail.
 
-## Bằng chứng giữa kỳ — phần Thành, giai đoạn 1–2
+ADR chọn `workflow`: cùng pass rate public với single/orchestrator, mức tự chủ thấp nhất và cost/success 28.862857 VND mô phỏng. Không suy ra đạt hidden >= 0.75. Hash ADR là nguồn shape được đánh giá, không phải commit tương lai của báo cáo.
 
-Ngày chạy: 2026-11-17. Nhánh: `thanh-ledger-evaluation`, phát triển từ `main` commit `20b2fba`. Giai đoạn 1–2 đã được lưu tại commit `175d770`; sau đó merge main tại `1f7d89d`. Các số liệu trong đoạn checkpoint này là lịch sử, không thay cho kết quả sau merge ở dưới.
+## Lệnh tái tạo
 
-- Baseline cũ tại `175d770`: 4 shape × 14 claim × 5 seed = 280 trial. Khi đó single và orchestrator còn stub. Bản cũ có thể xem bằng `git show 175d770:src/reports/benchmark.json`; `benchmark.json` hiện được tạo lại sau merge single.
-- `crash.json`: suite có sẵn đạt 20/20. Suite kiểm host và một kịch bản swarm; độ an toàn workflow được kiểm bổ sung ở `tests/test_team_crash_recovery.py`.
-- `research_ablation.json`: 2 variant × 14 claim × 5 seed = 140 trial; phục vụ research card R4, không phải bài bonus.
+Chạy trong `src/` với Python 3.11.9 của .venv:
 
-Lệnh tái tạo ablation trong `src/`:
+```powershell
+./.venv/Scripts/python.exe -m pytest -q
+./.venv/Scripts/python.exe -m pytest -q -m student -o addopts=
+./.venv/Scripts/python.exe -m lab8.crash_test --count 20 --out reports/crash.json
+./.venv/Scripts/python.exe -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json
+./.venv/Scripts/python.exe -m lab8.check_submission
+```
+
+Ablation (đã chạy tại giai đoạn 1–2, không chạy lại trong phiên hoàn thiện):
 
 ```powershell
 ./.venv/Scripts/python.exe -m lab8.benchmark --shapes workflow,workflow_no_draft --extra-shape workflow_no_draft=bonus.research_draft_ablation:run_claim --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/research_ablation.json
 ```
 
-Chạy tuần tự: helper ablation dùng patch cục bộ trên module workflow, không hỗ trợ chạy song song trong cùng process. Patch được khôi phục kể cả khi crash; variant dùng run id riêng. Hai lời gọi official benchmark có thể ghi lại trace workflow cùng run id, nên không coi trace trong thư mục local là bản lưu bất biến của từng report. JSON là artifact commit; khi cần kiểm trace, chạy lại đúng lệnh.
+Chạy tuần tự: helper dùng scoped patch module workflow, không hỗ trợ gọi song song cùng process; khôi phục patch kể cả khi exception. Variant có tên/run id riêng. Research helper trong bonus/ không đồng nghĩa đăng ký bonus; không tạo bonus_report.md.
 
-Các JSON trên được công cụ tạo tự động. ADR và quyết định kiến trúc vẫn chưa chốt. Không suy ra ngưỡng pass hidden từ số liệu public.
+## Lịch sử và provenance
 
-Kiểm tra cuối giai đoạn 2: `python -m lab8.check_submission` còn **9 FAIL, 1 WARN**. Hai FAIL thuộc single/orchestrator còn stub; bảy FAIL thuộc ADR chưa chốt; WARN là thay đổi chưa commit. Benchmark, crash report và research card đã qua kiểm tra cấu trúc. Checker chỉ kiểm cột research card đã điền, không xác nhận giá trị khoa học của nguồn hoặc ablation.
+| Mốc | Trạng thái |
+| --- | --- |
+| 175d770 | Commit đóng góp giai đoạn 1–2 của Thành: baseline khi single/orchestrator còn stub, crash 20/20, ablation, 156 test mặc định |
+| db22c3b | Mở rộng single: 164 test mặc định, 186 student không gồm orchestrator |
+| 4f2060d | Merge orchestrator, giải quyết TEAM/benchmark bằng giữ đóng góp và chạy lại công cụ; 187 test mặc định, 248 student |
+| Phiên hoàn thiện hiện tại, chưa commit | Mở rộng recovery đủ ba shape, 195 test mặc định, 248 student; tạo lại benchmark/crash và hoàn thiện ADR/tài liệu |
 
-Sau khi nhận orchestrator: mở rộng recovery test sang shape đó, chạy toàn bộ student test, tạo lại benchmark/crash report, hoàn thiện ADR với hash/run id thật, cập nhật báo cáo cuối rồi chạy checker về 0 FAIL. Không suy ra trạng thái push/merge phần Thành chỉ từ các commit local.
+Baseline cũ còn trong Git: `git show 175d770:src/reports/benchmark.json`, `git show db22c3b:src/reports/benchmark.json`. Các con số stub trong đó là lịch sử, không phải trạng thái hiện tại. JSON hiện tại do công cụ tạo, không sửa tay hoặc ghép số liệu.
 
-## Checkpoint hiện tại — sau merge single
+Run id xác định theo shape/claim/seed, không phải batch ID duy nhất. Test/benchmark chạy lại có thể ghi đè trace local cùng tên; khi kiểm trace cần tái tạo đúng lệnh. Commit JSON bằng chứng; không commit traces, SQLite, .venv hoặc student_drop. Chi phí mô phỏng, latency `unavailable`.
 
-Ngày 2026-11-17, sau merge `1f7d89d` trên `thanh-ledger-evaluation`. Code shape dùng để đánh giá là tại mốc merge này; phần cập nhật test/báo cáo đang chưa commit. Commit kỹ thuật giai đoạn trước của Thành là `175d770`.
+## Bàn giao
 
-- `benchmark.json` đã được công cụ tạo lại: 280 trial, workflow và single đều 70/70, swarm 69/70; orchestrator vẫn là stub (0/70). Kết quả baseline cũ nằm trong Git tại `175d770`, không còn là nội dung file hiện tại.
-- `crash.json` được tạo lại, vẫn 20/20; suite chính kiểm host/swarm. Test recovery riêng được mở rộng từ 8 lên 16 cho workflow/single, kiểm ba crash point, mở lại kết nối, resume/retry, C-014 và approval.
-- Bộ mặc định 164 passed, student không gồm orchestrator 186 passed. Không skip/xfailed orchestrator để tuyên bố cả bộ xanh; checkpoint này chủ động chỉ chạy ba shape đã triển khai.
-- Workflow/single cost/success 28.862857 / 29.798571 VND mô phỏng. Bảng và nhận xét tạm thời ở `report/team/decision_adr.md`; bảy trường quyết định cuối vẫn để trống.
-- Research card, helper và `research_ablation.json` giữ nguyên kết quả tại `175d770`; workflow/helper không thay đổi sau merge nên không chạy lại ablation trong checkpoint này.
+Phần evaluation/ADR của Thành đã đánh giá đủ ba shape. Sau khi tự review, thành viên commit phần test và tài liệu cuối; nhóm trưởng tích hợp nhánh vào main, chạy lại cổng kiểm tra trên bản nộp. Cập nhật thông tin commit bàn giao nếu có commit mới; giữ rõ hash nguồn benchmark và không bịa hash.
 
-Lệnh đã chạy trong `src/`, dùng Python 3.11.9 của `.venv`:
+Kiểm tra cuối: `./.venv/Scripts/python.exe -m lab8.check_submission` đạt **0 FAIL, 1 WARN**. WARN duy nhất là thay đổi mới chưa commit; các shape, reports, ADR và research card qua kiểm tra. `git diff --check` không có lỗi whitespace. Không chỉnh checker để bỏ cảnh báo; cần commit thực tế trước bàn giao. Checker không xác nhận đã đạt hidden hoặc việc sử dụng nguồn thay thế đã được coach chấp thuận.
 
-```powershell
-./.venv/Scripts/python.exe -m pytest -q
-./.venv/Scripts/python.exe -m pytest -q -m student -o addopts= -k 'not orchestrator'
-./.venv/Scripts/python.exe -m lab8.crash_test --count 20 --out reports/crash.json
-./.venv/Scripts/python.exe -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json
-```
-
-Giữ nguyên giới hạn: JSON do công cụ sinh, giá mô phỏng, latency `unavailable`, chưa có kết quả hidden hoặc quyết định kiến trúc cuối. Chờ orchestrator để hoàn tất checklist ở trên.
-
-Kiểm tra cuối checkpoint mới: `./.venv/Scripts/python.exe -m lab8.check_submission` → **8 FAIL, 1 WARN**. Một FAIL là orchestrator còn stub, bảy FAIL là các trường ADR cố ý chưa chốt; WARN là cập nhật chưa commit. `git diff --check` không có lỗi whitespace. Chưa commit/push cập nhật sau merge.
+Mỗi thành viên tự xác nhận nội dung báo cáo cá nhân và nộp link repo trên LMS; checker không thay thế việc đọc bài hoặc chứng minh đã đạt hidden.
