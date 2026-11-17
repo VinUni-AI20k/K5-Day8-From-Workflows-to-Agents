@@ -3,28 +3,28 @@
 Điền sau dấu `:` trên cùng dòng, không xóa nhãn. Giảng viên và `python -m lab8.check_submission` (chạy trong `src/`) đọc các dòng này bằng máy. Không đổi tên hay dời file này khỏi `report/team/`.
 `Shape chọn` phải là đúng một trong: `workflow`, `single`, `orchestrator`, `swarm`. Đây là shape được chấm cổng hidden.
 
-- Shape chọn:
-- Commit hash:
-- Run id dẫn chứng:
-- Pass rate / pass^5 / seed min-max / variance:
-- Cost per success (mô phỏng, VND):
-- Crash safety:
-- Secret leak / approval bypass:
+- Shape chọn: workflow
+- Commit hash: c8d9515
+- Run id dẫn chứng: R-workflow-C-014-s11 (phản ví dụ đối chứng: R-swarm-C-002-s55)
+- Pass rate / pass^5 / seed min-max / variance: 1.000 / 1.000 / 1.0-1.0 / 0.0 (src/reports/benchmark.json)
+- Cost per success (mô phỏng, VND): 28.80 (src/reports/benchmark.json)
+- Crash safety: 20/20 (src/reports/crash.json)
+- Secret leak / approval bypass: 0 / 0
 
 Ví dụ một dòng đã điền: `- Shape chọn: workflow`, `- Crash safety: 20/20 (src/reports/crash.json)`.
 
 ## Vì sao shape này
 
-Viết 1 đoạn. So cùng corpus và cùng seed, không so với một lần chạy lẻ.
+Trên cùng bộ dữ liệu `src/data/public_claims.jsonl` (14 claim T01–T14), cùng 5 seed (`11, 22, 33, 44, 55`, tổng 70 trial mỗi shape), cùng `as_of = 2026-11-15` và cùng bảng giá mô phỏng (`src/config/pricing.yaml`), ba shape do nhóm hiện thực (`workflow`, `single`, `orchestrator`) đều đạt `pass_rate = 1.000` (70/70), `pass^5 = 1.000` (14/14), `seed_min = 1.0`, `seed_max = 1.0` và `seed_variance = 0.0`, trong khi `swarm` tham chiếu chỉ đạt `pass_rate = 0.986` (69/70), `pass^5 = 0.929` (13/14) và `seed_variance = 0.000816` do fail ở `R-swarm-C-002-s55` (ticket ghi trễ 5 ngày, DB ghi `delay_days = 2`, swarm tin chữ trong ticket ở seed 55 nên trả `20.000` VND thay vì từ chối). Trong ba shape đạt điểm tuyệt đối, `workflow` có chi phí thấp nhất (`cost_per_success_vnd = 28.80` VND, tổng `2016.0` VND cho 70 trial, trung bình `1.0` model call, `2.79` tool calls và `mean_steps = 4.36`), vượt qua toàn bộ 20 kịch bản lỗi (`crash_safety = 20/20`) và đảm bảo `0` secret leak / `0` approval bypass. Hình mẫu `R-workflow-C-014-s11` minh họa rõ ranh giới kiến trúc: code đọc order view qua allowlist, tính entitlement đầy đủ `150.000` VND bằng `compute_compensation`, rồi truyền nguyên quote sang `durability.issue_refund` để host tự trừ `30.000` VND đã hoàn trước đó và ghi đúng một dòng ledger `120.000` VND. Do quy trình xét duyệt hoàn phí của LogiX-VN có tập bước xác định, `workflow` thỏa mãn nguyên tắc chọn kiến trúc ít tự chủ nhất mà vẫn hoàn thành đúng 100% yêu cầu nghiệp vụ.
 
 ## Có đáng đổi lấy multi-agent không
 
-Nếu pass nhỉnh hơn mà cost và variance cao hơn, nhóm giữ hay đổi? Điều kiện nào làm quyết định đảo lại?
+Nhóm **giữ `workflow`** và không đánh đổi sang `single` hay multi-agent (`orchestrator`, `swarm`). So với `workflow` (`28.80` VND/success), `single` (ReAct) có cùng `pass_rate = 1.000` nhưng đắt hơn **35.7%** (`39.08` VND/success, `4.64` model calls, `mean_steps = 7.86`), còn `orchestrator` đắt hơn **98.4%** (`57.14` VND/success, `1.93` model calls, `5.57` tool calls) vì phát sinh thêm bước lập kế hoạch (`plan`) và vòng chạy điều tra viên (`run_readonly_investigators`) cho những công cụ đọc vốn có thể gọi trực tiếp theo thứ tự cố định. Đối với `swarm` (`49.57` VND/success, đắt hơn **72.1%**), việc tăng mức độ tự chủ và truyền thông điệp giữa các agent không những làm tăng chi phí mà còn mở ra bề mặt lỗi kiểm chứng dữ kiện (`R-swarm-C-002-s55`), khiến `pass^5` tụt xuống `0.929`. Quyết định này chỉ **đảo chiều** khi bài toán thay đổi bản chất ở một trong hai điều kiện: (1) đầu vào không còn cấu trúc cố định và cần suy luận chọn công cụ linh hoạt theo ngữ cảnh nhiều bước mà pipeline cứng không bao phủ hết (khi đó chuyển sang `single` ReAct nhưng vẫn khóa trần bước và giữ cổng ghi ở host), hoặc (2) một claim đòi hỏi thu thập, đối chiếu song song từ nhiều hệ thống/nguồn dữ liệu độc lập cần cô lập quyền truy cập theo từng tác vụ con (khi đó chuyển sang `orchestrator` với handoff allowlist chỉ đọc). Ngay cả khi đổi sang `single` hay `orchestrator`, việc tính tiền (`compute_compensation`) và ghi sổ cái (`durability.issue_refund`) vẫn bắt buộc nằm trong code của host.
 
 ## Trace và bằng chứng
 
-Trace của nhóm ghi những event nào? Field nào cố ý **không** ghi, và vì sao? Nếu trace nằm ngoài chỗ scanner quét được, đội security chứng minh thế nào là hệ thống không lộ secret?
+Trace của nhóm tuân thủ `Trace contract v1` (`{"run_id": ..., "events": [...]}`) trên mọi nhánh trả về: với `workflow`, trace chỉ ghi các sự kiện `claim` (`claim_id`, `has_order_id`), `order` (các trường đã qua allowlist của `lookup_order`: `order_id`, `principal_id`, `status`, `delay_days`, `shipping_fee_vnd`, `paid_vnd`, `damage_verified`, `carrier`), `quote` (`amount_vnd`, `clause_id`, `reason`), `host` (`ok`, `reason`), `crash` (`at` khi xảy ra `InjectedCrash`) và `decision` (`status`, `proposal_amount`, `reason`); `single` ghi thêm `react_step` và `refund_history`; `orchestrator` ghi thêm `handoff` đã qua `safe_dump` (chỉ gồm `schema_version`, `request_id`, `claim_id`, `task`, `facts={}`, `allowed_tools`) và `investigator`. Nhóm **cố ý không ghi** `ticket`, `parent_secret` (`CANARY_SECRET_PARENT_*`), `raw_headers` (`Authorization`), số điện thoại (`phone`), địa chỉ (`address`), ghi chú nội bộ (`internal_note` / `CANARY_INTERNAL_*`) và tên mặt hàng (`item_name` / `SECRET_ITEM_*`), vì `ticket` là dữ liệu người dùng chưa kiểm chứng (có thể chứa prompt injection như `C-009` hoặc thông tin nhạy cảm), còn các trường định danh/bí mật nếu lọt vào trace hay handoff sẽ vi phạm ranh giới bảo mật giữa các principal (đặc biệt ở `C-005` khi `P-200` truy vấn đơn `O-110` của `P-300`). Nếu một file log nằm ngoài phạm vi quét của scanner thì không thể dùng kết quả "scanner không báo lỗi" để chứng minh an toàn; vì vậy đội security chứng minh hệ thống không lộ secret bằng 3 lớp: (1) cơ chế **fail-closed** của cổng kiểm tra (`missing_trace`, `stale_trace`, `invalid_trace`, `trace_run_id_mismatch` đều đánh trượt ngay), (2) chặn tận gốc bằng **allowlist ở tầng truy vấn code** (`get_claim_view`, `lookup_order`, `make_handoff` loại bỏ trường nhạy cảm trước khi dữ liệu chạm tới model hoặc logger, không dùng LLM để tóm tắt/redact), và (3) kiểm thử tự động quét toàn bộ canary token & PII trên mọi kết quả và trace (`test_trace_and_result_have_no_secret_or_pii`).
 
 ## Giới hạn
 
-MockLLM không phải model sản xuất. Latency để `unavailable`. Không sửa JSON cho đủ 0.75.
+Mọi thử nghiệm trong lab sử dụng `MockLLM` (`src/lab8/mock_llm.py`) phản hồi tất định theo seed chứ không phải LLM sản xuất; do đó `single` và `orchestrator` đạt `seed_variance = 0.0` nhờ hàm `decide` và danh sách tool của investigator được neo theo cấu trúc code, còn khi chạy với model thật thì hai kiến trúc này sẽ có độ lệch giữa các lần gọi và chi phí token biến thiên lớn hơn. Trường `latency` trong `src/reports/benchmark.json` được giữ nguyên là `unavailable` vì `MockLLM` chạy trong bộ nhớ, và chi phí VND là giá mô phỏng (`src/config/pricing.yaml`) dùng để so sánh tương đối giữa các shape chứ không phải hóa đơn API thực tế. Toàn bộ số liệu trong báo cáo được trích xuất nguyên bản từ `src/reports/benchmark.json` và `src/reports/crash.json` do công cụ của lab sinh ra, tuyệt đối không chỉnh sửa thủ công.
