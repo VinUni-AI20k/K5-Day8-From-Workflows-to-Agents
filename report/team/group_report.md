@@ -51,20 +51,20 @@ Code: `src/lab8/shapes/orchestrator.py`. Test riêng: `src/tests/test_orchestrat
 Người phụ trách: Tăng Nguyễn Hải Đăng (Thành viên 4). Commit test an toàn chính: `733745d` (`src/tests/test_safety_approval_invariant.py`).
 
 **Cổng duyệt Approval & Host Policy:**
-- Kiểm thử bất biến an toàn (`src/tests/test_safety_approval_invariant.py`): Một claim có đơn hàng hợp lệ (`O-107`, trễ 4 ngày, đủ điều kiện hoàn 35.000 VND, chính chủ `P-100`) nhưng approval gắn kèm có trạng thái `rejected` (`A-TEST-REJECTED`). Khi gọi `durability.issue_refund`, cổng host chặn dứt khoát (`outcome["ok"] is False`, lý do `approval_rejected`, `effect is None`), không tạo bất kỳ dòng hoàn tiền nào trong `refund_ledger` (`get_refund is None`, số dòng ledger không đổi), đồng thời ghi nhận sự kiện `policy_denied` vào `audit_events`.
-- Kết hợp với các test host có sẵn (`test_authorization.py`, `test_order_cap_and_approval_binding.py`), hệ thống chặn triệt để approval hết hạn, thiếu approval và approval bị mượn từ claim khác.
+- Kiểm thử bất biến an toàn (`src/tests/test_safety_approval_invariant.py`): Giả lập claim có đơn hàng hợp lệ (`O-107`, trễ 4 ngày, đủ điều kiện hoàn 35.000 VND, chính chủ `P-100`) nhưng approval gắn kèm có trạng thái `rejected` (`A-TEST-REJECTED`). Khi gọi `durability.issue_refund`, cổng host từ chối (`outcome["ok"] is False`, lý do `approval_rejected`, `effect is None`), không tạo dòng hoàn tiền nào trong `refund_ledger` (`get_refund is None`, số dòng ledger giữ nguyên), đồng thời ghi nhận sự kiện `policy_denied` vào `audit_events`.
+- Kết hợp với các test host có sẵn (`test_authorization.py`, `test_order_cap_and_approval_binding.py`), hệ thống chặn các trường hợp approval hết hạn, thiếu approval hoặc approval bị mượn từ claim khác.
 
 **Idempotency, Ledger và Audit Trails:**
-- Cơ chế khóa duy nhất `refund:{claim_id}` trong SQLite đảm bảo nguyên tắc exactly-once: gọi lại cùng claim nhiều lần không tạo thêm dòng ledger, trả về `idempotent_replay` và duy trì đúng 1 sự kiện `refund_committed`. Nếu quote thay đổi khi retry, hệ thống báo xung đột (`amount_conflict`) và bảo toàn dòng tiền ban đầu.
-- Xử lý trần hoàn tiền theo đơn (per-order cap): Cả 4 shape đều chuyển quote đầy đủ để host tự trừ khoản đã hoàn trước đó (T13 từ chối vì đã hoàn đủ, T14 chỉ hoàn phần chênh lệch).
+- Khóa duy nhất `refund:{claim_id}` trong SQLite giúp ghi nhận đúng một lần (exactly-once): gọi lại cùng claim nhiều lần không tạo thêm dòng ledger, trả về `idempotent_replay` và giữ đúng 1 sự kiện `refund_committed`. Nếu quote thay đổi khi retry, hệ thống báo xung đột (`amount_conflict`) và giữ nguyên số tiền đã commit trước đó.
+- Xử lý trần hoàn tiền theo đơn (per-order cap): Cả 4 shape đều chuyển quote đầy đủ để host tự trừ phần đã hoàn trước đó (T13 từ chối vì đã hoàn đủ, T14 chỉ hoàn phần chênh lệch).
 
 **Crash Safety & Khôi phục sau sự cố:**
 - Cả 3 shape mới viết đều chuyển tiếp tham số `crash_at` vào host và không nuốt `InjectedCrash`.
-- Kết quả kiểm thử thực tế: Vượt qua toàn bộ bộ kiểm thử crash `python -m lab8.crash_test --count 20 --out reports/crash.json` (`crash_safety: 20/20`). Suite kiểm tra thực tế 20 kịch bản bao gồm crash trước khi ghi ledger (`before_effect`), sau khi ghi ledger nhưng trước checkpoint (`after_effect_before_checkpoint`), sau checkpoint, xung đột retry và retry không approval. Khi resume sau crash, hệ thống không bao giờ thanh toán trùng (không double-pay).
+- Kết quả chạy lệnh `python -m lab8.crash_test --count 20 --out reports/crash.json` đạt `crash_safety: 20/20`. Bộ test kiểm tra 20 kịch bản gồm crash trước khi ghi ledger (`before_effect`), sau khi ghi ledger nhưng trước checkpoint (`after_effect_before_checkpoint`), sau checkpoint, xung đột retry và retry không approval. Khi resume sau crash, hệ thống không thanh toán trùng (không double-pay).
 
 **Bảo mật Trace và Vùng cách ly Handoff:**
-- Handoff của Orchestrator được lọc nghiêm ngặt qua allowlist bằng `make_handoff`; investigator chỉ đọc không có tool ghi và không tiếp cận thông tin nhạy cảm.
-- Bộ 16 test kiểm tra rà soát trace (`src/tests/test_orchestrator_own.py`) và test Single (`src/tests/test_single.py`) xác nhận 100% trace và kết quả của 14 claim public sạch hoàn toàn: không chứa `CANARY_SECRET_*`, token Bearer, số điện thoại, địa chỉ hay ghi chú nội bộ.
+- Handoff của Orchestrator được lọc qua allowlist bằng `make_handoff`; investigator chỉ đọc không có tool ghi và không tiếp cận thông tin nhạy cảm.
+- Bộ 16 test rà soát trace (`src/tests/test_orchestrator_own.py`) và test Single (`src/tests/test_single.py`) xác nhận trace và kết quả của 14 claim public không chứa `CANARY_SECRET_*`, token Bearer, số điện thoại, địa chỉ hay ghi chú nội bộ.
 
 **Kết quả kiểm thử tích hợp (chạy thực tế trên nhánh tích hợp):**
 - **Smoke test:** `lab8.smoke pass`.
