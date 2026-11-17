@@ -3,15 +3,18 @@
 ## Thông tin nhóm
 
 - Tên nhóm: ABC
-- Lớp: L3A
+- Lớp: L3B
 - Repo nhóm: `K5-L3B-DAY08-ABC-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
 - URL repo, nhánh nộp, commit chốt:
+  - https://github.com/tundut/K5-L3B-DAY08-ABC-FromWorkflowsToAgents
+  - nhánh: `main`
+  - commit chốt: _(điền khi nộp)_
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        | Workflow |
+|   1 | Huỳnh Văn Cường | 2A202603866 |  | cuong-huynh | Workflow |
 |   2 |        |      |       |        | Single agent |
 |   3 |        |      |       |        | Orchestrator và handoff |
 |   4 |        |      |       |        | Kiểm thử và an toàn |
@@ -67,7 +70,7 @@ Các mốc trên là lịch lab mẫu, không phải deadline nộp bài. Deadli
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | Workflow | | |
+| Huỳnh Văn Cường | Workflow | _(cập nhật sau khi push)_ | `test_workflow_owner.py` (C-002 ticket sai ngày; C-004 thiếu order_id; C-005 ngoài principal) |
 | | Single agent | | |
 | | Orchestrator và handoff | | |
 | | Kiểm thử và an toàn | | |
@@ -85,16 +88,19 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Sao chép mục dưới đây cho từng thành viên.
 
-## MSSV_HoTen
+## 2A202603866_HuynhVanCuong
 
 ### Phần việc phụ trách
 
--
+- Shape A `workflow` (`src/lab8/shapes/workflow.py`): pipeline cố định đọc claim → order → quote → `issue_refund`.
 
 ### Đóng góp cụ thể
 
--
+- Implement `run_claim` (CP2+CP3): tool trực tiếp, full quote, truyền `crash_at`, không bắt `InjectedCrash`.
+- Thêm `src/tests/test_workflow_owner.py`.
 
 ### Bằng chứng
 
--
+- Student matrix: `pytest -q -m student -o addopts= -k workflow` → 62 passed.
+- Owner tests: `pytest -q -m student -o addopts= -k workflow_owner`.
+- Báo cáo cá nhân: `report/team/2A202603866_HuynhVanCuong.md`.
