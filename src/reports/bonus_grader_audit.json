@@ -1,0 +1,162 @@
+{
+  "topic": "B7",
+  "relations": {
+    "infra_errors_do_not_move_pass_rate": {
+      "grader_a": {
+        "conforms": true,
+        "violations": [],
+        "pass_rate_before": 0.75,
+        "pass_rate_after": 0.75,
+        "graded_trials_before": 12,
+        "graded_trials_after": 12
+      },
+      "grader_b": {
+        "conforms": true,
+        "violations": [],
+        "pass_rate_before": 0.75,
+        "pass_rate_after": 0.75,
+        "graded_trials_before": 12,
+        "graded_trials_after": 12
+      },
+      "grader_c": {
+        "conforms": false,
+        "violations": [
+          "pass_rate changed after adding infra_error trials"
+        ],
+        "pass_rate_before": 0.75,
+        "pass_rate_after": 0.5625,
+        "graded_trials_before": 12,
+        "graded_trials_after": 16
+      }
+    },
+    "duplicated_list_keeps_rates_doubles_totals": {
+      "grader_a": {
+        "conforms": false,
+        "violations": [
+          "pass_5 changed when duplicating every trial",
+          "cost_per_success_vnd changed when duplicating every trial",
+          "total_simulated_cost_vnd did not double"
+        ],
+        "before": {
+          "trials": 12,
+          "graded_trials": 12,
+          "successes": 9,
+          "pass_rate": 0.75,
+          "cost_per_success_vnd": 31.5,
+          "total_simulated_cost_vnd": 283.5
+        },
+        "after": {
+          "trials": 24,
+          "graded_trials": 24,
+          "successes": 18,
+          "pass_rate": 0.75,
+          "cost_per_success_vnd": 26.27777777777778,
+          "total_simulated_cost_vnd": 473.0
+        }
+      },
+      "grader_b": {
+        "conforms": false,
+        "violations": [
+          "pass_5 changed when duplicating every trial"
+        ],
+        "before": {
+          "trials": 12,
+          "graded_trials": 12,
+          "successes": 9,
+          "pass_rate": 0.75,
+          "cost_per_success_vnd": 21.055555555555557,
+          "total_simulated_cost_vnd": 189.5
+        },
+        "after": {
+          "trials": 24,
+          "graded_trials": 24,
+          "successes": 18,
+          "pass_rate": 0.75,
+          "cost_per_success_vnd": 21.055555555555557,
+          "total_simulated_cost_vnd": 379.0
+        }
+      },
+      "grader_c": {
+        "conforms": false,
+        "violations": [
+          "pass_5 changed when duplicating every trial"
+        ],
+        "before": {
+          "trials": 12,
+          "graded_trials": 12,
+          "successes": 9,
+          "pass_rate": 0.75,
+          "cost_per_success_vnd": 21.055555555555557,
+          "total_simulated_cost_vnd": 189.5
+        },
+        "after": {
+          "trials": 24,
+          "graded_trials": 24,
+          "successes": 18,
+          "pass_rate": 0.75,
+          "cost_per_success_vnd": 21.055555555555557,
+          "total_simulated_cost_vnd": 379.0
+        }
+      }
+    },
+    "adding_failed_trial_counts_once": {
+      "grader_a": {
+        "conforms": false,
+        "violations": [
+          "failed trial cost was not counted exactly once"
+        ],
+        "graded_trials_before": 12,
+        "graded_trials_after": 13,
+        "successes_before": 9,
+        "successes_after": 9,
+        "pass_rate_before": 0.75,
+        "pass_rate_after": 0.6923076923076923,
+        "total_cost_before": 283.5,
+        "total_cost_after": 363.5,
+        "added_trial_cost": 40.0,
+        "observed_cost_delta": 80.0
+      },
+      "grader_b": {
+        "conforms": true,
+        "violations": [],
+        "graded_trials_before": 12,
+        "graded_trials_after": 13,
+        "successes_before": 9,
+        "successes_after": 9,
+        "pass_rate_before": 0.75,
+        "pass_rate_after": 0.6923076923076923,
+        "total_cost_before": 189.5,
+        "total_cost_after": 229.5,
+        "added_trial_cost": 40.0,
+        "observed_cost_delta": 40.0
+      },
+      "grader_c": {
+        "conforms": true,
+        "violations": [],
+        "graded_trials_before": 12,
+        "graded_trials_after": 13,
+        "successes_before": 9,
+        "successes_after": 9,
+        "pass_rate_before": 0.75,
+        "pass_rate_after": 0.6923076923076923,
+        "total_cost_before": 189.5,
+        "total_cost_after": 229.5,
+        "added_trial_cost": 40.0,
+        "observed_cost_delta": 40.0
+      }
+    }
+  },
+  "business_rule_delay_threshold": {
+    "relation": "delay_days_2_vs_3",
+    "conforms": true,
+    "two_day_quote_vnd": 0,
+    "two_day_reason": "no_entitlement",
+    "three_day_quote_vnd": 35000,
+    "three_day_reason": "entitled"
+  },
+  "expected_candidate_findings": {
+    "grader_a": "Fails duplicate-list pass_5 and cost accounting; an added failure is charged twice.",
+    "grader_b": "Passes infra and added-failure relations; fails duplicate-list pass_5 invariance.",
+    "grader_c": "Fails infra invariance and duplicate-list pass_5 invariance."
+  }
+}
