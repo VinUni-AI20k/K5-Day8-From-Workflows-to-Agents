@@ -61,3 +61,22 @@ Sao chép mục dưới đây cho từng thành viên.
 - Commit: `docs(cp5): complete ADR, research card and benchmark reports`
 - Báo cáo cá nhân chi tiết: `report/team/2A202603855_VuongQuangThang.md`
 - Test: `src/tests/test_benchmark_robustness.py::test_benchmark_metric_consistency`
+
+## 2A202603868_NguyenTrongTruyen
+
+### Phần việc phụ trách
+
+- Durability & Handoff Engineer (Phụ trách Checkpoint CP3 — Ghi tiền an toàn khi gọi lại và khi crash, handoff không mang secret qua ranh giới).
+
+### Đóng góp cụ thể
+
+- Truyền `crash_at` vào `durability.issue_refund` ở cả ba shape (`workflow.py`, `single.py`, `orchestrator.py`), vẫn truyền quote đầy đủ để host tự trừ phần đã hoàn của đơn.
+- Không nuốt `InjectedCrash`: chỉ ghi event `crash` vào trace, flush trace rồi `raise` lại, nên crash suite thấy đúng crash và lần resume không tạo thêm refund (idempotency key `refund:{claim_id}`).
+- Rà handoff của orchestrator: dựng bằng `make_handoff` với tool chỉ đọc, trace chỉ ghi handoff đã sanitize, không ghi parent context.
+- Xác nhận T11 (gọi lại cùng claim) và T12 (crash rồi resume) xanh trên cả ba shape; cổng host vẫn xanh.
+
+### Bằng chứng
+
+- Commit: `812ea03 feat(cp3): pass crash_at to issue_refund and re-raise InjectedCrash in all shapes` (nhánh `truien`)
+- Kết quả chạy: `python -m pytest -q` → 63 passed; `python -m pytest -q -m student -o addopts=` → 248 passed, 0 failed
+- Test liên quan: `src/tests/test_public_matrix.py::test_t12_crash_before_checkpoint_does_not_double_pay`
