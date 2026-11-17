@@ -4,7 +4,7 @@
 
 - Họ tên: Nguyễn Minh Phương
 - MSSV: 2A202603997
-- Email: 26ai.phuongnm3@vinai.edu
+- Email: 26ai.phuongnm3@vinai.edu.vn
 - GitHub: `minhphuong150505`
 
 ## 2. Phần việc phụ trách
