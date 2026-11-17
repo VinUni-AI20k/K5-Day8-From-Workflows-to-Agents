@@ -11,7 +11,7 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 | Nguyễn Minh Quân | 2A202603747 | 26ai.quannm8@vinuni.edu.vn | minhquannm0905-cloud | Workflow |
 |   2 |        |      |       |        |         |
 
 Gợi ý chia vai:
@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Nguyễn Minh Quân | Deterministic workflow | `34900b4` | `test_workflow_is_deterministic_and_model_free` |
 
 ## Cá nhân
 
