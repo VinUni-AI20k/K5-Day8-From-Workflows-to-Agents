@@ -2,17 +2,16 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: NKV
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Repo nhóm: `K5-L3A-DAY08-NKV-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo, nhánh nộp, commit chốt: main, commit 49ac282
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
+|   1 | Nguyễn Khánh Vinh | 2A202603390 | vinh.nk.2753@gmail.com | vinhnk2753-blip | Core Architecture & Shapes Implementation |
 
 Gợi ý chia vai:
 
@@ -25,7 +24,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+| Nguyễn Khánh Vinh | Core Architecture & Shapes | 49ac282 | tests/test_individual_vinhnk.py |
 
 ## Cá nhân
 
@@ -39,16 +38,22 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Sao chép mục dưới đây cho từng thành viên.
 
-## MSSV_HoTen
+## 2A202603390_NguyenKhanhVinh
 
 ### Phần việc phụ trách
 
--
+- Cài đặt 3 shape: workflow, single, orchestrator tuân thủ các quy tắc nghiệp vụ LogiX-VN.
+- Đảm bảo ranh giới bảo mật PII/secret và cơ chế crash-safety (20/20).
+- Viết test kỹ thuật kiểm thử idempotency và policy rejection.
 
 ### Đóng góp cụ thể
 
--
+- Hoàn thiện code cho `src/lab8/shapes/workflow.py`, `src/lab8/shapes/single.py`, `src/lab8/shapes/orchestrator.py`.
+- Thêm test kỹ thuật cá nhân tại `src/tests/test_individual_vinhnk.py`.
+- Chạy benchmark 4 shape x 14 claim x 5 seed và crash suite 20 kịch bản.
 
 ### Bằng chứng
 
--
+- `src/tests/test_individual_vinhnk.py` (passed 6/6).
+- `src/reports/crash.json` (crash_safety: 20/20).
+- `src/reports/benchmark.json`.
