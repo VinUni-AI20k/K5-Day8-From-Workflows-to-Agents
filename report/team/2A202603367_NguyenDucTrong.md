@@ -1,4 +1,4 @@
-# Báo cáo cá nhân — MSSV_HoTen
+# Báo cáo cá nhân — SV03_NguyenDucTrong
 
 Đổi tên file theo quy tắc `MSSV_HoTen.md`.
 
@@ -6,100 +6,44 @@ Ví dụ: `20241234_NguyenVanAn.md`.
 
 ## 1. Thông tin thành viên
 
-- Họ tên:
-- MSSV:
-- Email:
-- GitHub:
+- Họ tên: Nguyễn Đức Trọng
+- MSSV: 2A202603367
+- Email: trongnguyen104@gmail.com
+- GitHub: `trongnguyen104`
 
 ## 2. Phần việc phụ trách
 
-Shape, module hoặc phần báo cáo bạn phụ trách.
-
-Phụ trách **Checkpoint 4 (CP4) – kiểm tra độ an toàn khi crash và các điều kiện bảo vệ refund** trong dự án LogiX-VN, thuộc Lab 8 – From Workflows to Agents.
-
-Các nội dung công việc:
-- Chạy crash-safety suite với 20 lần kiểm thử.
-- Kiểm tra kết quả các tình huống crash/retry được ghi trong `reports/crash.json`.
-- Kiểm tra các báo cáo trong thư mục `reports` để tìm dấu hiệu lộ chuỗi `CANARY_SECRET_`.
-- Chạy lại bộ kiểm thử chung và bộ kiểm thử dành cho sinh viên để xác nhận các thay đổi không làm hỏng chức năng hiện có.
-- Đối chiếu kết quả với yêu cầu CP4: không thực hiện refund khi thiếu/không hợp lệ approval, không để lộ secret trong trace hoặc kết quả, và không tạo refund trùng khi xảy ra crash/retry.
+- Phụ trách cài đặt **Shape C — Orchestrator + Read-Only Investigators (`src/lab8/shapes/orchestrator.py`)**.
+- Phụ trách kiểm thử đơn vị cho Shape C và ranh giới bảo mật handoff/trace (`src/tests/test_SV03_trongnguyen104_orchestrator_handoff.py`).
+- Phụ trách cài đặt phần mở rộng **Bonus B3 — Verifier chống khuếch đại lỗi (`src/bonus/swarm_verified.py`, `src/bonus/cases.jsonl`, `src/bonus/world.json`, `src/tests/test_bonus_swarm_verified.py`)** và tổng hợp **`report/team/group_report.md`**, **`report/team/bonus_report.md`**.
 
 ## 3. Đóng góp cụ thể
 
-Commit chính (hash), test đã thêm hoặc sửa, quyết định kỹ thuật bạn đưa ra.
-
-### 3.1. Kiểm thử crash-safety
-
-Đã thực hiện lệnh:
-
-```powershell
-python -m lab8.crash_test --count 20 --out reports/crash.json
-```
-
-Kết quả:
-- `crash_safety`: **20/20**
-- `passed`: **20**
-- `count`: **20**
-- Các scenario từ `CR-01` đến `CR-20` đều có `passed: true`.
-- Các nhóm tình huống trong kết quả bao gồm crash trước/sau effect, crash sau checkpoint, retry khi amount không khớp, retry không có approval và tình huống swarm crash sau effect nhưng trước checkpoint.
-
-### 3.2. Kiểm thử hồi quy
-
-Đã chạy hai bộ lệnh:
-
-```powershell
-python -m pytest -q
-```
-
-Kết quả: **61 passed, 248 deselected**.
-
-```powershell
-python -m pytest -q -m student -o addopts=
-```
-
-Kết quả: **248 passed, 61 deselected**.
-
-Hai lệnh đều hoàn tất thành công.
-
-### 3.3. Kiểm tra dấu hiệu lộ secret trong báo cáo
-
-Đã tìm chuỗi `CANARY_SECRET_` trong các file thuộc thư mục `reports` bằng PowerShell:
-
-```powershell
-Get-ChildItem .\\reports -Recurse -File |
-    Select-String -Pattern 'CANARY_SECRET_'
-```
-
-Không có kết quả khớp trong phạm vi thư mục `reports`.
-
-### 3.4. Quyết định và lưu ý kỹ thuật
-
-- Sử dụng crash test report làm bằng chứng định lượng cho yêu cầu chống tạo refund trùng khi tiến trình bị gián đoạn và retry.
-- Giữ lại `reports/crash.json` để nhóm có thể kiểm tra lại từng scenario thay vì chỉ ghi nhận kết quả tổng hợp.
-- Không tự kết luận rằng toàn bộ yêu cầu bảo mật đã được xác nhận chỉ từ kết quả crash test. Việc tìm chuỗi secret nêu trên mới giới hạn trong thư mục `reports`; cần rà soát thêm toàn bộ trace/stdout và bảo đảm không ghi raw claim row hoặc order row trước khi xác nhận hoàn tất toàn bộ phần kiểm tra bảo mật CP4.
-
+- **Code chính (`src/lab8/shapes/orchestrator.py`):**
+  - Xây dựng luồng điều phối phân tách quyền hạn: Orchestrator đọc `get_claim_view`, tạo gói chuyển giao `handoff.v1` qua `lab8.handoff.make_handoff` chỉ cấp quyền các công cụ đọc (`lookup_order`, `lookup_policy`, `lookup_refund_history`, `compute_compensation`) và không truyền `parent_secret`, `raw_headers` hay dòng `claim` thô vào `facts`.
+  - Gọi `lab8.runtime.run_readonly_investigators` để thu thập dữ liệu đã lọc theo `principal_id`, ghi nhận gói handoff đã sanitize vào trace (`trace.add("handoff", safe_dump(handoff))`), sau đó tính quote từ dữ liệu có cấu trúc và gọi `durability.issue_refund(conn, claim_id, proposal, crash_at=crash_at)` tại orchestrator.
+- **Code Bonus B3 (`src/bonus/swarm_verified.py`, `src/bonus/cases.jsonl`, `src/bonus/world.json`):**
+  - Bổ sung bước **code verifier** vào sau bước báo giá của `swarm` để đối chiếu `delay_days`, `status`, `damage_verified` với `structured_order`. Khi phát hiện sai lệch (do `model_override` ở `seed % 5 == 0`), verifier ghi event `verifier_override`, tính lại quote đúng 1 lần từ dữ liệu chuẩn và chặn hoàn toàn lỗi trả tiền sai.
+  - Thiết kế 8 ca kiểm thử đối kháng có nhãn viết tay trong `src/bonus/cases.jsonl` và `src/bonus/world.json`.
+- **Test đã thêm (`src/tests/test_SV03_trongnguyen104_orchestrator_handoff.py` và `src/tests/test_bonus_swarm_verified.py`, không gắn `@pytest.mark.student`, chạy trong `python -m pytest -q`):**
+  - `test_sv03_orchestrator_handoff_allowlist_and_secret_redaction`: kiểm tra gói handoff trong trace chỉ chứa các khóa thuộc `ALLOWED_FIELDS` và công cụ thuộc `READONLY_TOOLS`, đồng thời không rò rỉ bất kỳ chuỗi `forbid_substrings` nào (`CANARY_SECRET_*`, SĐT, địa chỉ, mặt hàng, ghi chú nội bộ).
+  - `test_sv03_orchestrator_stacking_and_partial_approval_cap`: kiểm tra trần hoàn tiền theo đơn và approval thấp hơn quote trên `orchestrator` (`C-008`, `C-014`).
+  - `test_sv03_orchestrator_crash_propagation_and_resume`: kiểm tra truyền `crash_at` và khôi phục sau crash trên `orchestrator` (`C-012`).
+  - `test_bonus_verifier_overrides_swarm_weakness_on_public_t02` & `test_bonus_adversarial_pack_passes_all_cases_and_seeds`: kiểm tra `swarm_verified` sửa lỗi `C-002` ở seed 55 và đạt 100% pass trên bộ 8 ca đối kháng.
 
 ## 4. Bằng chứng
 
-Link commit, tên test, run id hoặc trích đoạn report liên quan.
-
-| Bằng chứng | Kết quả / vị trí |
-|---|---|
-| Crash-safety report | `reports/crash.json` |
-| Crash-safety suite | `crash_safety = 20/20` |
-| Toàn bộ pytest | `61 passed, 248 deselected` |
-| Student tests | `248 passed, 61 deselected` |
-| Quét chuỗi secret trong reports | Không tìm thấy `CANARY_SECRET_` |
-| Commit | Bổ sung hash/link commit sau khi push lên GitHub |
+- File code: `src/lab8/shapes/orchestrator.py`, `src/bonus/swarm_verified.py`, `src/bonus/cases.jsonl`, `src/bonus/world.json`
+- File test: `src/tests/test_SV03_trongnguyen104_orchestrator_handoff.py`, `src/tests/test_bonus_swarm_verified.py` (chạy xanh trong `python -m pytest -q` và 62/62 test trong `python -m pytest -q -m student -o addopts= -k orchestrator`)
+- File báo cáo & dữ liệu: `report/team/group_report.md`, `report/team/bonus_report.md`, `src/reports/benchmark.json`, `src/reports/bonus_benchmark.json`, `src/reports/bonus_adversarial.json`, `src/reports/hidden_selfcheck.json`.
 
 ## 5. Công cụ AI đã dùng
 
-Công cụ, dùng vào việc gì, và bạn đã tự kiểm tra kết quả thế nào (xem [RULES.md](../../RULES.md)).
-
-- **ChatGPT:** Hỗ trợ phân tích yêu cầu CP4, giải thích các tình huống approval/refund và crash-retry, đề xuất lệnh kiểm thử và cách đọc kết quả.
+- Công cụ: Trợ lý AI (Antigravity / Gemini) hỗ trợ rà soát cơ chế allowlist trong `src/lab8/handoff.py`, thiết kế dữ liệu kiểm thử đối kháng cho Bonus B3 và trình bày báo cáo nhóm.
+- Cách tự kiểm tra kết quả:
+  - Chạy `python -m pytest -q -m student -o addopts= -k orchestrator` (62 passed) và `python -m pytest -q` (69 passed).
+  - Chạy `python -m lab8.check_submission` để xác minh định dạng toàn bộ báo cáo, bảng đóng góp và các file JSON trong `src/reports/`.
 
 ## 6. Tự đánh giá
 
-Đã hoàn thành phần chạy và xác nhận crash-safety suite với kết quả **20/20**, đồng thời hai bộ pytest đều chạy thành công. Báo cáo `reports/crash.json` đã được tạo và lưu làm bằng chứng cho các tình huống crash/retry.
-
-Phần kiểm tra secret hiện mới thực hiện trên thư mục `reports`, chưa đủ cơ sở để khẳng định toàn bộ trace/stdout không chứa secret hoặc raw claim/order row. Trước khi chốt CP4, cần hoàn tất rà soát phạm vi này, kiểm tra các nhánh approval (bao gồm approval không hợp lệ, approval thuộc claim khác và claim đã refund đủ) và cập nhật hash/link commit thực tế vào báo cáo.
+- Hoàn thành tốt nhiệm vụ cài đặt Shape C (`orchestrator.py`), kiểm toán an toàn thông tin trên trace/handoff, phát triển thành công phần điểm cộng B3 (`swarm_verified`) và phối hợp chặt chẽ với hai thành viên còn lại để hoàn thiện báo cáo nhóm.
