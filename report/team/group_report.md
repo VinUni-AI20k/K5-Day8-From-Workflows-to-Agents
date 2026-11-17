@@ -4,9 +4,9 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 
 ## 1. Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: ABC
 - Thành viên: xem `TEAM.md`
-- Commit chốt (trùng `report/team/decision_adr.md`):
+- Commit chốt (trùng `report/team/decision_adr.md`): _(điền khi nộp)_
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -17,6 +17,16 @@ Nhóm hiểu bài toán thế nào, chia việc ra sao, thứ tự làm bốn sh
 ## 3. Giải pháp
 
 Mô tả ba shape nhóm viết (workflow, single, orchestrator): mỗi shape đọc gì, quyết định gì, gọi host ra sao. Chỉ rõ ranh giới code / model (tham khảo [docs/architecture.md](../../docs/architecture.md)), cách handoff được sanitize và trace ghi những event nào.
+
+### Shape A — workflow
+
+Pipeline cố định trong code, không ReAct/handoff. Đọc claim bằng `get_claim_view`; thiếu `order_id` → `needs_info`; `lookup_order` không visible → `escalated` (không đưa PII vào trace). Quote lấy từ order qua `compute_compensation` — bỏ qua số ngày trong ticket. Quote 0 → `denied` (không gọi host). Quote > 0 → `issue_refund` với **full quote** và `crash_at`; host tự kiểm approval và trần theo đơn. Model không chọn số tiền và không commit refund. Trace (`lab8.trace.Trace`) ghi mọi nhánh return.
+
+### Shape B — single
+
+...
+
+### Shape C — orchestrator
 
 ...
 
