@@ -18,8 +18,19 @@ ones. `lab8.trace.Trace` does this; your own tracer is fine if it matches.
 
 from __future__ import annotations
 
-from lab8.schemas import RunResult
-from lab8.shapes.common import not_implemented
+import sqlite3
+
+from lab8 import durability
+from lab8.db import connect
+from lab8.handoff import make_handoff
+from lab8.mock_llm import complete
+from lab8.runtime import run_readonly_investigators
+from lab8.schemas import Budget, RunResult, make_run_id
+from lab8.shapes.common import finish, safe_dump
+from lab8.tools import get_claim_view, tool_cost
+from lab8.trace import Trace
+
+SHAPE = "orchestrator"
 
 
 def run_claim(
@@ -29,7 +40,112 @@ def run_claim(
     store_path: str,
     crash_at: str | None = None,
 ) -> RunResult:
-    # TODO CP2 (student): thay stub này bằng shape orchestrator theo các bước ở docstring đầu file.
-    # TODO CP3 (student): truyền crash_at vào durability.issue_refund, không bắt InjectedCrash.
-    del store_path, crash_at
-    return not_implemented("orchestrator", claim_id, seed)
+    conn = connect(store_path)
+    try:
+        return _run(conn, claim_id, seed=seed, crash_at=crash_at)
+    finally:
+        conn.close()
+
+
+def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | None) -> RunResult:
+    budget = Budget()
+    trace = Trace(make_run_id(SHAPE, claim_id, seed))
+
+    def done(status: str, proposal: int, reason: str | None) -> RunResult:
+        # Orchestrator drafts the final reply based on the verified decision only.
+        # Ticket text is never included in the prompt.
+        complete(budget, seed=seed, purpose="draft", prompt=f"status={status} amount={proposal}")
+        trace.add("decision", {"status": status, "proposal_amount": proposal, "reason": reason})
+        return finish(
+            conn,
+            shape=SHAPE,
+            claim_id=claim_id,
+            seed=seed,
+            status=status,
+            proposal_amount=proposal,
+            budget=budget,
+            trace=trace,
+            error_reason=reason,
+        )
+
+    # 1. Read allowlisted claim view. Never trace raw claim row, parent_secret, raw_headers, or ticket.
+    budget.add_tool(tool_cost())
+    claim = get_claim_view(conn, claim_id)
+    trace.add("get_claim_view", {"found": claim["found"], "has_order_id": bool(claim.get("order_id"))})
+    if not claim["found"]:
+        return done("failed", 0, "unknown_claim")
+
+    if not claim["order_id"]:
+        return done("needs_info", 0, "missing_order_id")
+
+    # 2. Build a typed, allowlisted handoff with read-only tools for the investigator.
+    complete(budget, seed=seed, purpose="orchestrate", prompt=f"delegate claim={claim_id}")
+    handoff = make_handoff(
+        request_id=f"REQ-{claim_id}",
+        claim_id=claim_id,
+        task="investigate_order_and_quote",
+        facts={},
+        allowed_tools=["lookup_order", "lookup_policy", "lookup_refund_history", "compute_compensation"],
+    )
+    trace.add("handoff", safe_dump(handoff))
+
+    # 3. Run read-only investigators across the handoff boundary.
+    investigated = run_readonly_investigators(
+        conn, budget, handoff, principal_id=claim["principal_id"]
+    )
+    tools_out = investigated["tools"]
+    order_view = tools_out.get("lookup_order") or {}
+    history_view = tools_out.get("lookup_refund_history") or {}
+    policies = (tools_out.get("lookup_policy") or {}).get("policies") or []
+
+    if not order_view.get("visible"):
+        trace.add(
+            "investigator",
+            {
+                "visible": False,
+                "reason": order_view.get("reason"),
+                "policy_count": len(policies),
+            },
+        )
+        return done("escalated", 0, order_view.get("reason"))
+
+    quote = tools_out.get("compute_compensation") or {}
+    amount = int(quote.get("amount_vnd") or 0)
+    trace.add(
+        "investigator",
+        {
+            "visible": True,
+            "order": order_view["order"],
+            "policy_count": len(policies),
+            "refund_history": {
+                "refund_count": history_view.get("refund_count", 0),
+                "refunded_vnd": history_view.get("refunded_vnd", 0),
+            },
+            "quote": {
+                "amount_vnd": amount,
+                "reason": quote.get("reason"),
+                "clause_ids": quote.get("clause_ids"),
+            },
+        },
+    )
+
+    if amount <= 0:
+        return done("denied", 0, quote.get("reason"))
+
+    # 4. Orchestrator calls host durability gate with the FULL quote.
+    #    Host enforces approval, per-order cap, idempotency, and crash points.
+    try:
+        outcome = durability.issue_refund(conn, claim_id, amount, crash_at=crash_at)
+    except durability.InjectedCrash:
+        trace.add("crash", {"at": crash_at})
+        trace.write()
+        raise
+
+    trace.add(
+        "issue_refund",
+        {"ok": outcome["ok"], "reason": outcome["reason"], "conflict": outcome["conflict"]},
+    )
+    if not outcome["ok"]:
+        return done("failed" if outcome["conflict"] else "denied", amount, outcome["reason"])
+
+    return done("resolved", amount, None)
