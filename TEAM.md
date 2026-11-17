@@ -2,10 +2,10 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm: Dota
+- Lớp: L3B
+- Repo nhóm: `K5-L3B-DAY08-Dota-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo, nhánh nộp, commit chốt: https://github.com/phungtr/K5-L3B-DAY08-Dota-FromWorkflowsToAgents · nhánh `main` · commit chốt: _(điền cuối)_
 
 ## Thành viên
 
@@ -27,7 +27,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | workflow (A) + integration | | |
+| Phùng Quang Trà | workflow (A) + integration | `f0fb63f` | `src/tests/test_workflow_shape.py` (22 test) |
 | | single agent (B) | | |
 | | orchestrator (C) + handoff | | |
 | | ledger/crash + evaluation | | |
@@ -44,7 +44,7 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` thành MSSV và họ tên không dấu).
 
-## Thành viên 1 — MSSV_HoTen
+## Thành viên 1 — 2A202604094_PhungQuangTra
 
 ### Phần việc phụ trách
 
@@ -52,11 +52,26 @@ Mỗi thành viên điền mục của mình dưới đây (đổi `MSSV_HoTen` 
 
 ### Đóng góp cụ thể
 
--
+- Viết shape `workflow` theo 7 bước cố định: đọc claim qua `get_claim_view` → thiếu `order_id` thì `needs_info` → `lookup_order` (không thấy/không sở hữu thì `escalated`) → quote bằng `compute_compensation` → quote 0 thì `denied` → quote > 0 thì gọi `durability.issue_refund` với quote đầy đủ → `resolved` / `denied` / `failed` (conflict).
+- Ranh giới code/model: tiền do code tính; MockLLM chỉ được gọi 1 lần để soạn câu trả lời, prompt chỉ có `status` và số tiền, không chứa ticket. Số ngày trễ ghi trong ticket bị bỏ qua.
+- Durability: truyền `crash_at` vào `issue_refund`; khi `InjectedCrash` thì ghi trace rồi raise tiếp, không nuốt lỗi.
+- Trace: chỉ ghi field đã qua allowlist; không ghi ticket, `parent_secret`, header.
+- Thêm 22 test trong `src/tests/test_workflow_shape.py`: ticket chèn lệnh không làm tăng tiền (5 seed), output của model không quyết số tiền, claim không tồn tại trả `failed` có trace hợp lệ, gọi lại với số tiền khác thì `amount_conflict` và giữ dòng cũ, trace của 14 claim public không lộ secret/header/ticket.
 
 ### Bằng chứng
 
--
+- Commit [`f0fb63f`](https://github.com/phungtr/K5-L3B-DAY08-Dota-FromWorkflowsToAgents/commit/f0fb63f) (nhánh `Phungtr-04094`).
+- `python -m pytest -q -m student -o addopts= -k workflow` → 62 passed.
+- `python -m pytest -q` → 76 passed (cổng host xanh, gồm 22 test mới).
+- `python -m lab8.check_submission` → `[ OK ] shape workflow: format đúng, 12/12 claim public pass ở seed 11`.
+- Báo cáo cá nhân: [report/team/2A202604094_PhungQuangTra.md](report/team/2A202604094_PhungQuangTra.md).
+
+**Nhật ký integration**
+
+| Lần | Ngày | Merge vào `main` | Cổng host `pytest -q` | Ma trận student | `check_submission` |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 2026-11-17 | `Phungtr-04094` → `main`, fast-forward tới `f0fb63f`, không conflict | 76 passed | 124 passed / 124 failed (workflow 62/62, swarm 62/62; 124 fail là của `single`, `orchestrator` chưa merge) | 12 FAIL (2 shape chưa có; chưa có benchmark, crash, ADR, research card) |
+
 
 ## Thành viên 2 — MSSV_HoTen
 
