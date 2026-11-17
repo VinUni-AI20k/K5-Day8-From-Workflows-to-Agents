@@ -177,3 +177,43 @@ def test_single_low_approval_caps_the_effect_but_not_the_proposal(public_db):
     assert result.status == "resolved"
     assert result.proposal_amount == 35000
     assert int(result.refund_effects[0]["amount_vnd"]) == 20000
+
+
+# --- T11 / T12 riêng cho shape B: gọi lại và crash rồi resume ----------------
+
+from lab8.durability import InjectedCrash  # noqa: E402
+
+
+def _ledger_rows(public_db, claim_id):
+    conn = connect(public_db)
+    try:
+        return conn.execute("SELECT * FROM refund_ledger WHERE claim_id = ?", (claim_id,)).fetchall()
+    finally:
+        conn.close()
+
+
+def test_single_t11_replay_same_claim_keeps_one_refund(public_db):
+    """T11: gọi lại cùng claim nhiều lần vẫn chỉ một dòng ledger và một audit refund_committed."""
+    first = run_claim("C-001", seed=11, store_path=str(public_db))
+    second = run_claim("C-001", seed=11, store_path=str(public_db))
+    third = run_claim("C-001", seed=22, store_path=str(public_db))
+    for result in (first, second, third):
+        assert result.status == "resolved"
+        assert result.proposal_amount == 35000
+        assert len(result.refund_effects) == 1
+        assert result.committed_audit_count == 1
+    assert len(_ledger_rows(public_db, "C-001")) == 1
+
+
+@pytest.mark.parametrize("crash_at", ["before_effect", "after_effect_before_checkpoint", "after_checkpoint"])
+def test_single_t12_crash_then_resume_pays_once(public_db, crash_at):
+    """T12: crash thật sự xảy ra (shape không nuốt InjectedCrash), resume xong vẫn một refund, một audit."""
+    with pytest.raises(InjectedCrash):
+        run_claim("C-001", seed=11, store_path=str(public_db), crash_at=crash_at)
+
+    resumed = run_claim("C-001", seed=11, store_path=str(public_db))
+    assert resumed.status == "resolved"
+    assert resumed.proposal_amount == 35000
+    assert len(resumed.refund_effects) == 1
+    assert resumed.committed_audit_count == 1
+    assert len(_ledger_rows(public_db, "C-001")) == 1
