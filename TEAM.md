@@ -13,6 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |        |      |       |        |         |
 |   2 | Nguyễn Văn Hiếu | 2A202603746 | 26ai.hieunv3@vinuni.edu.vn | lunaHieu | Single ReAct agent |
+|   3 | Võ Hồng Lương | 2A202603839 | 26ai.luongvh@vinuni.edu.vn | luongvh2510 | Orchestrator + handoff |
 
 Gợi ý chia vai:
 
@@ -26,6 +27,7 @@ Gợi ý chia vai:
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 | Nguyễn Văn Hiếu | Single ReAct agent | 451c154 | tests/test_single_agent.py |
+| Võ Hồng Lương | Orchestrator + handoff | c394196, 30007b2 | tests/test_orchestrator_handoff.py |
 
 ## Cá nhân
 
