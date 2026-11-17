@@ -2,10 +2,10 @@
 
 ## 1. Thông tin thành viên
 
-- Họ tên:
-- MSSV:
-- Email:
-- GitHub:
+- Họ tên: Trần Tùng Lâm
+- MSSV: 2A202603893
+- Email: lamtt22004@gmail.com
+- GitHub: lamtt262004
 
 ## 2. Phần việc phụ trách
 
