@@ -11,17 +11,19 @@ from lab8.db import connect
 from lab8.durability import InjectedCrash, committed_audit_count, get_refund
 from lab8.metrics import trial_pass
 from lab8.policy import order_refunded_vnd
-from lab8.shapes.workflow import run_claim
+from lab8.shapes import SHAPES
 from tests.conftest import BY_ID
 
 
+@pytest.mark.parametrize("shape", ["workflow", "single"])
 @pytest.mark.parametrize("point", ["before_effect", "after_effect_before_checkpoint", "after_checkpoint"])
 @pytest.mark.parametrize("claim_id,quote,paid", [("C-001", 35000, 35000), ("C-014", 150000, 120000)])
-def test_workflow_reopens_and_retries_after_each_crash(public_db, point, claim_id, quote, paid):
+def test_shape_reopens_and_retries_after_each_crash(public_db, shape, point, claim_id, quote, paid):
+    run_claim = SHAPES[shape]
     with pytest.raises(InjectedCrash, match=point):
         run_claim(claim_id, seed=11, store_path=str(public_db), crash_at=point)
 
-    # This is a new connection after workflow has closed its crashed connection.
+    # This is a new connection after the shape has closed its crashed connection.
     conn = connect(public_db)
     try:
         effect = get_refund(conn, claim_id)
@@ -61,8 +63,10 @@ def test_workflow_reopens_and_retries_after_each_crash(public_db, point, claim_i
             conn.close()
 
 
+@pytest.mark.parametrize("shape", ["workflow", "single"])
 @pytest.mark.parametrize("approval,reason", [(None, "missing_approval"), ("A-014", "approval_claim_mismatch")])
-def test_workflow_repeated_denial_never_writes_money(public_db, approval, reason):
+def test_shape_repeated_denial_never_writes_money(public_db, shape, approval, reason):
+    run_claim = SHAPES[shape]
     conn = connect(public_db)
     try:
         conn.execute("UPDATE claims SET approval_id = ? WHERE claim_id = 'C-001'", (approval,))
